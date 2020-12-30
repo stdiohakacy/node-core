@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn} from "typeorm";
-import { Category } from "./Category";
+import { Category } from "../../../category/domain/entity/Category";
 
 @Entity('product')
 export class Product {
@@ -14,15 +14,6 @@ export class Product {
 
     @Column({ name: 'price', type: 'integer' })
     price!: number;
-
-    @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-    createdAt!: Date;
-
-    @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
-    updatedAt!: Date;
-
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-    deletedAt?: Date
 
     @ManyToOne(() => Category, category => category.products)
     @JoinColumn({ name: 'category_id' })
