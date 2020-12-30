@@ -3,17 +3,17 @@ import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn('uuid', { name: 'id'})
-    id: string;
+    id!: string;
 
     @Column({name: 'first_name', length: 20})
-    firstName: string;
+    firstName!: string;
 
     @Column({name: 'last_name', length: 20, nullable: true})
-    lastName: string;
+    lastName?: string;
 
     @Column({name: 'email', length: 120})
-    email: string;
+    email!: string;
 
     @Column({name: 'password', length: 32})
-    password: string;
+    password!: string;
 }

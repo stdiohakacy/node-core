@@ -1,13 +1,15 @@
-import express, { Request, Response } from 'express'
-import cors from 'cors'
-const app = express()
+// this shim is required
+import { createExpressServer } from 'routing-controllers';
+import {createConnection} from "typeorm";
+import { CategoryController } from './controller/CategoryController';
+// import { CategoryController } from './controller/CategoryController';
 
-app.use(cors())
 
-app.get("/", (req: Request, res: Response) => {
-    res.status(200).send("Hello World!");
-})
-  
-  app.listen(8000,()=>{
-    console.log('Server Started at Port, 3000')
+const app = createExpressServer({
+    controllers: [CategoryController]
+});
+
+app.listen(3000, () => {
+    createConnection().then(async connection => {
+    }).catch(error => console.log("Error: ", error));
 })

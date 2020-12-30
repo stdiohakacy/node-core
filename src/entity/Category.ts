@@ -4,20 +4,20 @@ import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColu
 @Entity('category')
 export class Category {
     @PrimaryGeneratedColumn('uuid', { name: 'id'})
-    id: string;
+    id!: string;
 
     @Column({ name: 'name', length: 150 })
-    name: string;
+    name!: string;
 
     @CreateDateColumn({name: 'created_at', type: 'timestamptz'})
-    createdAt: Date
+    createdAt!: Date
 
     @UpdateDateColumn({name: 'updated_at', type: 'timestamptz'})
-    updatedAt: Date
+    updatedAt!: Date
 
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
     deletedAt?: Date
     
     @OneToMany(() => Product, products => products.category)
-    products: Product[]
+    products!: Product[]
 }
