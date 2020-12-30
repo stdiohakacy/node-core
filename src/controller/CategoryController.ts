@@ -1,12 +1,12 @@
-import { Category } from './../entity/Category';
-import { Controller, Param, Body, Get, Post, Put, Delete } from 'routing-controllers';
+import { Category } from '../shared/infra/databases/typeorm/entity/Category';
+import { Controller, Param, Body, Get, Post, Put, Delete, JsonController } from 'routing-controllers';
 import { getRepository } from 'typeorm';
 
-@Controller()
+@JsonController('/v1/categories')
 export class CategoryController {
     private categoryRepository = getRepository(Category)
 
-    @Get('/categories')
+    @Get('/')
     async getCategories() {
         return await this.categoryRepository.findAndCount()
     }

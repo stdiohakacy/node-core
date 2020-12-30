@@ -11,5 +11,6 @@ const app = createExpressServer({
 
 app.listen(3000, () => {
     createConnection().then(async connection => {
+        console.log('OK')
     }).catch(error => console.log("Error: ", error));
 })
