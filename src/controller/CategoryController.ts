@@ -6,6 +6,10 @@ import { Repository } from 'typeorm';
 
 @JsonController('/v1/categories')
 export class CategoryController {
+    private _categoryRepository: CategoryRepository
+    constructor(){
+        this._categoryRepository = new CategoryRepository()
+    }
 
     @Get('/')
     async getCategories() {
@@ -14,9 +18,8 @@ export class CategoryController {
 
     @Post('/')
     async post(@Body() category: any) {
-        const cateRepository = new CategoryRepository()
         const data = new Category()
         data.name = 'akjsdflkj'
-        return cateRepository.create(data)
+        return this._categoryRepository.create(data)
     }
 }
