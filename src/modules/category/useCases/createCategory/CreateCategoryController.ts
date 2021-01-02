@@ -1,12 +1,13 @@
+import { CreateCategoryUseCase } from './CreateCategoryUseCase';
 import { Body, Get, Post, JsonController } from 'routing-controllers';
 import { Category } from '../../domain/entity/Category';
 import { CategoryRepository } from '../../repositories/CategoryRepository';
 
 @JsonController('/v1/categories')
 export class CreateCategoryController {
-    private _categoryRepository: CategoryRepository
+    private _useCase: CreateCategoryUseCase
     constructor() {
-        this._categoryRepository = new CategoryRepository()
+        this._useCase = new CreateCategoryUseCase()
     }
 
     @Get('/')
@@ -18,6 +19,6 @@ export class CreateCategoryController {
     async post(@Body() category: any) {
         const data = new Category()
         data.name = 'akjsdflkj'
-        return this._categoryRepository.create(data)
+        return this._useCase.execute(data)
     }
 }
