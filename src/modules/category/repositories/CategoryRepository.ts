@@ -1,29 +1,13 @@
 import { getRepository } from 'typeorm';
 import { Repository } from 'typeorm';
+import { BaseRepository } from '../../../shared/repository/BaseRepository';
 import { Category } from './../domain/entity/Category';
 import { ICategoryRepository } from './ICategoryRepository';
 
-export class CategoryRepository implements ICategoryRepository<Category> {
-    private readonly _categoryRepository: Repository<Category>
-    constructor() {
-        this._categoryRepository = getRepository(Category)
+export class CategoryRepository extends BaseRepository<Category, string> {
+    constructor(){
+        super(Category, {
+            TABLE_NAME: 'category'
+        })
     }
-
-    findAndCount(): Promise<[Category, number]> {
-        throw new Error('Method not implemented.');
-    }
-    getById(id: string): Promise<Category> {
-        throw new Error('Method not implemented.');
-    }
-    async create(data: any): Promise<string> {
-        await this._categoryRepository.save(data)
-        return 'created'
-    }
-    update(id: string, data: any): Promise<boolean> {
-        throw new Error('Method not implemented.');
-    }
-    delete(id: string): Promise<boolean> {
-        throw new Error('Method not implemented.');
-    }
-    
 }
