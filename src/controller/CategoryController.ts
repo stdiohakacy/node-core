@@ -1,18 +1,22 @@
-import { Category } from '../shared/infra/databases/typeorm/entity/Category';
-import { Controller, Param, Body, Get, Post, Put, Delete, JsonController } from 'routing-controllers';
 import { getRepository } from 'typeorm';
+import { Category } from './../modules/category/domain/entity/Category';
+import { CategoryRepository } from './../modules/category/repositories/CategoryRepository';
+import { Body, Get, Post, JsonController } from 'routing-controllers';
+import { Repository } from 'typeorm';
 
 @JsonController('/v1/categories')
 export class CategoryController {
-    private categoryRepository = getRepository(Category)
 
     @Get('/')
     async getCategories() {
-        return await this.categoryRepository.findAndCount()
+
     }
 
-    @Post('/categories')
+    @Post('/')
     async post(@Body() category: any) {
-        return await this.categoryRepository.insert({name: 'Category 01'})
+        const cateRepository = new CategoryRepository()
+        const data = new Category()
+        data.name = 'akjsdflkj'
+        return cateRepository.create(data)
     }
 }
