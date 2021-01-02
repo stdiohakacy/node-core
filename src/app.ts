@@ -1,12 +1,12 @@
 // this shim is required
 import { createExpressServer } from 'routing-controllers';
 import {createConnection} from "typeorm";
-import { CategoryController } from './controller/CategoryController';
+import { CreateCategoryController } from './modules/category/useCases/createCategory/CreateCategoryController';
 // import { CategoryController } from './controller/CategoryController';
 
 
 const app = createExpressServer({
-    controllers: [CategoryController]
+    controllers: [CreateCategoryController]
 });
 
 app.listen(3000, () => {
