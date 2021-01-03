@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn} from "typeorm";
-import { Category } from "../../../category/domain/entity/Category";
+import { CategoryDb } from "../../../category/domain/entity/CategoryDb";
 
 @Entity('product')
 export class Product {
@@ -15,7 +15,7 @@ export class Product {
     @Column({ name: 'price', type: 'integer' })
     price!: number;
 
-    @ManyToOne(() => Category, category => category.products)
+    @ManyToOne(() => CategoryDb, category => category.products)
     @JoinColumn({ name: 'category_id' })
-    category!: Category;
+    category!: CategoryDb;
 }

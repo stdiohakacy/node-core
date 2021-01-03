@@ -3,7 +3,7 @@ import { BaseEntity } from "../../../../shared/infra/databases/typeorm/entity/Ba
 import { Product } from "../../../product/domain/entity/Product";
 
 @Entity('category')
-export class Category extends BaseEntity {
+export class CategoryDb extends BaseEntity {
     @PrimaryGeneratedColumn('uuid', { name: 'id'})
     id!: string;
 

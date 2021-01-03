@@ -1,6 +1,6 @@
 import { IBaseRepository } from "../../../shared/repository/IBaseRepository";
-import { Category } from "../domain/entity/Category";
+import { CategoryDb } from "../domain/entity/CategoryDb";
 
-export interface ICategoryRepository extends IBaseRepository<Category, string>{
-
+export interface ICategoryRepository extends IBaseRepository<CategoryDb, string> {
+    isExist(name: string): Promise<boolean>
 }

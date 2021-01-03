@@ -1,8 +1,6 @@
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
 import { CreateCategoryUseCase } from './CreateCategoryUseCase';
 import { Body, Get, Post, JsonController } from 'routing-controllers';
-import { Category } from '../../domain/entity/Category';
-import { CategoryRepository } from '../../repositories/CategoryRepository';
 
 @JsonController('/v1/categories')
 export class CreateCategoryController {
