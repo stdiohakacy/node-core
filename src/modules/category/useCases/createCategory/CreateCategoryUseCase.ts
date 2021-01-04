@@ -3,8 +3,9 @@ import { ICreateCategoryDTO } from './ICreateCategoryDTO';
 import { CategoryRepository } from './../../repositories/CategoryRepository';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
 import { IUseCase } from './../../../../shared/core/IUserCase';
-import { left } from '../../../../shared/core/Result';
+import { left, Result } from '../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
+import { CategoryName } from '../../domain/valueObjects/CategoryName';
 export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {
     private _categoryRepository: CategoryRepository
     
@@ -13,6 +14,10 @@ export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promi
     }
     
     async execute(param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
+        const categoryNameOrError = CategoryName.create({ name: param.name })
+        if(categoryNameOrError.isFailure) {
+            return left(Result.fail(categoryNameOrError.error)) as CreateCategoryResponse;
+        }
         try {
             const isExist = await this._categoryRepository.isExist(param.name)
             if(isExist) {
