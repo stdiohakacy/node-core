@@ -15,8 +15,7 @@ export class Category extends AggregateRoot<ICategoryProps> {
   }
 
   get categoryId (): CategoryId {
-    return CategoryId.create(this._id)
-      .getValue();
+    return CategoryId.create(this._id).getValue();
   }
 
   get name (): CategoryName {

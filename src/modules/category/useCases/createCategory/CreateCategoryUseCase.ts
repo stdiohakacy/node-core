@@ -3,7 +3,7 @@ import { ICreateCategoryDTO } from './ICreateCategoryDTO';
 import { CategoryRepository } from './../../repositories/CategoryRepository';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
 import { IUseCase } from './../../../../shared/core/IUserCase';
-import { left, Result } from '../../../../shared/core/Result';
+import { left, Result, right } from '../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
 import { CategoryName } from '../../domain/valueObjects/CategoryName';
 import { Category } from '../../domain/aggregateRoot/Category';
@@ -44,6 +44,8 @@ export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promi
 
         const data = new CategoryDb()
         data.name = category.name.value
-        return await this._categoryRepository.create(data)
+        const id = await this._categoryRepository.create(data)
+
+        return right(Result.OK(id))
     }
 }

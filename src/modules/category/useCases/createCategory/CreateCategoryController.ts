@@ -1,6 +1,7 @@
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
 import { CreateCategoryUseCase } from './CreateCategoryUseCase';
 import { Body, Get, Post, JsonController } from 'routing-controllers';
+import { CreateCategoryResponse } from './CreateCategoryResponse';
 
 @JsonController('/v1/categories')
 export class CreateCategoryController {
@@ -15,7 +16,7 @@ export class CreateCategoryController {
     }
 
     @Post('/')
-    async post(@Body() param: ICreateCategoryDTO): Promise<string> {
+    async post(@Body() param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
         return await this._useCase.execute(param)
     }
 }
