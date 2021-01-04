@@ -1,5 +1,5 @@
 import { BaseRepository } from '../../../shared/repository/BaseRepository';
-import { CategoryDb } from '../domain/entity/CategoryDb';
+import { CategoryDb } from '../infra/databases/typeorm/entities/CategoryDb';
 import { ICategoryRepository } from './ICategoryRepository';
 
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {

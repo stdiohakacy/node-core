@@ -1,4 +1,3 @@
-import { CategoryDb } from '../../domain/entity/CategoryDb';
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
 import { CategoryRepository } from './../../repositories/CategoryRepository';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
@@ -7,6 +6,7 @@ import { left, Result, right } from '../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
 import { CategoryName } from '../../domain/valueObjects/CategoryName';
 import { Category } from '../../domain/aggregateRoot/Category';
+import { CategoryDb } from '../../infra/databases/typeorm/entities/CategoryDb';
 export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {
     private _categoryRepository: CategoryRepository
     
