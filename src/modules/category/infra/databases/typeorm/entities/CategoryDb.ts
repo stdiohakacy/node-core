@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity} from "typeorm";
-import { Product } from "../../../../../product/infra/databases/typeorm/entities/Product";
+import { ProductDb } from "../../../../../product/infra/databases/typeorm/entities/ProductDb";
 
 @Entity('category')
 export class CategoryDb extends BaseEntity {
@@ -9,6 +9,6 @@ export class CategoryDb extends BaseEntity {
     @Column({ name: 'name', length: 150 })
     name!: string;
     
-    @OneToMany(() => Product, products => products.category)
-    products!: Product[]
+    @OneToMany(() => ProductDb, products => products.category)
+    products!: ProductDb[]
 }

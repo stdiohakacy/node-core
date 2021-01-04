@@ -2,7 +2,7 @@ import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typ
 import { CategoryDb } from "../../../../../category/infra/databases/typeorm/entities/CategoryDb";
 
 @Entity('product')
-export class Product {
+export class ProductDb {
     @PrimaryGeneratedColumn('uuid', { name: 'id' })
     id!: string;
 
