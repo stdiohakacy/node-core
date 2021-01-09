@@ -1,4 +1,3 @@
-
 import { UseCaseError } from "../../../../shared/core/UseCaseError"
 import { Result } from "../../../../shared/core/Result"
 

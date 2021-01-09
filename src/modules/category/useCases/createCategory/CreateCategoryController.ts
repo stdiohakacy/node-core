@@ -1,6 +1,6 @@
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
 import { CreateCategoryUseCase } from './CreateCategoryUseCase';
-import { Body, Get, Post, JsonController } from 'routing-controllers';
+import { Body, Post, JsonController } from 'routing-controllers';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
 
 @JsonController('/v1/categories')
@@ -8,11 +8,6 @@ export class CreateCategoryController {
     private _useCase: CreateCategoryUseCase
     constructor() {
         this._useCase = new CreateCategoryUseCase()
-    }
-
-    @Get('/')
-    async getCategories() {
-
     }
 
     @Post('/')

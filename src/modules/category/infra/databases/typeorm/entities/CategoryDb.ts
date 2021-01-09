@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
 import { ProductDb } from "../../../../../product/infra/databases/typeorm/entities/ProductDb";
 
 @Entity('category')
