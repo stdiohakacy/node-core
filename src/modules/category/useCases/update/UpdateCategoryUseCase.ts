@@ -1,8 +1,8 @@
-import { CategoryMapper } from './../../infra/CategoryMapper';
-import { Category } from './../../domain/aggregateRoot/Category';
+import { CategoryMapper } from '../../infra/CategoryMapper';
+import { Category } from '../../domain/aggregateRoot/Category';
 import { UpdateCategoryResponse } from './UpdateCategoryResponse';
 import { IUpdateCategoryDTO } from './IUpdateCategoryDTO';
-import { CategoryRepository } from './../../repositories/CategoryRepository';
+import { CategoryRepository } from '../../repositories/CategoryRepository';
 import { IUseCase } from "../../../../shared/core/IUserCase";
 import { CategoryName } from '../../domain/valueObjects/CategoryName';
 import { left, Result, right } from '../../../../shared/core/Result';

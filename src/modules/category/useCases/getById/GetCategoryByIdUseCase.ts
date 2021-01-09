@@ -1,7 +1,7 @@
-import { CategoryMapper } from './../../infra/CategoryMapper';
+import { CategoryMapper } from '../../infra/CategoryMapper';
 import { GetCategoryByIdResponse } from './GetCategoryByIdResponse';
-import { CategoryRepository } from './../../repositories/CategoryRepository';
-import { IUseCase } from './../../../../shared/core/IUserCase';
+import { CategoryRepository } from '../../repositories/CategoryRepository';
+import { IUseCase } from '../../../../shared/core/IUserCase';
 import { IGetCategoryByIdDTO } from './IGetCategoryById';
 import { CategoryId } from '../../domain/entity/CategoryId';
 import { UniqueEntityId } from '../../../../shared/core/UniqueEntityId';

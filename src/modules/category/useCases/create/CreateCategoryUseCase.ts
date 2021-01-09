@@ -1,12 +1,14 @@
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
-import { CategoryRepository } from './../../repositories/CategoryRepository';
+import { CategoryRepository } from '../../repositories/CategoryRepository';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
-import { IUseCase } from './../../../../shared/core/IUserCase';
+import { IUseCase } from '../../../../shared/core/IUserCase';
 import { left, Result, right } from '../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
 import { CategoryName } from '../../domain/valueObjects/CategoryName';
 import { Category } from '../../domain/aggregateRoot/Category';
 import { CategoryDb } from '../../infra/databases/typeorm/entities/CategoryDb';
+import { CategoryMapper } from '../../infra/CategoryMapper';
+
 export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {
     private _categoryRepository: CategoryRepository
     
@@ -42,9 +44,8 @@ export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promi
 
         const category: Category = categoryOrError.getValue();
 
-        const data = new CategoryDb()
-        data.name = category.name.value
-        const id = await this._categoryRepository.create(data)
+        const categoryDb = CategoryMapper.toPersistence(category)
+        const id = await this._categoryRepository.create(categoryDb)
 
         return right(Result.OK(id))
     }

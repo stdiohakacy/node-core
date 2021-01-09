@@ -1,20 +1,22 @@
-import { UpdateCategoryResponse } from './../useCases/updateCategory/UpdateCategoryResponse';
-import { GetCategoryByIdResponse } from './../useCases/getCategoryById/GetCategoryByIdResponse';
-import { GetCategoryByIdUseCase } from './../useCases/getCategoryById/GetCategoryByIdUseCase';
-import { UpdateCategoryUseCase } from './../useCases/updateCategory/UpdateCategoryUseCase';
+import { UpdateCategoryResponse } from '../useCases/update/UpdateCategoryResponse';
+import { GetCategoryByIdResponse } from '../useCases/getById/GetCategoryByIdResponse';
+import { GetCategoryByIdUseCase } from '../useCases/getById/GetCategoryByIdUseCase';
+import { UpdateCategoryUseCase } from '../useCases/update/UpdateCategoryUseCase';
 import { Body, Get, JsonController, Param, Params, Post, Put } from "routing-controllers";
-import { CreateCategoryUseCase } from "../useCases/createCategory/CreateCategoryUseCase";
-import { IGetCategoryByIdDTO } from '../useCases/getCategoryById/IGetCategoryById';
-import { ICreateCategoryDTO } from '../useCases/createCategory/ICreateCategoryDTO';
-import { CreateCategoryResponse } from '../useCases/createCategory/CreateCategoryResponse';
-import { IUpdateCategoryDTO } from '../useCases/updateCategory/IUpdateCategoryDTO';
+import { CreateCategoryUseCase } from "../useCases/create/CreateCategoryUseCase";
+import { IGetCategoryByIdDTO } from '../useCases/getById/IGetCategoryById';
+import { ICreateCategoryDTO } from '../useCases/create/ICreateCategoryDTO';
+import { CreateCategoryResponse } from '../useCases/create/CreateCategoryResponse';
+import { IUpdateCategoryDTO } from '../useCases/update/IUpdateCategoryDTO';
+import { Service } from 'typedi';
 
 @JsonController('/v1/categories')
 export class CategoryController {
     private _getCategoryByIdUseCase: GetCategoryByIdUseCase
     private _createCategoryUseCase: CreateCategoryUseCase
     private _updateCategoryUseCase: UpdateCategoryUseCase
-    constructor() {
+    constructor(
+    ) {
         this._getCategoryByIdUseCase = new GetCategoryByIdUseCase()
         this._createCategoryUseCase = new CreateCategoryUseCase()
         this._updateCategoryUseCase = new UpdateCategoryUseCase()
