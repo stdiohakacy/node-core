@@ -1,25 +1,30 @@
+import { DeleteCategoryUseCase } from './../useCases/delete/DeleteCategoryUseCase';
+import { IDeleteCategoryDTO } from './../useCases/delete/IDeleteCategoryDTO';
 import { UpdateCategoryResponse } from '../useCases/update/UpdateCategoryResponse';
 import { GetCategoryByIdResponse } from '../useCases/getById/GetCategoryByIdResponse';
 import { GetCategoryByIdUseCase } from '../useCases/getById/GetCategoryByIdUseCase';
 import { UpdateCategoryUseCase } from '../useCases/update/UpdateCategoryUseCase';
-import { Body, Get, JsonController, Param, Params, Post, Put } from "routing-controllers";
+import { Body, Delete, Get, JsonController, Param, Params, Post, Put } from "routing-controllers";
 import { CreateCategoryUseCase } from "../useCases/create/CreateCategoryUseCase";
 import { IGetCategoryByIdDTO } from '../useCases/getById/IGetCategoryById';
 import { ICreateCategoryDTO } from '../useCases/create/ICreateCategoryDTO';
 import { CreateCategoryResponse } from '../useCases/create/CreateCategoryResponse';
 import { IUpdateCategoryDTO } from '../useCases/update/IUpdateCategoryDTO';
 import { Service } from 'typedi';
+import { DeleteCategoryResponse } from '../useCases/delete/DeleteCategoryResponse';
 
 @JsonController('/v1/categories')
 export class CategoryController {
     private _getCategoryByIdUseCase: GetCategoryByIdUseCase
     private _createCategoryUseCase: CreateCategoryUseCase
     private _updateCategoryUseCase: UpdateCategoryUseCase
+    private _deleteCategoryUseCase: DeleteCategoryUseCase
     constructor(
     ) {
         this._getCategoryByIdUseCase = new GetCategoryByIdUseCase()
         this._createCategoryUseCase = new CreateCategoryUseCase()
         this._updateCategoryUseCase = new UpdateCategoryUseCase()
+        this._deleteCategoryUseCase = new DeleteCategoryUseCase()
     }
 
     @Get('/:id([0-9a-f-]{36})')
@@ -36,5 +41,10 @@ export class CategoryController {
     async update(@Param('id') id: string, @Body() param: IUpdateCategoryDTO): Promise<UpdateCategoryResponse> {
         param.id = id;
         return await this._updateCategoryUseCase.execute(param);
+    }
+    
+    @Delete('/:id([0-9a-f-]{36})')
+    async delete(@Params() param: IDeleteCategoryDTO): Promise<DeleteCategoryResponse> {
+        return await this._deleteCategoryUseCase.execute(param);
     }
 }
