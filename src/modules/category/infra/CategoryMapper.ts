@@ -5,18 +5,26 @@ import { IMapper } from './../../../shared/IMapper';
 import { UniqueEntityId } from '../../../shared/core/UniqueEntityId';
 
 export class CategoryMapper implements IMapper<Category> {
+    public static toDomain (categoryDb: CategoryDb): Category | null {
+        const categoryNameOrError = CategoryName.create({ name: categoryDb.name })
 
-  public static toDomain (categoryDb: CategoryDb): Category | null{
-    const categoryNameOrError = CategoryName.create({ name: categoryDb.name })
+        const categoryOrError = Category.create(
+            { name: categoryNameOrError.getValue() }, 
+            new UniqueEntityId(categoryDb.id)
+        )
 
-    const categoryOrError = Category.create(
-        { name: categoryNameOrError.getValue() }, 
-        new UniqueEntityId(categoryDb.id)
-    )
+        if(categoryOrError.isFailure)
+            console.log(categoryOrError.error)
 
-    if(categoryOrError.isFailure)
-        console.log(categoryOrError.error)
-    
-    return categoryOrError.isSuccess ? categoryOrError.getValue() : null
-  }
+        return categoryOrError.isSuccess ? categoryOrError.getValue() : null
+    }
+
+    public static toPersistence (category: Category): CategoryDb {
+        const categoryDb = new CategoryDb()
+
+        categoryDb.name = category.name.value
+        categoryDb.updatedAt = new Date()
+
+        return categoryDb
+    }
 }

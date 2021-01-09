@@ -1,4 +1,4 @@
 export interface IUpdateCategoryDTO {
-    id: string | number
+    id: string
     name: string
 }

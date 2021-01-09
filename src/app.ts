@@ -1,17 +1,10 @@
-import { GetCategoryByIdController } from './modules/category/useCases/getCategoryById/GetCategoryByIdController';
-// this shim is required
+import { CategoryController } from './modules/category/controller/CategoryController';
 import { createExpressServer } from 'routing-controllers';
 import { createConnection } from "typeorm";
-import { CreateCategoryController } from './modules/category/useCases/createCategory/CreateCategoryController';
-import { DeleteCategoryController } from './modules/category/useCases/deleteCategory/DeleteCategoryController';
-// import { CategoryController } from './controller/CategoryController';
-
 
 const app = createExpressServer({
     controllers: [
-        CreateCategoryController, 
-        DeleteCategoryController, 
-        GetCategoryByIdController
+        CategoryController,
     ]
 });
 

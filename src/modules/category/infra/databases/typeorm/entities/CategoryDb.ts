@@ -11,5 +11,5 @@ export class CategoryDb extends BaseEntity {
     name!: string;
     
     @OneToMany(() => ProductDb, products => products.category)
-    products!: ProductDb[]
+    products?: ProductDb[]
 }
