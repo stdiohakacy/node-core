@@ -21,9 +21,9 @@ export class DeleteCategoryUseCase implements IUseCase<IDeleteCategoryDTO, Promi
     
     async execute(param: IDeleteCategoryDTO): Promise<DeleteCategoryResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))
-        if(idOrError.isFailure) {
+        if(idOrError.isFailure)
             return left(Result.fail(idOrError.error)) as DeleteCategoryResponse;
-        }
+        
         const categoryId: CategoryId = idOrError.getValue()
 
         try {
@@ -39,11 +39,11 @@ export class DeleteCategoryUseCase implements IUseCase<IDeleteCategoryDTO, Promi
             return left(new ApplicationError.UnexpectedError(error))
         }
 
-        const categoryDb = new CategoryDb()
-        categoryDb.deletedAt = new Date()
+        // const categoryDb = new CategoryDb()
+        // categoryDb.deletedAt = new Date()
 
-        const isDeleted = await this._categoryRepository.update(param.id, categoryDb)
+        // const isDeleted = await this._categoryRepository.update(param.id, categoryDb)
 
-        return right(Result.OK(isDeleted ? true : false))
+        return right(Result.OK(true))
     }
 }

@@ -25,11 +25,13 @@ export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Pro
         const categoryId: CategoryId = idOrError.getValue()
         try {
             const category = await this._categoryRepository.getById(categoryId.id.toString())
-            if(!category) {
+            const isFound = !!category === true
+            if(!isFound) {
                 return left(Result.fail(GetCategoryByIdErrors.NotFoundError)) as GetCategoryByIdResponse
             }
 
-            const categoryMapper: Category | null = CategoryMapper.toDomain(category)
+            const categoryMapper = CategoryMapper.toDomain(category)
+            
             if(!categoryMapper) {
                 return left(Result.fail(GetCategoryByIdErrors.NotFoundError)) as GetCategoryByIdResponse
             }
