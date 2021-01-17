@@ -1,3 +1,4 @@
+import { IUseCaseIoC } from './../../../IoC/interfaces';
 import { DeleteCategoryUseCase } from './../useCases/delete/DeleteCategoryUseCase';
 import { IDeleteCategoryDTO } from './../useCases/delete/IDeleteCategoryDTO';
 import { UpdateCategoryResponse } from '../useCases/update/UpdateCategoryResponse';
@@ -12,6 +13,9 @@ import { CreateCategoryResponse } from '../useCases/create/CreateCategoryRespons
 import { IUpdateCategoryDTO } from '../useCases/update/IUpdateCategoryDTO';
 import { Service } from 'typedi';
 import { DeleteCategoryResponse } from '../useCases/delete/DeleteCategoryResponse';
+import container from '../../../IoC/container';
+import { IUseCase } from '../../../shared/core/IUserCase';
+import TYPES from '../../../IoC/types';
 
 @JsonController('/v1/categories')
 export class CategoryController {

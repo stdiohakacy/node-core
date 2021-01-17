@@ -1,6 +1,8 @@
+import "reflect-metadata"
+import { injectable } from "inversify";
 import { getRepository, Repository } from "typeorm";
 import { IBaseRepository } from "./IBaseRepository";
-
+@injectable()
 export abstract class BaseRepository<IEntity, TIdentityType> 
 implements IBaseRepository<IEntity, TIdentityType> {
     protected readonly repository: Repository<IEntity>

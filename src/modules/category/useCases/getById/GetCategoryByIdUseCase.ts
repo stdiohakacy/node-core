@@ -1,3 +1,5 @@
+import "reflect-metadata"
+import { IUseCaseIoC } from './../../../../IoC/interfaces';
 import { CategoryMapper } from '../../infra/CategoryMapper';
 import { GetCategoryByIdResponse } from './GetCategoryByIdResponse';
 import { CategoryRepository } from '../../repositories/CategoryRepository';
@@ -9,14 +11,18 @@ import { left, Result, right } from '../../../../shared/core/Result';
 import { GetCategoryByIdErrors } from './GetCategoryByIdErrors';
 import { ApplicationError } from '../../../../shared/core/ApplicationError';
 import { Category } from '../../domain/aggregateRoot/Category';
+import { inject, injectable } from 'inversify';
+import { ICategoryRepository } from "../../repositories/ICategoryRepository";
+import TYPES from "../../../../IoC/types";
 
+@injectable()
 export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
     private _categoryRepository: CategoryRepository
     
     constructor() {
         this._categoryRepository = new CategoryRepository()
     }
-    
+
     async execute(param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))
         if(idOrError.isFailure) {
