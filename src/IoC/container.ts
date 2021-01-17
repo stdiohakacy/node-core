@@ -8,5 +8,4 @@ const container = new Container();
 container.bind<ICategoryRepository>(TYPES.ICategoryRepository).to(CategoryRepository);
 container.bind<IUseCaseIoC>(TYPES.IUseCaseIoC).to(GetByIdUseCase);
 
-// const useCase = container.get<IUseCase<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>>>(TYPES.IUseCase)
 export default container;

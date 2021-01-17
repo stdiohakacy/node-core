@@ -1,9 +1,9 @@
-import "reflect-metadata"
-import { injectable } from 'inversify';
+import { Service } from 'typedi';
 import { BaseRepository } from '../../../shared/repository/BaseRepository';
 import { CategoryDb } from '../infra/databases/typeorm/entities/CategoryDb';
 import { ICategoryRepository } from './ICategoryRepository';
-@injectable()
+
+@Service("category.repository")
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {
     constructor(){
         super(CategoryDb, {

@@ -1,4 +1,3 @@
-import { IUseCaseIoC } from './../../../IoC/interfaces';
 import { DeleteCategoryUseCase } from './../useCases/delete/DeleteCategoryUseCase';
 import { IDeleteCategoryDTO } from './../useCases/delete/IDeleteCategoryDTO';
 import { UpdateCategoryResponse } from '../useCases/update/UpdateCategoryResponse';
@@ -11,21 +10,19 @@ import { IGetCategoryByIdDTO } from '../useCases/getById/IGetCategoryById';
 import { ICreateCategoryDTO } from '../useCases/create/ICreateCategoryDTO';
 import { CreateCategoryResponse } from '../useCases/create/CreateCategoryResponse';
 import { IUpdateCategoryDTO } from '../useCases/update/IUpdateCategoryDTO';
-import { Service } from 'typedi';
 import { DeleteCategoryResponse } from '../useCases/delete/DeleteCategoryResponse';
-import container from '../../../IoC/container';
-import { IUseCase } from '../../../shared/core/IUserCase';
-import TYPES from '../../../IoC/types';
+import { CategoryRepository } from '../repositories/CategoryRepository';
+import Container from 'typedi';
 
 @JsonController('/v1/categories')
 export class CategoryController {
-    private _getCategoryByIdUseCase: GetCategoryByIdUseCase
     private _createCategoryUseCase: CreateCategoryUseCase
     private _updateCategoryUseCase: UpdateCategoryUseCase
     private _deleteCategoryUseCase: DeleteCategoryUseCase
+
     constructor(
+        private readonly _getCategoryByIdUseCase: GetCategoryByIdUseCase = Container.get(GetCategoryByIdUseCase)
     ) {
-        this._getCategoryByIdUseCase = new GetCategoryByIdUseCase()
         this._createCategoryUseCase = new CreateCategoryUseCase()
         this._updateCategoryUseCase = new UpdateCategoryUseCase()
         this._deleteCategoryUseCase = new DeleteCategoryUseCase()
