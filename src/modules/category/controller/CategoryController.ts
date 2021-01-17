@@ -11,22 +11,16 @@ import { ICreateCategoryDTO } from '../useCases/create/ICreateCategoryDTO';
 import { CreateCategoryResponse } from '../useCases/create/CreateCategoryResponse';
 import { IUpdateCategoryDTO } from '../useCases/update/IUpdateCategoryDTO';
 import { DeleteCategoryResponse } from '../useCases/delete/DeleteCategoryResponse';
-import { CategoryRepository } from '../repositories/CategoryRepository';
 import Container from 'typedi';
 
 @JsonController('/v1/categories')
 export class CategoryController {
-    private _createCategoryUseCase: CreateCategoryUseCase
-    private _updateCategoryUseCase: UpdateCategoryUseCase
-    private _deleteCategoryUseCase: DeleteCategoryUseCase
-
     constructor(
-        private readonly _getCategoryByIdUseCase: GetCategoryByIdUseCase = Container.get(GetCategoryByIdUseCase)
-    ) {
-        this._createCategoryUseCase = new CreateCategoryUseCase()
-        this._updateCategoryUseCase = new UpdateCategoryUseCase()
-        this._deleteCategoryUseCase = new DeleteCategoryUseCase()
-    }
+        private readonly _getCategoryByIdUseCase: GetCategoryByIdUseCase = Container.get(GetCategoryByIdUseCase),
+        private readonly _createCategoryUseCase: CreateCategoryUseCase = Container.get(CreateCategoryUseCase),
+        private readonly _updateCategoryUseCase: UpdateCategoryUseCase = Container.get(UpdateCategoryUseCase),
+        private readonly _deleteCategoryUseCase: DeleteCategoryUseCase = Container.get(DeleteCategoryUseCase),
+    ) {}
 
     @Get('/:id([0-9a-f-]{36})')
     async getById(@Params() param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {

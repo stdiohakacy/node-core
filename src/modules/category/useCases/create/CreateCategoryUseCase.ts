@@ -8,13 +8,13 @@ import { CategoryName } from '../../domain/valueObjects/CategoryName';
 import { Category } from '../../domain/aggregateRoot/Category';
 import { CategoryDb } from '../../infra/databases/typeorm/entities/CategoryDb';
 import { CategoryMapper } from '../../infra/CategoryMapper';
+import { Inject, Service } from 'typedi';
+import { ICategoryRepository } from '../../repositories/ICategoryRepository';
 
+@Service()
 export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {
-    private _categoryRepository: CategoryRepository
-    
-    constructor() {
-        this._categoryRepository = new CategoryRepository()
-    }
+    @Inject('category.repository')
+    private readonly _categoryRepository: ICategoryRepository;
     
     async execute(param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ name: param.name })
