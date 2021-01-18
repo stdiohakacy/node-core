@@ -4,13 +4,13 @@ import { CategoryRepository } from '../../../repositories/CategoryRepository';
 import { IUseCase } from '../../../../../shared/core/IUserCase';
 import { IGetCategoryByIdDTO } from './IGetCategoryById';
 import { CategoryId } from '../../../domain/entity/CategoryId';
-import { UniqueEntityId } from '../../../../../shared/core/UniqueEntityId';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { GetCategoryByIdErrors } from './GetCategoryByIdErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Category } from '../../../domain/aggregateRoot/Category';
 import { Inject, Service } from 'typedi';
 import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
+import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 
 @Service()
 export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
@@ -26,15 +26,15 @@ export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Pro
         try {
             const category = await this._categoryRepository.getById(categoryId.id.toString())
             const isFound = !!category === true
-            if(!isFound) {
+            if(!isFound) 
                 return left(Result.fail(GetCategoryByIdErrors.NotFoundError)) as GetCategoryByIdResponse
-            }
+            
 
             const categoryMapper = CategoryMapper.toDomain(category)
             
-            if(!categoryMapper) {
+            if(!categoryMapper) 
                 return left(Result.fail(GetCategoryByIdErrors.NotFoundError)) as GetCategoryByIdResponse
-            }
+            
             return right(Result.OK<Category>(categoryMapper));
         } 
         catch (error) {

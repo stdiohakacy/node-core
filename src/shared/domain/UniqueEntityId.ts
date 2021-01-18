@@ -1,5 +1,5 @@
 
-import { Identifier } from './Identifier'
+import { Identifier } from '../domain/Identifier'
 import * as uuid from 'uuid'
 
 export class UniqueEntityId extends Identifier<string | number>{

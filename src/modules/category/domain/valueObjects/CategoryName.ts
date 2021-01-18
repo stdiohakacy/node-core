@@ -1,5 +1,5 @@
 import { Result } from "../../../../shared/core/Result";
-import { ValueObject } from "../../../../shared/core/ValueObject";
+import { ValueObject } from "../../../../shared/domain/ValueObject";
 import * as validator from 'class-validator'
 interface IUserNameProps {
   name: string;

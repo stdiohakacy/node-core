@@ -1,9 +1,9 @@
-import { AggregateRoot } from "../../../../shared/core/AggregateRoot";
 import { Result } from "../../../../shared/core/Result";
-import { UniqueEntityId } from "../../../../shared/core/UniqueEntityId";
 import { CategoryId } from "../entity/CategoryId";
 import { CategoryName } from "../valueObjects/CategoryName";
 import * as validator from 'class-validator'
+import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
+import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
 
 interface ICategoryProps {
     name: CategoryName;

@@ -3,11 +3,11 @@ import { IDeleteCategoryDTO } from './IDeleteCategoryDTO';
 import { IUseCase } from '../../../../../shared/core/IUserCase';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { DeleteCategoryResponse } from './DeleteCategoryResponse';
-import { UniqueEntityId } from '../../../../../shared/core/UniqueEntityId';
 import { DeleteCategoryErrors } from './DeleteCategoryErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Inject, Service } from 'typedi';
 import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
+import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 
 @Service()
 export class DeleteCategoryUseCase implements IUseCase<IDeleteCategoryDTO, Promise<DeleteCategoryResponse>> {

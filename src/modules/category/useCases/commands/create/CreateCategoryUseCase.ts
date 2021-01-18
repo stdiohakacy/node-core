@@ -1,5 +1,4 @@
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
-import { CategoryRepository } from '../../../repositories/CategoryRepository';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
 import { IUseCase } from '../../../../../shared/core/IUserCase';
 import { left, Result, right } from '../../../../../shared/core/Result';

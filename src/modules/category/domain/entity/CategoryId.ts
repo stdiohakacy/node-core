@@ -1,7 +1,7 @@
-import { Entity } from "../../../../shared/core/Entity";
 import { Result } from "../../../../shared/core/Result";
-import { UniqueEntityId } from "../../../../shared/core/UniqueEntityId";
 import * as validator from 'class-validator'
+import { Entity } from "../../../../shared/domain/Entity";
+import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
 export class CategoryId extends Entity<any> {
   private constructor (id?: UniqueEntityId) {
     super(null, id)

@@ -4,6 +4,7 @@ const isEntity = (v: any): v is Entity<any> => {
   return v instanceof Entity;
 };
 
+
 export abstract class Entity<T> {
   protected readonly _id: UniqueEntityId;
   public readonly props: T;
