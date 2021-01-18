@@ -1,10 +1,13 @@
+import { FindCategoriesUseCase } from './../useCases/queries/find/FindCategoriesUseCase';
+import { FindCategoriesResponse } from './../useCases/queries/find/FindCategoriesResponse';
+import { FindCategoriesDTO } from './../useCases/queries/find/FindCategoriesDTO';
 import { DeleteCategoryUseCase } from '../useCases/commands/delete/DeleteCategoryUseCase';
 import { IDeleteCategoryDTO } from '../useCases/commands/delete/IDeleteCategoryDTO';
 import { UpdateCategoryResponse } from '../useCases/commands/update/UpdateCategoryResponse';
 import { GetCategoryByIdResponse } from '../useCases/queries/getById/GetCategoryByIdResponse';
 import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryByIdUseCase';
 import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategoryUseCase';
-import { Body, Delete, Get, JsonController, Param, Params, Post, Put } from "routing-controllers";
+import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParams } from "routing-controllers";
 import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
 import { IGetCategoryByIdDTO } from '../useCases/queries/getById/IGetCategoryById';
 import { ICreateCategoryDTO } from '../useCases/commands/create/ICreateCategoryDTO';
@@ -16,11 +19,17 @@ import Container from 'typedi';
 @JsonController('/v1/categories')
 export class CategoryController {
     constructor(
+        private readonly _findCategoriesUseCase: FindCategoriesUseCase = Container.get(FindCategoriesUseCase),
         private readonly _getCategoryByIdUseCase: GetCategoryByIdUseCase = Container.get(GetCategoryByIdUseCase),
         private readonly _createCategoryUseCase: CreateCategoryUseCase = Container.get(CreateCategoryUseCase),
         private readonly _updateCategoryUseCase: UpdateCategoryUseCase = Container.get(UpdateCategoryUseCase),
         private readonly _deleteCategoryUseCase: DeleteCategoryUseCase = Container.get(DeleteCategoryUseCase),
     ) {}
+
+    @Get('/')
+    async find(@QueryParams() param: FindCategoriesDTO): Promise<FindCategoriesResponse> {
+        return await this._findCategoriesUseCase.execute(param)
+    }
 
     @Get('/:id([0-9a-f-]{36})')
     async getById(@Params() param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {
