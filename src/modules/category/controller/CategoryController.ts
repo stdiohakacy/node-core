@@ -1,16 +1,16 @@
-import { DeleteCategoryUseCase } from './../useCases/delete/DeleteCategoryUseCase';
-import { IDeleteCategoryDTO } from './../useCases/delete/IDeleteCategoryDTO';
-import { UpdateCategoryResponse } from '../useCases/update/UpdateCategoryResponse';
-import { GetCategoryByIdResponse } from '../useCases/getById/GetCategoryByIdResponse';
-import { GetCategoryByIdUseCase } from '../useCases/getById/GetCategoryByIdUseCase';
-import { UpdateCategoryUseCase } from '../useCases/update/UpdateCategoryUseCase';
+import { DeleteCategoryUseCase } from '../useCases/commands/delete/DeleteCategoryUseCase';
+import { IDeleteCategoryDTO } from '../useCases/commands/delete/IDeleteCategoryDTO';
+import { UpdateCategoryResponse } from '../useCases/commands/update/UpdateCategoryResponse';
+import { GetCategoryByIdResponse } from '../useCases/queries/getById/GetCategoryByIdResponse';
+import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryByIdUseCase';
+import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategoryUseCase';
 import { Body, Delete, Get, JsonController, Param, Params, Post, Put } from "routing-controllers";
-import { CreateCategoryUseCase } from "../useCases/create/CreateCategoryUseCase";
-import { IGetCategoryByIdDTO } from '../useCases/getById/IGetCategoryById';
-import { ICreateCategoryDTO } from '../useCases/create/ICreateCategoryDTO';
-import { CreateCategoryResponse } from '../useCases/create/CreateCategoryResponse';
-import { IUpdateCategoryDTO } from '../useCases/update/IUpdateCategoryDTO';
-import { DeleteCategoryResponse } from '../useCases/delete/DeleteCategoryResponse';
+import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
+import { IGetCategoryByIdDTO } from '../useCases/queries/getById/IGetCategoryById';
+import { ICreateCategoryDTO } from '../useCases/commands/create/ICreateCategoryDTO';
+import { CreateCategoryResponse } from '../useCases/commands/create/CreateCategoryResponse';
+import { IUpdateCategoryDTO } from '../useCases/commands/update/IUpdateCategoryDTO';
+import { DeleteCategoryResponse } from '../useCases/commands/delete/DeleteCategoryResponse';
 import Container from 'typedi';
 
 @JsonController('/v1/categories')

@@ -1,15 +1,15 @@
 import { ICreateCategoryDTO } from './ICreateCategoryDTO';
-import { CategoryRepository } from '../../repositories/CategoryRepository';
+import { CategoryRepository } from '../../../repositories/CategoryRepository';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
-import { IUseCase } from '../../../../shared/core/IUserCase';
-import { left, Result, right } from '../../../../shared/core/Result';
+import { IUseCase } from '../../../../../shared/core/IUserCase';
+import { left, Result, right } from '../../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
-import { CategoryName } from '../../domain/valueObjects/CategoryName';
-import { Category } from '../../domain/aggregateRoot/Category';
-import { CategoryDb } from '../../infra/databases/typeorm/entities/CategoryDb';
-import { CategoryMapper } from '../../infra/CategoryMapper';
+import { CategoryName } from '../../../domain/valueObjects/CategoryName';
+import { Category } from '../../../domain/aggregateRoot/Category';
+import { CategoryDb } from '../../../infra/databases/typeorm/entities/CategoryDb';
+import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { Inject, Service } from 'typedi';
-import { ICategoryRepository } from '../../repositories/ICategoryRepository';
+import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
 
 @Service()
 export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {

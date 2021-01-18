@@ -5,7 +5,7 @@ import { ICategoryRepository } from './ICategoryRepository';
 
 @Service("category.repository")
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {
-    constructor(){
+    constructor() {
         super(CategoryDb, {
             TABLE_NAME: 'category'
         })

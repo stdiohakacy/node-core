@@ -1,16 +1,16 @@
-import { CategoryMapper } from '../../infra/CategoryMapper';
+import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { GetCategoryByIdResponse } from './GetCategoryByIdResponse';
-import { CategoryRepository } from '../../repositories/CategoryRepository';
-import { IUseCase } from '../../../../shared/core/IUserCase';
+import { CategoryRepository } from '../../../repositories/CategoryRepository';
+import { IUseCase } from '../../../../../shared/core/IUserCase';
 import { IGetCategoryByIdDTO } from './IGetCategoryById';
-import { CategoryId } from '../../domain/entity/CategoryId';
-import { UniqueEntityId } from '../../../../shared/core/UniqueEntityId';
-import { left, Result, right } from '../../../../shared/core/Result';
+import { CategoryId } from '../../../domain/entity/CategoryId';
+import { UniqueEntityId } from '../../../../../shared/core/UniqueEntityId';
+import { left, Result, right } from '../../../../../shared/core/Result';
 import { GetCategoryByIdErrors } from './GetCategoryByIdErrors';
-import { ApplicationError } from '../../../../shared/core/ApplicationError';
-import { Category } from '../../domain/aggregateRoot/Category';
+import { ApplicationError } from '../../../../../shared/core/ApplicationError';
+import { Category } from '../../../domain/aggregateRoot/Category';
 import { Inject, Service } from 'typedi';
-import { ICategoryRepository } from '../../repositories/ICategoryRepository';
+import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
 
 @Service()
 export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
