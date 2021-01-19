@@ -26,6 +26,7 @@
    "scripts": {
       "start": "ts-node src/index.ts",
       "typeorm": "ts-node ./node_modules/.bin/typeorm",
-      "dev": "nodemon ./src/app.ts"
+      "dev": "nodemon ./src/app.ts",
+      "generate:module": "node ./src/module-generator/generate.js"
    }
 }

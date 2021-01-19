@@ -1,4 +1,4 @@
-import { PaginationResult } from './../../../../../shared/core/PaginationResult';
+import { PaginationResult } from '../../../../../shared/core/PaginationResult';
 import { FindCategoriesResponse } from './FindCategoriesResponse';
 import { FindCategoriesDTO } from './FindCategoriesDTO';
 import { Inject, Service } from "typedi";

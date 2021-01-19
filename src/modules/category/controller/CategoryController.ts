@@ -1,3 +1,5 @@
+import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParams } from "routing-controllers";
+import Container from 'typedi';
 import { FindCategoriesUseCase } from './../useCases/queries/find/FindCategoriesUseCase';
 import { FindCategoriesResponse } from './../useCases/queries/find/FindCategoriesResponse';
 import { FindCategoriesDTO } from './../useCases/queries/find/FindCategoriesDTO';
@@ -7,14 +9,12 @@ import { UpdateCategoryResponse } from '../useCases/commands/update/UpdateCatego
 import { GetCategoryByIdResponse } from '../useCases/queries/getById/GetCategoryByIdResponse';
 import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryByIdUseCase';
 import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategoryUseCase';
-import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParams } from "routing-controllers";
 import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
 import { IGetCategoryByIdDTO } from '../useCases/queries/getById/IGetCategoryById';
 import { ICreateCategoryDTO } from '../useCases/commands/create/ICreateCategoryDTO';
 import { CreateCategoryResponse } from '../useCases/commands/create/CreateCategoryResponse';
 import { IUpdateCategoryDTO } from '../useCases/commands/update/IUpdateCategoryDTO';
 import { DeleteCategoryResponse } from '../useCases/commands/delete/DeleteCategoryResponse';
-import Container from 'typedi';
 
 @JsonController('/v1/categories')
 export class CategoryController {
@@ -24,8 +24,7 @@ export class CategoryController {
         private readonly _createCategoryUseCase: CreateCategoryUseCase = Container.get(CreateCategoryUseCase),
         private readonly _updateCategoryUseCase: UpdateCategoryUseCase = Container.get(UpdateCategoryUseCase),
         private readonly _deleteCategoryUseCase: DeleteCategoryUseCase = Container.get(DeleteCategoryUseCase),
-    ) {
-    }
+    ) {}
 
     @Get('/')
     async find(@QueryParams() param: FindCategoriesDTO): Promise<FindCategoriesResponse> {
