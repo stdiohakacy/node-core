@@ -1,16 +1,21 @@
 export class Pagination {
-    constructor(public skip: number, public limit: number, public  total: number) {
-        this.skip = skip
-        this.limit = limit
-        this.total = total
+    skip: number;
+    limit: number;
+    total: number;
+
+    constructor(skip: number, limit: number, total: number) {
+        this.skip = skip;
+        this.limit = limit;
+        this.total = total;
     }
 }
 
 export class PaginationResult<T> {
-    public pagination: Pagination
+    pagination: Pagination;
+    data: T[];
 
-    constructor(public data: T[], public total: number, public skip: number, public limit: number) {
-        this.pagination = new Pagination(skip, limit, total)
-        this.data = data
+    constructor(data: T[], total: number, skip: number, limit: number) {
+        this.pagination = new Pagination(skip, limit, total);
+        this.data = data;
     }
 }
