@@ -1,7 +1,8 @@
-export interface IFilter {
+import { IQuery } from "./ICQRS";
+
+export interface IFilter extends IQuery {
     skip: number;
     limit: number;
-
     maxLimit(val: number): void;
 }
 

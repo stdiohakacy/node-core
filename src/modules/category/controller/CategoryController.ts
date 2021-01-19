@@ -2,18 +2,18 @@ import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParam
 import Container from 'typedi';
 import { FindCategoriesUseCase } from './../useCases/queries/find/FindCategoriesUseCase';
 import { FindCategoriesResponse } from './../useCases/queries/find/FindCategoriesResponse';
-import { FindCategoriesDTO } from './../useCases/queries/find/FindCategoriesDTO';
+import { FindCategoriesQueryDTO } from './../useCases/queries/find/FindCategoriesQueryDTO';
 import { DeleteCategoryUseCase } from '../useCases/commands/delete/DeleteCategoryUseCase';
-import { IDeleteCategoryDTO } from '../useCases/commands/delete/IDeleteCategoryDTO';
+import { DeleteCategoryCommandDTO } from '../useCases/commands/delete/DeleteCategoryCommandDTO';
 import { UpdateCategoryResponse } from '../useCases/commands/update/UpdateCategoryResponse';
 import { GetCategoryByIdResponse } from '../useCases/queries/getById/GetCategoryByIdResponse';
 import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryByIdUseCase';
 import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategoryUseCase';
 import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
-import { IGetCategoryByIdDTO } from '../useCases/queries/getById/IGetCategoryById';
+import { GetCategoryByIdQueryDTO } from '../useCases/queries/getById/GetCategoryByIdQueryDTO';
 import { CreateCategoryCommandDTO } from '../useCases/commands/create/CreateCategoryCommandDTO';
 import { CreateCategoryResponse } from '../useCases/commands/create/CreateCategoryResponse';
-import { IUpdateCategoryDTO } from '../useCases/commands/update/IUpdateCategoryDTO';
+import { UpdateCategoryCommandDTO } from '../useCases/commands/update/UpdateCategoryCommandDTO';
 import { DeleteCategoryResponse } from '../useCases/commands/delete/DeleteCategoryResponse';
 
 @JsonController('/v1/categories')
@@ -27,12 +27,12 @@ export class CategoryController {
     ) {}
 
     @Get('/')
-    async find(@QueryParams() param: FindCategoriesDTO): Promise<FindCategoriesResponse> {
+    async find(@QueryParams() param: FindCategoriesQueryDTO): Promise<FindCategoriesResponse> {
         return await this._findCategoriesUseCase.execute(param)
     }
 
     @Get('/:id([0-9a-f-]{36})')
-    async getById(@Params() param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {
+    async getById(@Params() param: GetCategoryByIdQueryDTO): Promise<GetCategoryByIdResponse> {
         return await this._getCategoryByIdUseCase.execute(param);
     }
 
@@ -42,13 +42,13 @@ export class CategoryController {
     }
 
     @Put('/:id([0-9a-f-]{36})')
-    async update(@Param('id') id: string, @Body() param: IUpdateCategoryDTO): Promise<UpdateCategoryResponse> {
+    async update(@Param('id') id: string, @Body() param: UpdateCategoryCommandDTO): Promise<UpdateCategoryResponse> {
         param.id = id;
         return await this._updateCategoryUseCase.execute(param);
     }
     
     @Delete('/:id([0-9a-f-]{36})')
-    async delete(@Params() param: IDeleteCategoryDTO): Promise<DeleteCategoryResponse> {
+    async delete(@Params() param: DeleteCategoryCommandDTO): Promise<DeleteCategoryResponse> {
         return await this._deleteCategoryUseCase.execute(param);
     }
 }

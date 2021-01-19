@@ -2,7 +2,7 @@ import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { GetCategoryByIdResponse } from './GetCategoryByIdResponse';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
 import { IUseCaseQueryCQRS } from '../../../../../shared/core/IUseCase';
-import { IGetCategoryByIdDTO } from './IGetCategoryById';
+import { GetCategoryByIdQueryDTO } from './GetCategoryByIdQueryDTO';
 import { CategoryId } from '../../../domain/entity/CategoryId';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { GetCategoryByIdErrors } from './GetCategoryByIdErrors';
@@ -12,11 +12,11 @@ import { Inject, Service } from 'typedi';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 
 @Service()
-export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
+export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryByIdQueryDTO, Promise<GetCategoryByIdResponse>> {
     @Inject('category.repository')
     private readonly _categoryRepository: CategoryRepository;
 
-    async execute(param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {
+    async execute(param: GetCategoryByIdQueryDTO): Promise<GetCategoryByIdResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))
         if(idOrError.isFailure) {
             return left(Result.fail<CategoryId>(idOrError.error)) as GetCategoryByIdResponse;
