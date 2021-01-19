@@ -1,7 +1,7 @@
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { GetCategoryByIdResponse } from './GetCategoryByIdResponse';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
-import { IUseCase } from '../../../../../shared/core/IUserCase';
+import { IUseCaseQueryCQRS } from '../../../../../shared/core/IUseCase';
 import { IGetCategoryByIdDTO } from './IGetCategoryById';
 import { CategoryId } from '../../../domain/entity/CategoryId';
 import { left, Result, right } from '../../../../../shared/core/Result';
@@ -12,7 +12,7 @@ import { Inject, Service } from 'typedi';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 
 @Service()
-export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
+export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
     @Inject('category.repository')
     private readonly _categoryRepository: CategoryRepository;
 

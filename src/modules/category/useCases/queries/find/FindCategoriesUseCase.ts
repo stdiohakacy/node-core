@@ -3,14 +3,14 @@ import { FindCategoriesResponse } from './FindCategoriesResponse';
 import { FindCategoriesDTO } from './FindCategoriesDTO';
 import { Inject, Service } from "typedi";
 import { ApplicationError } from "../../../../../shared/core/ApplicationError";
-import { IUseCase } from "../../../../../shared/core/IUserCase";
+import { IUseCaseQueryCQRS } from "../../../../../shared/core/IUseCase";
 import { left, Result, right } from "../../../../../shared/core/Result";
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { Category } from '../../../domain/aggregateRoot/Category';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
 
 @Service()
-export class FindCategoriesUseCase implements IUseCase<FindCategoriesDTO, Promise<FindCategoriesResponse>> {
+export class FindCategoriesUseCase implements IUseCaseQueryCQRS<FindCategoriesDTO, Promise<FindCategoriesResponse>> {
     @Inject('category.repository')
     private readonly _categoryRepository: CategoryRepository;
 

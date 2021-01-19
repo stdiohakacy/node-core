@@ -1,6 +1,6 @@
 import { CategoryId } from '../../../domain/entity/CategoryId';
 import { IDeleteCategoryDTO } from './IDeleteCategoryDTO';
-import { IUseCase } from '../../../../../shared/core/IUserCase';
+import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { DeleteCategoryResponse } from './DeleteCategoryResponse';
 import { DeleteCategoryErrors } from './DeleteCategoryErrors';
@@ -10,7 +10,7 @@ import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
 
 @Service()
-export class DeleteCategoryUseCase implements IUseCase<IDeleteCategoryDTO, Promise<DeleteCategoryResponse>> {
+export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<IDeleteCategoryDTO, Promise<DeleteCategoryResponse>> {
     @Inject('category.repository')
     private readonly _categoryRepository: CategoryRepository;
     

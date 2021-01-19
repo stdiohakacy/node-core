@@ -1,6 +1,6 @@
-import { ICreateCategoryDTO } from './ICreateCategoryDTO';
+import { CreateCategoryCommandDTO } from './CreateCategoryCommandDTO';
 import { CreateCategoryResponse } from './CreateCategoryResponse';
-import { IUseCase } from '../../../../../shared/core/IUserCase';
+import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
 import { CategoryName } from '../../../domain/valueObjects/CategoryName';
@@ -12,11 +12,11 @@ import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
 
 @Service()
-export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {
+export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategoryCommandDTO, Promise<CreateCategoryResponse>> {
     @Inject('category.repository')
     private _categoryRepository: CategoryRepository;
 
-    async execute(param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
+    async execute(param: CreateCategoryCommandDTO): Promise<CreateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ name: param.name })
         if(categoryNameOrError.isFailure) {
             return left(Result.fail<CategoryName>(categoryNameOrError.error)) as CreateCategoryResponse;

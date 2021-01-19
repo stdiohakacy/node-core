@@ -11,7 +11,7 @@ import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryB
 import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategoryUseCase';
 import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
 import { IGetCategoryByIdDTO } from '../useCases/queries/getById/IGetCategoryById';
-import { ICreateCategoryDTO } from '../useCases/commands/create/ICreateCategoryDTO';
+import { CreateCategoryCommandDTO } from '../useCases/commands/create/CreateCategoryCommandDTO';
 import { CreateCategoryResponse } from '../useCases/commands/create/CreateCategoryResponse';
 import { IUpdateCategoryDTO } from '../useCases/commands/update/IUpdateCategoryDTO';
 import { DeleteCategoryResponse } from '../useCases/commands/delete/DeleteCategoryResponse';
@@ -37,7 +37,7 @@ export class CategoryController {
     }
 
     @Post('/')
-    async post(@Body() param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
+    async post(@Body() param: CreateCategoryCommandDTO): Promise<CreateCategoryResponse> {
         return await this._createCategoryUseCase.execute(param)
     }
 

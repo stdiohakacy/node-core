@@ -4,14 +4,14 @@ import { Category } from '../../../domain/aggregateRoot/Category';
 import { UpdateCategoryResponse } from './UpdateCategoryResponse';
 import { IUpdateCategoryDTO } from './IUpdateCategoryDTO';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
-import { IUseCase } from "../../../../../shared/core/IUserCase";
+import { IUseCaseCommandCQRS } from "../../../../../shared/core/IUseCase";
 import { CategoryName } from '../../../domain/valueObjects/CategoryName';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { UpdateCategoryErrors } from './UpdateCategoryErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 
 @Service()
-export class UpdateCategoryUseCase implements IUseCase<IUpdateCategoryDTO, Promise<UpdateCategoryResponse>> {
+export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<IUpdateCategoryDTO, Promise<UpdateCategoryResponse>> {
     @Inject('category.repository')
     private _categoryRepository: CategoryRepository;
     
