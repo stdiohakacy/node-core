@@ -1,10 +1,11 @@
+import { CategoryName } from './../domain/valueObjects/CategoryName';
 import { Service } from 'typedi';
 import { BaseRepository } from '../../../shared/repository/BaseRepository';
 import { IBaseRepository } from "../../../shared/repository/IBaseRepository";
 import { CategoryDb } from "../infra/databases/typeorm/entities/CategoryDb";
 
 export interface ICategoryRepository extends IBaseRepository<CategoryDb, string> {
-    isExist(name: string): Promise<boolean>
+    isExist(categoryName: CategoryName): Promise<boolean>
 }
 
 @Service('category.repository')
@@ -15,10 +16,10 @@ export class CategoryRepository extends BaseRepository<CategoryDb, string> imple
         })
     }
 
-    async isExist(name: string): Promise<boolean> {
+    async isExist(categoryName: CategoryName): Promise<boolean> {
         let query = this.repository
             .createQueryBuilder('category')
-            .where(`LOWER(category.name) = LOWER(:name)`, { name });
+            .where(`LOWER(category.name) = LOWER(:name)`, { name: categoryName.value });
 
         return !!await query.getOne();
     }

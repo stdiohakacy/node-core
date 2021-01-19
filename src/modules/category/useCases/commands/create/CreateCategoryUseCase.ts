@@ -5,10 +5,8 @@ import { left, Result, right } from '../../../../../shared/core/Result';
 import { CreateCategoryErrors } from './CreateCategoryErrors';
 import { CategoryName } from '../../../domain/valueObjects/CategoryName';
 import { Category } from '../../../domain/aggregateRoot/Category';
-import { CategoryDb } from '../../../infra/databases/typeorm/entities/CategoryDb';
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { Inject, Service } from 'typedi';
-import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
 
 @Service()
@@ -23,7 +21,7 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
         }
         const name: CategoryName = categoryNameOrError.getValue();
         try {
-            const isExist = await this._categoryRepository.isExist(param.name)
+            const isExist = await this._categoryRepository.isExist(name)
             if(isExist) {
                 return left(
                     new CreateCategoryErrors.NameAlreadyExistsError(param.name)

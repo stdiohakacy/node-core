@@ -36,11 +36,23 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategory
         const categoryDb = CategoryMapper.toPersistence(category)
 
         try {
-            const isUpdated = await this._categoryRepository.update(param.id, categoryDb)
-            return right(Result.OK<boolean>(isUpdated))
+            const isExist = await this._categoryRepository.isExist(name)
+            if(isExist) {
+                return left(
+                    new UpdateCategoryErrors.NameAlreadyExistsError(param.name)
+                ) as UpdateCategoryResponse
+            }
+            try {
+                const isUpdated = await this._categoryRepository.update(param.id, categoryDb)
+                return right(Result.OK<boolean>(isUpdated))
+            } 
+            catch (error) {
+                console.error(error)
+                return left(new ApplicationError.UnexpectedError(error))
+            }
+            
         } catch (error) {
-            console.log(error)
-            return left(new ApplicationError.UnexpectedError(error))
+            
         }
     }
 }

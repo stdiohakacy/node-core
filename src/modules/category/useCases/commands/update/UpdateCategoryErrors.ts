@@ -9,4 +9,12 @@ export namespace UpdateCategoryErrors {
             } as UseCaseError)
         }
     }
+
+    export class NameAlreadyExistsError extends Result<UseCaseError> {    
+        constructor (name: string) {
+            super(false, {
+            message: `Category name : ${name} is taken`
+            } as UseCaseError)
+        }
+    }
 }
