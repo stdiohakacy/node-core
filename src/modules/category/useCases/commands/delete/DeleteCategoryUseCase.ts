@@ -8,11 +8,12 @@ import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Inject, Service } from 'typedi';
 import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
+import { CategoryRepository } from '../../../repositories/CategoryRepository';
 
 @Service()
 export class DeleteCategoryUseCase implements IUseCase<IDeleteCategoryDTO, Promise<DeleteCategoryResponse>> {
     @Inject('category.repository')
-    private readonly _categoryRepository: ICategoryRepository;
+    private readonly _categoryRepository: CategoryRepository;
     
     async execute(param: IDeleteCategoryDTO): Promise<DeleteCategoryResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))

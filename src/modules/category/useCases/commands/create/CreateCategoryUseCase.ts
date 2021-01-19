@@ -9,12 +9,13 @@ import { CategoryDb } from '../../../infra/databases/typeorm/entities/CategoryDb
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { Inject, Service } from 'typedi';
 import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
+import { CategoryRepository } from '../../../repositories/CategoryRepository';
 
 @Service()
 export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promise<CreateCategoryResponse>> {
     @Inject('category.repository')
-    private readonly _categoryRepository: ICategoryRepository;
-    
+    private _categoryRepository: CategoryRepository;
+
     async execute(param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ name: param.name })
         if(categoryNameOrError.isFailure) {

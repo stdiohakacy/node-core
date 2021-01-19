@@ -15,7 +15,7 @@ import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 @Service()
 export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Promise<GetCategoryByIdResponse>> {
     @Inject('category.repository')
-    private readonly _categoryRepository: ICategoryRepository;
+    private readonly _categoryRepository: CategoryRepository;
 
     async execute(param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))

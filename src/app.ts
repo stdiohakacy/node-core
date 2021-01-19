@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { CategoryController } from './modules/category/controller/CategoryController';
 import { createExpressServer } from 'routing-controllers';
 import { createConnection } from "typeorm";

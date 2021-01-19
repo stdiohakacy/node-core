@@ -3,7 +3,7 @@ import { BaseRepository } from '../../../shared/repository/BaseRepository';
 import { CategoryDb } from '../infra/databases/typeorm/entities/CategoryDb';
 import { ICategoryRepository } from './ICategoryRepository';
 
-@Service("category.repository")
+@Service('category.repository')
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {
     constructor() {
         super(CategoryDb, {

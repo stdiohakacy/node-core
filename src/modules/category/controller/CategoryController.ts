@@ -24,7 +24,8 @@ export class CategoryController {
         private readonly _createCategoryUseCase: CreateCategoryUseCase = Container.get(CreateCategoryUseCase),
         private readonly _updateCategoryUseCase: UpdateCategoryUseCase = Container.get(UpdateCategoryUseCase),
         private readonly _deleteCategoryUseCase: DeleteCategoryUseCase = Container.get(DeleteCategoryUseCase),
-    ) {}
+    ) {
+    }
 
     @Get('/')
     async find(@QueryParams() param: FindCategoriesDTO): Promise<FindCategoriesResponse> {
