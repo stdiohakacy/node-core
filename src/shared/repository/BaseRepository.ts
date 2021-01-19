@@ -29,9 +29,6 @@ implements IBaseRepository<IEntity, TIdentityType> {
             .whereInIds(id)
             .getOne()
 
-        if(!result)
-            throw new Error
-
         return result
     }
 
