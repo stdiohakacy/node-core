@@ -53,11 +53,19 @@ implements IBaseRepository<IEntity, TIdentityType> {
     }
 
     async delete(ids: TIdentityType | TIdentityType[]): Promise<boolean> {
-        const result = await this.repository
-            .createQueryBuilder(this._schema.TABLE_NAME)
+        const result = await this.repository.createQueryBuilder(this._schema.TABLE_NAME)
             .delete()
             .whereInIds(ids)
-            .execute()
-        return !!result.affected
+            .execute();
+        return !!result.affected;
+    }
+    
+    async softDelete(ids: TIdentityType | TIdentityType[]): Promise<boolean> {
+        const result = await this.repository
+            .createQueryBuilder(this._schema.TABLE_NAME)
+            .softDelete()
+            .whereInIds(ids)
+            .execute();
+        return !!result.affected;
     }
 }

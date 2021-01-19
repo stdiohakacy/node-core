@@ -12,8 +12,9 @@ export class CategoryId extends Entity<any> {
   }
 
   public static create (id: UniqueEntityId): Result<CategoryId> {
-    if(validator.isEmpty(id))
-        return Result.fail<CategoryId>(`The category id ${id} is null or undefined`)
+    if(validator.isEmpty(id)) {
+      return Result.fail<CategoryId>(`The category id ${id} is null or undefined`)
+    }
     if(!validator.isUUID(id.toValue()))
         return Result.fail<CategoryId>(`The category id ${id} is invalid`)
         

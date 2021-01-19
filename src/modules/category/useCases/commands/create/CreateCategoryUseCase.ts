@@ -19,7 +19,7 @@ export class CreateCategoryUseCase implements IUseCase<ICreateCategoryDTO, Promi
     async execute(param: ICreateCategoryDTO): Promise<CreateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ name: param.name })
         if(categoryNameOrError.isFailure) {
-            return left(Result.fail(categoryNameOrError.error)) as CreateCategoryResponse;
+            return left(Result.fail<CategoryName>(categoryNameOrError.error)) as CreateCategoryResponse;
         }
         const name: CategoryName = categoryNameOrError.getValue();
         try {

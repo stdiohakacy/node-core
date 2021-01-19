@@ -5,7 +5,7 @@ export namespace DeleteCategoryErrors {
     export class NotFoundError extends Result<UseCaseError> {    
         constructor (id: string) {
             super(false, {
-            message: `The category with id ${id} not found`
+            message: `The category with id ${id} had soft deleted!`
             } as UseCaseError)
         }
     }

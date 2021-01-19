@@ -24,7 +24,7 @@ export class UpdateCategoryUseCase implements IUseCase<IUpdateCategoryDTO, Promi
         const categoryNameOrError = CategoryName.create({ name: param.name })
         
         if(categoryNameOrError.isFailure) {
-            return left(Result.fail(categoryNameOrError.error)) as UpdateCategoryResponse;
+            return left(Result.fail<CategoryName>(categoryNameOrError.error)) as UpdateCategoryResponse;
         }
         const name: CategoryName = categoryNameOrError.getValue()
         const categoryOrError: Result<Category> = Category.create({ name });
@@ -37,7 +37,7 @@ export class UpdateCategoryUseCase implements IUseCase<IUpdateCategoryDTO, Promi
 
         try {
             const isUpdated = await this._categoryRepository.update(param.id, categoryDb)
-            return right(Result.OK<boolean>(isUpdated ? true : false))
+            return right(Result.OK<boolean>(isUpdated))
         } catch (error) {
             console.log(error)
             return left(new ApplicationError.UnexpectedError(error))

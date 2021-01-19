@@ -8,4 +8,6 @@ export interface IBaseRepository<TEntity, TIdentityType> {
     update(id: TIdentityType, data: TEntity): Promise<boolean>
     
     delete(id: TIdentityType | TIdentityType[]): Promise<boolean>
+
+    softDelete(ids: TIdentityType | TIdentityType[]): Promise<boolean>;
 }

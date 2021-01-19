@@ -9,7 +9,6 @@ import { GetCategoryByIdErrors } from './GetCategoryByIdErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Category } from '../../../domain/aggregateRoot/Category';
 import { Inject, Service } from 'typedi';
-import { ICategoryRepository } from '../../../repositories/ICategoryRepository';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 
 @Service()
@@ -20,15 +19,15 @@ export class GetCategoryByIdUseCase implements IUseCase<IGetCategoryByIdDTO, Pro
     async execute(param: IGetCategoryByIdDTO): Promise<GetCategoryByIdResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))
         if(idOrError.isFailure) {
-            return left(Result.fail(idOrError.error)) as GetCategoryByIdResponse;
+            return left(Result.fail<CategoryId>(idOrError.error)) as GetCategoryByIdResponse;
         }
         const categoryId: CategoryId = idOrError.getValue()
         try {
             const category = await this._categoryRepository.getById(categoryId.id.toString())
-            const isFound = !!category === true
-            if(!isFound) 
-                return left(Result.fail(GetCategoryByIdErrors.NotFoundError)) as GetCategoryByIdResponse
-            
+            if(!category)
+                return left(
+                    new GetCategoryByIdErrors.NotFoundError(param.id)
+                ) as GetCategoryByIdResponse
 
             const categoryMapper = CategoryMapper.toDomain(category)
             
