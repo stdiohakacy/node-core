@@ -26,7 +26,7 @@ export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryById
             const category = await this._categoryRepository.getById(categoryId.id.toString())
             if(!category)
                 return left(
-                    new GetCategoryByIdErrors.NotFoundError(param.id)
+                    new GetCategoryByIdErrors.NotFoundError()
                 ) as GetCategoryByIdResponse
 
             const categoryMapper = CategoryMapper.toDomain(category)

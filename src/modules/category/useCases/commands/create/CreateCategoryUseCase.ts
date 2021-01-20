@@ -24,7 +24,7 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
             const isExist = await this._categoryRepository.isExist(name)
             if(isExist) {
                 return left(
-                    new CreateCategoryErrors.NameAlreadyExistsError(param.name)
+                    new CreateCategoryErrors.NameAlreadyExistsError()
                 ) as CreateCategoryResponse
             }
         } 

@@ -19,7 +19,7 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategory
         const isExist = await this._categoryRepository.getById(param.id)
 
         if(!isExist)
-            return left(new UpdateCategoryErrors.NotFoundError(param.id)) as UpdateCategoryResponse
+            return left(new UpdateCategoryErrors.NotFoundError()) as UpdateCategoryResponse
         
         const categoryNameOrError = CategoryName.create({ name: param.name })
         
@@ -39,7 +39,7 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategory
             const isExist = await this._categoryRepository.isExist(name)
             if(isExist) {
                 return left(
-                    new UpdateCategoryErrors.NameAlreadyExistsError(param.name)
+                    new UpdateCategoryErrors.NameAlreadyExistsError()
                 ) as UpdateCategoryResponse
             }
             try {
