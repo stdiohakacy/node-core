@@ -4,7 +4,7 @@ import { Entity } from "../../../../shared/domain/Entity";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
 import { ContentError, MessageError } from "../../../../shared/exceptions/MessageError";
 
-export class CategoryId extends Entity<any> {
+export class UserId extends Entity<any> {
   private constructor (id?: UniqueEntityId) {
     super(null, id)
   }
@@ -13,14 +13,14 @@ export class CategoryId extends Entity<any> {
     return this._id;
   }
 
-  public static create (id: UniqueEntityId): Result<CategoryId> {
+  public static create (id: UniqueEntityId): Result<UserId> {
     if(validator.isEmpty(id)) {
-      return Result.fail<CategoryId>(new MessageError(ContentError.PARAM_REQUIRED(), 'id').getMessage())
+      return Result.fail<UserId>(new MessageError(ContentError.PARAM_REQUIRED(), 'id').getMessage())
     }
     if(!validator.isUUID(id.toValue()))
-        return Result.fail<CategoryId>(new MessageError(ContentError.PARAM_INVALID(), 'id').getMessage())
+        return Result.fail<UserId>(new MessageError(ContentError.PARAM_INVALID(), 'id').getMessage())
         
-    const categoryId = new CategoryId(id) 
-    return Result.OK<CategoryId>(categoryId);
+    const userId = new UserId(id) 
+    return Result.OK<UserId>(userId);
   }
 }

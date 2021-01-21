@@ -4,6 +4,7 @@ import { CategoryName } from "../valueObjects/CategoryName";
 import * as validator from 'class-validator'
 import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
+import { ContentError, MessageError } from "../../../../shared/exceptions/MessageError";
 
 interface ICategoryProps {
     name: CategoryName;
@@ -24,7 +25,7 @@ export class Category extends AggregateRoot<ICategoryProps> {
 
     public static create (props: ICategoryProps, id?: UniqueEntityId): Result<Category> {
         if(validator.isEmpty(props.name)) {
-            return Result.fail<Category>(`The category name is null or undefined`)
+            return Result.fail<Category>(new MessageError(ContentError.PARAM_REQUIRED(), 'name').getMessage())
         }
 
         const category = new Category({...props}, id)
