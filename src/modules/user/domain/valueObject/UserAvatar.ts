@@ -22,7 +22,7 @@ export class UserAvatar extends ValueObject<IUserAvatarProps> {
     public static create(props: IUserAvatarProps): Result<UserAvatar> {
         props.value = props.value.trim()
 
-        if(!validator.isEmpty(props.value))
+        if(validator.isEmpty(props.value))
             return Result.fail<UserAvatar>(
                 new MessageError(
                     ContentError.PARAM_REQUIRED(), 

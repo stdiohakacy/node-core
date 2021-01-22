@@ -17,7 +17,7 @@ export class UserArchivedAt extends ValueObject<IUserArchivedAtProps> {
     }
 
     public static create(props: IUserArchivedAtProps): Result<UserArchivedAt> {
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserArchivedAt>(
                 new MessageError(
                     ContentError.PARAM_REQUIRED(), 

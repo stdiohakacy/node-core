@@ -17,7 +17,7 @@ export class UserActivedAt extends ValueObject<IUserActivedAtProps> {
     }
 
     public static create(props: IUserActivedAtProps): Result<UserActivedAt> {
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserActivedAt>(
                 new MessageError(ContentError.PARAM_REQUIRED(), 'actived at').getMessage()
             )

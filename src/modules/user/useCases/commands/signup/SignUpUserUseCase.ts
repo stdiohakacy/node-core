@@ -1,3 +1,6 @@
+import { UserActiveExpire } from './../../../domain/valueObject/UserActiveExpire';
+import { UserActiveKey } from './../../../domain/valueObject/UserActiveKey';
+import * as crypto from 'crypto';
 import { JwtAuthService } from './../../../../../shared/services/JwtAuthService';
 import { Inject, Service } from 'typedi';
 import { UserStatusType } from './../../../enums/UserStatusType';
@@ -15,6 +18,8 @@ import { left, Result, right } from '../../../../../shared/core/Result';
 import { SignUpUserErrors } from './SignUpUserErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserMapper } from '../../../infra/UserMapper';
+import { addSeconds } from '../../../../../shared/libs/date';
+
 
 @Service()
 export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandDTO, Promise<SignUpUserResponse>> {
@@ -30,13 +35,17 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const emailOrError = UserEmail.create({ value: param.email })
         const passwordOrError = UserPassword.create({ value: param.password })
         const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
+        const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
+        const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
 
         const dtoResults = Result.combine([
             firstNameOrError,
             lastNameOrError,
             emailOrError,
             passwordOrError,
-            statusOrError
+            statusOrError,
+            activeKeyOrError,
+            activeExpireOrError
         ])
 
         if(dtoResults.isFailure)
@@ -47,6 +56,8 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const email: UserEmail = emailOrError.getValue()
         const password : UserPassword = passwordOrError.getValue()
         const status: UserStatus = statusOrError.getValue()
+        const activeKey: UserActiveKey = activeKeyOrError.getValue()
+        const activeExpire: UserActiveExpire = activeExpireOrError.getValue()
 
         try {
             const isEmailExist = await this._userRepository.isEmailExist(email)
@@ -61,13 +72,16 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
             lastName,
             email, 
             password, 
-            status
+            status,
+            activeKey,
+            activeExpire
         })
 
         if(userOrError.isFailure)
             return left(Result.fail<User>(userOrError.error.toString())) as SignUpUserResponse
 
         const user: User = userOrError.getValue()
+
         const userDb = await UserMapper.toPersistence(user)
         try {
             const user = await this._userRepository.createGet(userDb)

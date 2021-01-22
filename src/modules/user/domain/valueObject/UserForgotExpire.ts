@@ -17,7 +17,7 @@ export class UserForgotExpire extends ValueObject<IUserForgotExpireProps> {
     }
 
     public static create(props: IUserForgotExpireProps): Result<UserForgotExpire> {
-        if(!validator.isEmpty(props.value) || !props.value) {
+        if(validator.isEmpty(props.value) || !props.value) {
             return Result.fail<UserForgotExpire>(
                 new MessageError(
                     ContentError.PARAM_REQUIRED(), 

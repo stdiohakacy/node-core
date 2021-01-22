@@ -17,7 +17,7 @@ export class UserActiveKey extends ValueObject<IUserActiveKeyProps> {
     }
 
     public static create(props: IUserActiveKeyProps): Result<UserActiveKey> {
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserActiveKey>(
                 new MessageError(ContentError.PARAM_REQUIRED(), 'active key').getMessage()
             )

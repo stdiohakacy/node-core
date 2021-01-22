@@ -17,7 +17,7 @@ export class UserForgotKey extends ValueObject<IUserForgotKeyProps> {
     }
 
     public static create(props: IUserForgotKeyProps): Result<UserForgotKey> {
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserForgotKey>(
                 new MessageError(
                     ContentError.PARAM_REQUIRED(), 

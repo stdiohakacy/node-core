@@ -22,7 +22,7 @@ export class UserAddress extends ValueObject<IUserAddressProps> {
     public static create(props: IUserAddressProps): Result<UserAddress> {
         props.value = props.value.trim()
 
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserAddress> (
                 new MessageError(
                     ContentError.PARAM_REQUIRED(), 

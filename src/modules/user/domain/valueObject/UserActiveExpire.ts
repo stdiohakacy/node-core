@@ -16,7 +16,7 @@ export class UserActiveExpire extends ValueObject<IUserActiveExpireProps> {
     }
 
     public static create(props: IUserActiveExpireProps): Result<UserActiveExpire> {
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserActiveExpire>(
                 new MessageError(ContentError.PARAM_REQUIRED(), 'active expire').getMessage()
             )

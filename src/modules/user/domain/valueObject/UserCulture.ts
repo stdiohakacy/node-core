@@ -21,7 +21,7 @@ export class UserCulture extends ValueObject<IUserCultureProps> {
     public static create(props: IUserCultureProps): Result<UserCulture> {
         props.value = props.value.trim()
 
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserCulture>(
                 new MessageError(ContentError.PARAM_REQUIRED(), 'culture').getMessage()
             )

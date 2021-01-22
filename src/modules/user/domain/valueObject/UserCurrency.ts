@@ -21,7 +21,7 @@ export class UserCurrency extends ValueObject<IUserCurrencyProps> {
     public static create(props: IUserCurrencyProps): Result<UserCurrency> {
         props.value = props.value.trim()
 
-        if(!validator.isEmpty(props.value)) {
+        if(validator.isEmpty(props.value)) {
             return Result.fail<UserCurrency> (
                 new MessageError(
                     ContentError.PARAM_LEN_EQUAL(), 
