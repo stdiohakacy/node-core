@@ -6,7 +6,7 @@ import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
 
 export class CategoryMapper implements IMapper<Category> {
     public static toDomain (categoryDb: CategoryDb): Category | null {
-        const categoryNameOrError = CategoryName.create({ name: categoryDb.name })
+        const categoryNameOrError = CategoryName.create({ value: categoryDb.name })
 
         const categoryOrError = Category.create(
             { name: categoryNameOrError.getValue() }, 
@@ -23,7 +23,6 @@ export class CategoryMapper implements IMapper<Category> {
         const categoryDb = new CategoryDb()
 
         categoryDb.name = category.name.value
-        categoryDb.updatedAt = new Date()
 
         return categoryDb
     }

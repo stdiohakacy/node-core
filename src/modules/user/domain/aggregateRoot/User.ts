@@ -121,16 +121,16 @@ export class User extends AggregateRoot<IUserProps> {
     }
 
     public static create(props: IUserProps, id?: UniqueEntityId): Result<User> {
-        if(validator.isEmpty(props.status) || !props.status)
+        if(validator.isEmpty(props.status))
             return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'status').getMessage())
 
-        if(validator.isEmpty(props.firstName) || !props.firstName)
+        if(validator.isEmpty(props.firstName))
             return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'first name').getMessage())
 
-        if(validator.isEmpty(props.email) || !props.email)
+        if(validator.isEmpty(props.email))
             return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'email').getMessage())
 
-        if(validator.isEmpty(props.password) || !props.password)
+        if(validator.isEmpty(props.password))
             return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'password').getMessage())
             
         const user = new User({...props}, id)

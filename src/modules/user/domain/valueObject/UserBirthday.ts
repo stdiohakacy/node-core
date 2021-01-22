@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -17,9 +18,9 @@ export class UserBirthday extends ValueObject<IUserBirthdayProps> {
 
     public static create(props: IUserBirthdayProps): Result<UserBirthday> {
         if(!validator.isDate(props.value))
-            return Result.fail<UserBirthday>(`Birthday data type invalid`)
+            return Result.fail<UserBirthday>(new MessageError(ContentError.DATA_INVALID()).getMessage())
         if(this.invalidBirthday(props.value))
-            return Result.fail<UserBirthday>(`Birthday invalid`)
+            return Result.fail<UserBirthday>(`Birthday must be past from now`)
         return Result.OK<UserBirthday>(new UserBirthday({ value: props.value }))
     }
 

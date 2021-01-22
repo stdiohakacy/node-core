@@ -26,13 +26,14 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const lastNameOrError = UserLastName.create({ value: param.lastName })
         const emailOrError = UserEmail.create({ value: param.email })
         const passwordOrError = UserPassword.create({ value: param.password })
-        const statusOrError = UserStatus.create({ value: UserStatusType.ACTIVED})
+        const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
 
         const dtoResults = Result.combine([
             firstNameOrError,
             lastNameOrError,
             emailOrError,
-            passwordOrError
+            passwordOrError,
+            statusOrError
         ])
 
         if(dtoResults.isFailure)

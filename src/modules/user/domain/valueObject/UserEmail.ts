@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -20,12 +21,24 @@ export class UserEmail extends ValueObject<IUserEmailProps> {
 
     public static create(props: IUserEmailProps): Result<UserEmail> {
         if(!validator.isEmail(props.value)) {
-            return Result.fail<UserEmail>('Email address invalid')
+            return Result.fail<UserEmail>(new MessageError(ContentError.DATA_INVALID()).getMessage())
         }
         if(!validator.minLength(props.value, this.minLength))
-          return Result.fail<UserEmail>(`The email min length invalid`)
+            return Result.fail<UserEmail>(
+                new MessageError(
+                    ContentError.PARAM_LEN_GREATER_OR_EQUAL(), 
+                    'email', 
+                    this.minLength)
+                .getMessage()
+            )
         if(!validator.maxLength(props.value, this.maxLength))
-          return Result.fail<UserEmail>(`The email max length invalid`)
+            return Result.fail<UserEmail>(
+                new MessageError(
+                    ContentError.PARAM_LEN_LESS_OR_EQUAL(), 
+                    'email', 
+                    this.maxLength)
+                .getMessage()
+            )
 
         return Result.OK<UserEmail>(new UserEmail({value: this.format(props.value)}))
     }

@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-import { CategoryController } from './modules/category/controller/CategoryController';
 import { createExpressServer } from 'routing-controllers';
 import { createConnection } from "typeorm";
+import { CategoryController } from './modules/category/controller/CategoryController';
+import { RootController } from './modules/category/controller/RootController';
 
 const app = createExpressServer({
     controllers: [
-        CategoryController,
+        CategoryController, RootController
     ]
 });
 

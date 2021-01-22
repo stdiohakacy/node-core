@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -19,11 +20,24 @@ export class UserLastName extends ValueObject<IUserLastName> {
     
     public static create (props: IUserLastName): Result<UserLastName> {
         if(validator.isEmpty(props.value))
-          return Result.fail<UserLastName>(`The last name is null or undefined`)
+            return Result.fail<UserLastName>(
+                new MessageError(ContentError.PARAM_REQUIRED(), 'last name').getMessage())
         if(!validator.minLength(props.value, this.minLength))
-          return Result.fail<UserLastName>(`The last name min length invalid`)
+            return Result.fail<UserLastName>(
+                new MessageError(
+                    ContentError.PARAM_LEN_GREATER_OR_EQUAL(), 
+                    'last name',
+                    this.minLength)
+                .getMessage()
+            )
         if(!validator.maxLength(props.value, this.maxLength))
-          return Result.fail<UserLastName>(`The last name max length invalid`)
+            return Result.fail<UserLastName>(
+                new MessageError(
+                    ContentError.PARAM_LEN_LESS_OR_EQUAL(), 
+                    'last name',
+                    this.maxLength)
+                .getMessage()
+            )
     
         const userLastName = new UserLastName(props)
         return Result.OK<UserLastName>(userLastName);

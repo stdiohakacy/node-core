@@ -21,7 +21,7 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategory
         if(!isExist)
             return left(new UpdateCategoryErrors.NotFoundError()) as UpdateCategoryResponse
         
-        const categoryNameOrError = CategoryName.create({ name: param.name })
+        const categoryNameOrError = CategoryName.create({ value: param.name })
         
         if(categoryNameOrError.isFailure) {
             return left(Result.fail<CategoryName>(categoryNameOrError.error)) as UpdateCategoryResponse;

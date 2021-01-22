@@ -16,7 +16,7 @@ export interface IUserRepository extends IBaseRepository<UserDb, string> {
 export class UserRepository extends BaseRepository<UserDb, string> implements IUserRepository {
     constructor() {
         super(UserDb, {
-            TABLE_NAME: 'category'
+            TABLE_NAME: 'user'
         })
     }
     async getByEmail(userEmail: UserEmail): Promise<User> {

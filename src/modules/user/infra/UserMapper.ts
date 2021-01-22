@@ -31,24 +31,24 @@ export class UserMapper implements IMapper<User> {
     public static toPersistence (user: User): UserDb {
         const userDb = new UserDb()
 
-        userDb.status = UserStatusType.ACTIVED
+        userDb.status = UserStatusType.INACTIVE
         userDb.firstName = user.firstName.value
-        userDb.lastName = user.lastName.value
+        userDb.lastName = user.lastName.value || ''
         userDb.email = user.email.value
         userDb.password = user.password.value
-        userDb.avatar = user.avatar.value
-        userDb.gender = user.gender.value
-        userDb.birthday = user.birthday.value
-        userDb.phone = user.phone.value
-        userDb.address = user.address.value
-        userDb.culture = user.culture.value
-        userDb.currency = user.currency.value
-        userDb.activeKey = user.activeKey.value
-        userDb.activeExpire = user.activeExpire.value
-        userDb.activedAt = user.activedAt.value
+        userDb.avatar = user.avatar && user.avatar.value || ''
+        userDb.gender = user.gender && user.gender.value || null
+        userDb.birthday = user.birthday && user.birthday.value || null
+        userDb.phone = user.phone && user.phone.value || ''
+        userDb.address = user.address && user.address.value || ''
+        userDb.culture = user.culture && user.culture.value || ''
+        userDb.currency = user.currency && user.currency.value || ''
+        userDb.activeKey = user.activeKey && user.activeKey.value || ''
+        userDb.activeExpire = user.activeExpire && user.activeExpire.value || null
+        userDb.activedAt = user.activedAt && user.activedAt.value || null
         // userDb.archivedAt = user.archivedAt.value
-        userDb.forgotKey = user.forgotKey.value
-        userDb.forgotExpire = user.forgotExpire.value
+        userDb.forgotKey = user.forgotKey && user.forgotKey.value || ''
+        userDb.forgotExpire = user.forgotExpire && user.forgotExpire.value || null
 
         return userDb
     }

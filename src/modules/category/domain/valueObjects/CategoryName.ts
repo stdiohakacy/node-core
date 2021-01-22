@@ -1,8 +1,9 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
 import * as validator from 'class-validator'
 interface IUserNameProps {
-  name: string;
+  value: string;
 }
 
 export class CategoryName extends ValueObject<IUserNameProps> {
@@ -10,7 +11,7 @@ export class CategoryName extends ValueObject<IUserNameProps> {
   public static minLength: number = 15;
 
   get value (): string {
-    return this.props.name;
+    return this.props.value;
   }
 
   private constructor (props: IUserNameProps) {
@@ -18,12 +19,12 @@ export class CategoryName extends ValueObject<IUserNameProps> {
   }
 
   public static create (props: IUserNameProps): Result<CategoryName> {
-    if(validator.isEmpty(props.name))
-      return Result.fail<CategoryName>(`The category name is null or undefined`)
-    if(!validator.minLength(props.name, this.minLength))
-      return Result.fail<CategoryName>(`The category name min length invalid`)
-    if(!validator.maxLength(props.name, this.maxLength))
-      return Result.fail<CategoryName>(`The category name max length invalid`)
+    if(validator.isEmpty(props.value))
+      return Result.fail<CategoryName>(new MessageError(ContentError.PARAM_REQUIRED(), 'name').getMessage())
+    if(!validator.minLength(props.value, this.minLength))
+      return Result.fail<CategoryName>(new MessageError(ContentError.PARAM_LEN_GREATER_OR_EQUAL(), 'name', this.minLength).getMessage())
+    if(!validator.maxLength(props.value, this.maxLength))
+      return Result.fail<CategoryName>(new MessageError(ContentError.PARAM_LEN_LESS_OR_EQUAL(), 'name', this.maxLength).getMessage())
 
     const categoryName = new CategoryName(props)
     return Result.OK<CategoryName>(categoryName);

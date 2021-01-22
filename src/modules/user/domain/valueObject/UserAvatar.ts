@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -22,14 +23,25 @@ export class UserAvatar extends ValueObject<IUserAvatarProps> {
         props.value = props.value.trim()
 
         if(!validator.isEmpty(props.value))
-            return Result.fail<UserAvatar>(`Avatar is null or undefined`)
-
-        if(!validator.minLength(props.value, this.minLength)) {
-            return Result.fail<UserAvatar>(`Avatar min length require ${this.minLength}`)
-        }
-
+            return Result.fail<UserAvatar>(
+                new MessageError(
+                    ContentError.PARAM_REQUIRED(), 
+                    'avatar'
+                ).getMessage())
+        if(!validator.minLength(props.value, this.minLength))
+            return Result.fail<UserAvatar>(
+                new MessageError(
+                    ContentError.PARAM_LEN_GREATER_OR_EQUAL(), 
+                    'avatar', 
+                    this.minLength).getMessage()
+                )
         if(!validator.maxLength(props.value, this.maxLength)) {
-            return Result.fail<UserAvatar>(`Avatar max length require ${this.maxLength}`)
+            return Result.fail<UserAvatar>(
+                new MessageError(
+                    ContentError.PARAM_LEN_LESS_OR_EQUAL(), 
+                    'avatar', 
+                    this.maxLength
+                ).getMessage())
         }
 
         return Result.OK<UserAvatar>(new UserAvatar({value: props.value}))

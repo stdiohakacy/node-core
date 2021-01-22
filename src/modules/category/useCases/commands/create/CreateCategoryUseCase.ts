@@ -15,10 +15,10 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
     private _categoryRepository: CategoryRepository;
 
     async execute(param: CreateCategoryCommandDTO): Promise<CreateCategoryResponse> {
-        const categoryNameOrError = CategoryName.create({ name: param.name })
-        if(categoryNameOrError.isFailure) {
+        const categoryNameOrError = CategoryName.create({ value: param.name })
+        if(categoryNameOrError.isFailure)
             return left(Result.fail<CategoryName>(categoryNameOrError.error)) as CreateCategoryResponse;
-        }
+        
         const name: CategoryName = categoryNameOrError.getValue();
         try {
             const isExist = await this._categoryRepository.isExist(name)

@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Result } from "../../../../shared/core/Result";
@@ -7,7 +8,6 @@ export interface IUserPasswordProps {
     value: string
     hashed?: boolean
 }
-
 export class UserPassword extends ValueObject<IUserPasswordProps> {
     public static minLength: number = 6;
     public static maxLength: number = 32;
@@ -21,12 +21,17 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     }
 
     public static create(props: IUserPasswordProps): Result<UserPassword> {
-        if(!validator.isEmpty(props.value))
-            return Result.fail<UserPassword>(`Password is null or undefined`)
+        if(validator.isEmpty(props.value))
+            return Result.fail<UserPassword>(
+                new MessageError(
+                    ContentError.PARAM_REQUIRED(), 
+                    'password'
+                    ).getMessage()
+                )
 
         if(!props.hashed) {
             if(!validator.minLength(props.value, this.minLength) || !validator.maxLength(props.value, this.maxLength)) {
-                return Result.fail<UserPassword>(`Password doesnot meet criteria [6 - 32]`)
+                return Result.fail<UserPassword>(`Password doesn't meet criteria [6 - 32]`)
             }
         }
 

@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -5,7 +6,6 @@ import { ValueObject } from "../../../../shared/domain/ValueObject";
 export interface IUserActiveExpireProps {
     value: Date
 }
-
 export class UserActiveExpire extends ValueObject<IUserActiveExpireProps> {
     private constructor (props: IUserActiveExpireProps) {
         super(props);
@@ -16,12 +16,18 @@ export class UserActiveExpire extends ValueObject<IUserActiveExpireProps> {
     }
 
     public static create(props: IUserActiveExpireProps): Result<UserActiveExpire> {
-        if(!validator.isEmpty(props.value) || !props.value) {
-            return Result.fail<UserActiveExpire>('Active expire is null or undefined')
+        if(!validator.isEmpty(props.value)) {
+            return Result.fail<UserActiveExpire>(
+                new MessageError(ContentError.PARAM_REQUIRED(), 'active expire').getMessage()
+            )
         }
         if(!validator.isDate(props.value)) {
-            return Result.fail<UserActiveExpire>('Active expire invalid date')
+            return Result.fail<UserActiveExpire>(
+                new MessageError(ContentError.DATA_INVALID()).getMessage()
+            )
         }
-        return Result.OK<UserActiveExpire>(new UserActiveExpire({value: props.value}))
+        return Result.OK<UserActiveExpire>(
+            new UserActiveExpire({value: props.value})
+        )
     }
 }

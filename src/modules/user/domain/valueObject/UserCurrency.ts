@@ -1,3 +1,4 @@
+import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -21,10 +22,20 @@ export class UserCurrency extends ValueObject<IUserCurrencyProps> {
         props.value = props.value.trim()
 
         if(!validator.isEmpty(props.value)) {
-            return Result.fail<UserCurrency>('Currency is null or undefined')
+            return Result.fail<UserCurrency> (
+                new MessageError(
+                    ContentError.PARAM_LEN_EQUAL(), 
+                    'currency', 
+                    this.maxLength
+                ).getMessage()
+            )
         }
         if(props.value.length !== this.maxLength)
-          return Result.fail<UserCurrency>(`Currency length invalid`)
+            new MessageError(
+                ContentError.PARAM_LEN_EQUAL(), 
+                'currency', 
+                this.maxLength
+            ).getMessage()
 
         return Result.OK<UserCurrency>(new UserCurrency({value: props.value}))
     }
