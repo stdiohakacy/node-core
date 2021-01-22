@@ -1,3 +1,4 @@
+import { JwtAuthService } from './../../../../../shared/services/JwtAuthService';
 import { Inject, Service } from 'typedi';
 import { UserStatusType } from './../../../enums/UserStatusType';
 import { User } from './../../../domain/aggregateRoot/User';
@@ -14,13 +15,15 @@ import { left, Result, right } from '../../../../../shared/core/Result';
 import { SignUpUserErrors } from './SignUpUserErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserMapper } from '../../../infra/UserMapper';
-import { UserDb } from '../../../infra/databases/typeorm/entities/UserDb';
 
 @Service()
 export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandDTO, Promise<SignUpUserResponse>> {
     @Inject('user.repository')
     private _userRepository: UserRepository;
     
+    @Inject('jwt.auth.service')
+    private readonly _jwtAuthService: JwtAuthService;
+
     async execute(param: SignUpUserCommandDTO): Promise<SignUpUserResponse> {
         const firstNameOrError = UserFirstName.create({ value: param.firstName })
         const lastNameOrError = UserLastName.create({ value: param.lastName })
@@ -67,14 +70,14 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const user: User = userOrError.getValue()
         const userDb = await UserMapper.toPersistence(user)
         try {
-            const id = await this._userRepository.create(userDb)
-            if(!id)
+            const user = await this._userRepository.createGet(userDb)
+            if(!user)
                 return left(new SignUpUserErrors.CannotSaveError()) as SignUpUserResponse
-
-            return right(Result.OK<string>(id)) as SignUpUserResponse
         } 
         catch (error) {
             return left(new ApplicationError.UnexpectedError(error)) as SignUpUserResponse
         }
+        const accessToken = this._jwtAuthService.sign(user)
+        return right(Result.OK<string>(accessToken)) as SignUpUserResponse
     }
 }

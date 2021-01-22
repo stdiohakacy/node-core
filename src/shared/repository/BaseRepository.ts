@@ -12,6 +12,7 @@ implements IBaseRepository<IEntity, TIdentityType> {
         this.repository = getRepository(this._type)
     }
     
+    
     async findAndCount(filter: any): Promise<[IEntity[], number]> {
         const query = this.repository
             .createQueryBuilder(this._schema.TABLE_NAME)
@@ -39,6 +40,18 @@ implements IBaseRepository<IEntity, TIdentityType> {
         return result.identifiers
             && result.identifiers.length
             && result.identifiers[0].id
+    }
+
+    async createGet(data: IEntity): Promise<IEntity> {
+        const result = await this.repository
+            .createQueryBuilder(this._schema.TABLE_NAME)
+            .insert()
+            .values(data)
+            .execute()
+        const id = result.identifiers && result.identifiers.length && result.identifiers[0].id
+        
+        if(id)
+            return await this.getById(id)
     }
 
     async update(id: TIdentityType, data: IEntity): Promise<boolean> {
