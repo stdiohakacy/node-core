@@ -11,4 +11,11 @@ export namespace SignUpUserErrors {
             } as UseCaseError)
         }
     }
+    export class CannotSaveError extends Result<UseCaseError> {    
+        constructor () {
+            super(false, {
+                message: new MessageError(ContentError.DATA_CANNOT_SAVE()).getMessage()
+            } as UseCaseError)
+        }
+    }
 }

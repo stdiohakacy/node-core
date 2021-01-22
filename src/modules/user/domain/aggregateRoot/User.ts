@@ -1,7 +1,4 @@
-import { Result } from "../../../../shared/core/Result";
-import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
-import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
-import { UserStatus } from "../../enums/UserStatusType";
+import * as validator from 'class-validator'
 import { UserId } from "../entity/UserId";
 import { UserActivedAt } from "../valueObject/UserActivedAt";
 import { UserActiveExpire } from "../valueObject/UserActiveExpire";
@@ -19,8 +16,12 @@ import { UserGender } from "../valueObject/UserGender";
 import { UserLastName } from "../valueObject/UserLastName";
 import { UserPassword } from "../valueObject/UserPassword";
 import { UserPhone } from "../valueObject/UserPhone";
-import * as validator from 'class-validator'
+import { Result } from "../../../../shared/core/Result";
+import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
+import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
+import { UserStatusType } from "../../enums/UserStatusType";
 import { ContentError, MessageError } from "../../../../shared/exceptions/MessageError";
+import { UserStatus } from '../valueObject/UserStatus';
 
 interface IUserProps {
     status: UserStatus,
@@ -95,6 +96,10 @@ export class User extends AggregateRoot<IUserProps> {
         return this.props.culture
     }
 
+    get currency(): UserCurrency {
+        return this.props.currency
+    }
+
     get activeKey(): UserActiveKey {
         return this.props.activeKey
     }
@@ -131,6 +136,4 @@ export class User extends AggregateRoot<IUserProps> {
         const user = new User({...props}, id)
         return Result.OK<User>(user)
     }
-
-    
 }

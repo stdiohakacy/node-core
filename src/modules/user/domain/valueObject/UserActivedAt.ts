@@ -3,7 +3,7 @@ import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
 
 export interface IUserActivedAtProps {
-    value: string
+    value: Date
 }
 
 export class UserActivedAt extends ValueObject<IUserActivedAtProps> {
@@ -11,7 +11,7 @@ export class UserActivedAt extends ValueObject<IUserActivedAtProps> {
         super(props);
     }
 
-    get value(): string {
+    get value(): Date {
         return this.props.value
     }
 

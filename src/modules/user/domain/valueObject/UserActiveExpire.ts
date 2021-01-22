@@ -3,7 +3,7 @@ import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
 
 export interface IUserActiveExpireProps {
-    value: string
+    value: Date
 }
 
 export class UserActiveExpire extends ValueObject<IUserActiveExpireProps> {
@@ -11,7 +11,7 @@ export class UserActiveExpire extends ValueObject<IUserActiveExpireProps> {
         super(props);
     }
 
-    get value(): string {
+    get value(): Date {
         return this.props.value
     }
 
