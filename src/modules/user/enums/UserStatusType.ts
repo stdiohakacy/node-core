@@ -1,4 +1,4 @@
-export enum UserStatus {
+export enum UserStatusType {
     INACTIVE = 'inactive',
     ACTIVED = 'actived',
     ARCHIVED = 'archived'

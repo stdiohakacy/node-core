@@ -3,7 +3,7 @@ import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
 
 export interface IUserFirstName {
-    firstName: string
+    value: string
 }
 
 export class UserFirstName extends ValueObject<IUserFirstName> {
@@ -14,16 +14,16 @@ export class UserFirstName extends ValueObject<IUserFirstName> {
         super(props);
     }
 
-    get value (): string {
-        return this.props.firstName;
+    get value(): string {
+        return this.props.value;
     }
     
     public static create (props: IUserFirstName): Result<UserFirstName> {
-        if(validator.isEmpty(props.firstName))
+        if(validator.isEmpty(props.value))
           return Result.fail<UserFirstName>(`The first name is null or undefined`)
-        if(!validator.minLength(props.firstName, this.minLength))
+        if(!validator.minLength(props.value, this.minLength))
           return Result.fail<UserFirstName>(`The first name min length invalid`)
-        if(!validator.maxLength(props.firstName, this.maxLength))
+        if(!validator.maxLength(props.value, this.maxLength))
           return Result.fail<UserFirstName>(`The first name max length invalid`)
     
         const userFirstName = new UserFirstName(props)

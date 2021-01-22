@@ -1,7 +1,7 @@
 import { Result } from "../../../../shared/core/Result";
 import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
-import { UserStatus } from "../../enums/UserStatus";
+import { UserStatus } from "../../enums/UserStatusType";
 import { UserId } from "../entity/UserId";
 import { UserActivedAt } from "../valueObject/UserActivedAt";
 import { UserActiveExpire } from "../valueObject/UserActiveExpire";

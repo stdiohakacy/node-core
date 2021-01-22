@@ -1,6 +1,6 @@
 import { DateTransformer } from './../transformers/DateTransformer';
 import { GenderType } from './../../../../enums/GenderType';
-import { UserStatus } from './../../../../enums/UserStatus';
+import { UserStatusType } from '../../../../enums/UserStatusType';
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
 
@@ -9,8 +9,8 @@ export class UserDb extends BaseEntity {
     @PrimaryGeneratedColumn('uuid', { name: 'id'})
     id: string;
 
-    @Column('enum', { name: 'status', enum: UserStatus, default: UserStatus.ACTIVED })
-    status: UserStatus;
+    @Column('enum', { name: 'status', enum: UserStatusType, default: UserStatusType.ACTIVED })
+    status: UserStatusType;
 
     @Column({ name: 'first_name', length: 20 })
     firstName: string;
