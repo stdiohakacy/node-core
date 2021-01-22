@@ -65,7 +65,7 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
             return left(Result.fail<User>(userOrError.error.toString())) as SignUpUserResponse
 
         const user: User = userOrError.getValue()
-        const userDb: UserDb = UserMapper.toPersistence(user)
+        const userDb = await UserMapper.toPersistence(user)
         try {
             const id = await this._userRepository.create(userDb)
             if(!id)

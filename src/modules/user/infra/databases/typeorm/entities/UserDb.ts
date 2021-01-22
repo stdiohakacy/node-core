@@ -21,7 +21,7 @@ export class UserDb extends BaseEntity {
     @Column({ name: 'email', length: 120 })
     email: string;
 
-    @Column({ name: 'password', length: 32 })
+    @Column({ name: 'password', length: 120 })
     password: string;
 
     @Column({ name: 'avatar', length: 200, nullable: true })

@@ -28,14 +28,20 @@ export class UserMapper implements IMapper<User> {
         return userOrError.isSuccess ? userOrError.getValue() : null
     }
 
-    public static toPersistence (user: User): UserDb {
+    public static async toPersistence (user: User): Promise<UserDb> {
         const userDb = new UserDb()
+        let password: string = ''
+        if(!!user.password === true) {
+            if(user.password.isAlreadyHashed())
+                password = user.password.value
+            password = await user.password.getHashedValue()
+        } 
 
         userDb.status = UserStatusType.INACTIVE
         userDb.firstName = user.firstName.value
         userDb.lastName = user.lastName.value || ''
         userDb.email = user.email.value
-        userDb.password = user.password.value
+        userDb.password = password
         userDb.avatar = user.avatar && user.avatar.value || ''
         userDb.gender = user.gender && user.gender.value || null
         userDb.birthday = user.birthday && user.birthday.value || null

@@ -41,4 +41,3 @@ export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryById
         }
     }
 }
-name
