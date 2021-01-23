@@ -1,3 +1,4 @@
+import { Guard } from './../../../../shared/core/Guard';
 import * as validator from 'class-validator'
 import { UserId } from "../entity/UserId";
 import { UserActivedAt } from "../valueObject/UserActivedAt";
@@ -24,7 +25,7 @@ import { ContentError, MessageError } from "../../../../shared/exceptions/Messag
 import { UserStatus } from '../valueObject/UserStatus';
 
 interface IUserProps {
-    status: UserStatus,
+    status?: UserStatus,
     firstName: UserFirstName,
     lastName?: UserLastName,
     email: UserEmail,
@@ -121,18 +122,15 @@ export class User extends AggregateRoot<IUserProps> {
     }
 
     public static create(props: IUserProps, id?: UniqueEntityId): Result<User> {
-        if(validator.isEmpty(props.status))
-            return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'status').getMessage())
+        const guard = Guard.againstNullOrUndefinedBulk([
+            { argument: props.firstName, argumentName: 'firstName' },
+            { argument: props.email, argumentName: 'email' },
+            { argument: props.password, argumentName: 'password' },
+        ])
 
-        if(validator.isEmpty(props.firstName))
-            return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'first name').getMessage())
-
-        if(validator.isEmpty(props.email))
-            return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'email').getMessage())
-
-        if(validator.isEmpty(props.password))
-            return Result.fail<User>(new MessageError(ContentError.PARAM_REQUIRED(), 'password').getMessage())
-            
+        if(!guard.succeeded)
+            return Result.fail<User>(guard.message)
+        
         const user = new User({...props}, id)
         return Result.OK<User>(user)
     }

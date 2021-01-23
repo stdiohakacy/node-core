@@ -1,6 +1,6 @@
-import { SignUpUserResponse } from './../../user/useCases/commands/signup/SignUpUserResponse';
-import { SignUpUserUseCase } from './../../user/useCases/commands/signup/SignUpUserUseCase';
-import { SignUpUserCommandDTO } from './../../user/useCases/commands/signup/SignUpUserCommandDTO';
+import { SignUpUserResponse } from '../useCases/commands/signup/SignUpUserResponse';
+import { SignUpUserUseCase } from '../useCases/commands/signup/SignUpUserUseCase';
+import { SignUpUserCommandDTO } from '../useCases/commands/signup/SignUpUserCommandDTO';
 import { Body, JsonController, Post } from "routing-controllers";
 import Container from 'typedi';
 

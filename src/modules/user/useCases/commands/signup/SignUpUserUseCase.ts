@@ -34,18 +34,18 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const lastNameOrError = UserLastName.create({ value: param.lastName })
         const emailOrError = UserEmail.create({ value: param.email })
         const passwordOrError = UserPassword.create({ value: param.password })
-        const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
-        const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
-        const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
+        // const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
+        // const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
+        // const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
 
         const dtoResults = Result.combine([
             firstNameOrError,
             lastNameOrError,
             emailOrError,
             passwordOrError,
-            statusOrError,
-            activeKeyOrError,
-            activeExpireOrError
+            // statusOrError,
+            // activeKeyOrError,
+            // activeExpireOrError
         ])
 
         if(dtoResults.isFailure)
@@ -55,9 +55,9 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const lastName: UserLastName = lastNameOrError.getValue()
         const email: UserEmail = emailOrError.getValue()
         const password : UserPassword = passwordOrError.getValue()
-        const status: UserStatus = statusOrError.getValue()
-        const activeKey: UserActiveKey = activeKeyOrError.getValue()
-        const activeExpire: UserActiveExpire = activeExpireOrError.getValue()
+        // const status: UserStatus = statusOrError.getValue()
+        // const activeKey: UserActiveKey = activeKeyOrError.getValue()
+        // const activeExpire: UserActiveExpire = activeExpireOrError.getValue()
 
         try {
             const isEmailExist = await this._userRepository.isEmailExist(email)
@@ -68,13 +68,13 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
             return left(new ApplicationError.UnexpectedError(error)) as SignUpUserResponse
         }
         const userOrError: Result<User> = User.create({
-            firstName, 
+            firstName,
             lastName,
             email, 
-            password, 
-            status,
-            activeKey,
-            activeExpire
+            password,
+            // status: UserStatusType,
+            // activeKey,
+            // activeExpire
         })
 
         if(userOrError.isFailure)

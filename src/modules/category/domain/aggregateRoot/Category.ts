@@ -1,10 +1,9 @@
+import { Guard } from './../../../../shared/core/Guard';
 import { Result } from "../../../../shared/core/Result";
 import { CategoryId } from "../entity/CategoryId";
 import { CategoryName } from "../valueObjects/CategoryName";
-import * as validator from 'class-validator'
 import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
-import { ContentError, MessageError } from "../../../../shared/exceptions/MessageError";
 
 interface ICategoryProps {
     name: CategoryName;
@@ -24,9 +23,9 @@ export class Category extends AggregateRoot<ICategoryProps> {
     }
 
     public static create (props: ICategoryProps, id?: UniqueEntityId): Result<Category> {
-        if(validator.isEmpty(props.name)) {
-            return Result.fail<Category>(new MessageError(ContentError.PARAM_REQUIRED(), 'name').getMessage())
-        }
+        const guard = Guard.againstNullOrUndefined(props.name, 'name')
+        if(!guard.succeeded)
+            return Result.fail<Category>(guard.message)
 
         const category = new Category({...props}, id)
         return Result.OK<Category>(category);
