@@ -2,10 +2,10 @@ import { UseCaseError } from "../../../../../shared/core/UseCaseError"
 import { Result } from "../../../../../shared/core/Result"
 
 export namespace CreateCategoryErrors {
-    export class NameAlreadyExistsError extends Result<UseCaseError> {    
+    export class AlreadyExistsError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-                message: 'name already exists error'
+                message: 'Already exists error'
             } as UseCaseError)
         }
     }

@@ -18,26 +18,25 @@ export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryById
 
     async execute(param: GetCategoryByIdQueryDTO): Promise<GetCategoryByIdResponse> {
         const idOrError = CategoryId.create(new UniqueEntityId(param.id))
-        if(idOrError.isFailure) {
-            return left(Result.fail<CategoryId>(idOrError.error)) as GetCategoryByIdResponse;
-        }
-        const categoryId: CategoryId = idOrError.getValue()
+        if(idOrError.isFailure)
+            return left(Result.fail(idOrError.error));
+
+        const categoryId = idOrError.getValue()
         try {
             const category = await this._categoryRepository.getById(categoryId.id.toString())
             if(!category)
-                return left(
-                    new GetCategoryByIdErrors.NotFoundError()
-                ) as GetCategoryByIdResponse
+                return left(new GetCategoryByIdErrors.NotFoundError())
 
             const categoryMapper = CategoryMapper.toDomain(category)
             
             if(!categoryMapper) 
-                return left(Result.fail(GetCategoryByIdErrors.NotFoundError)) as GetCategoryByIdResponse
+                return left(Result.fail(GetCategoryByIdErrors.NotFoundError))
             
-            return right(Result.OK<Category>(categoryMapper));
+            return right(Result.OK(categoryMapper));
         } 
         catch (error) {
-            return left(new ApplicationError.UnexpectedError(error)) as GetCategoryByIdResponse
+            console.error(error)
+            return left(new ApplicationError.UnexpectedError(error))
         }
     }
 }

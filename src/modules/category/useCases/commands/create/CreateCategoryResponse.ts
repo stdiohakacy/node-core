@@ -3,7 +3,7 @@ import { Either, Result } from "../../../../../shared/core/Result";
 import { CreateCategoryErrors } from "./CreateCategoryErrors";
 
 export type CreateCategoryResponse = Either<
-  CreateCategoryErrors.NameAlreadyExistsError |
+  CreateCategoryErrors.AlreadyExistsError |
   ApplicationError.UnexpectedError |
   Result<any>,
   Result<string>

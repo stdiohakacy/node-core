@@ -14,7 +14,16 @@ export abstract class BaseController {
         const response = {
             httpCode: 201,
             code: 'CREATED',
-            id: data
+            data
+        }
+        return BaseController.JsonResponse(res, response)
+    }
+
+    public OK(@Res() res: Response, data: any) {
+        const response = {
+            httpCode: 200,
+            code: 'SUCCESS',
+            data
         }
         return BaseController.JsonResponse(res, response)
     }

@@ -15,7 +15,6 @@ export class CategoryMapper implements IMapper<Category> {
 
         if(categoryOrError.isFailure)
             console.log(categoryOrError.error)
-
         return categoryOrError.isSuccess ? categoryOrError.getValue() : null
     }
 

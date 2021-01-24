@@ -18,36 +18,38 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
     async execute(param: CreateCategoryCommandDTO): Promise<CreateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ value: param.name })
         if(categoryNameOrError.isFailure)
-            return left(Result.fail<CategoryName>(categoryNameOrError.error)) as CreateCategoryResponse;
+            return left(Result.fail(categoryNameOrError.error));
         
-        const name: CategoryName = categoryNameOrError.getValue();
+        const name = categoryNameOrError.getValue();
         try {
             const isExist = await this._categoryRepository.isExist(name)
             if(isExist) {
                 return left(
-                    new CreateCategoryErrors.NameAlreadyExistsError()
-                ) as CreateCategoryResponse
+                    new CreateCategoryErrors.AlreadyExistsError()
+                )
             }
-            const categoryOrError: Result<Category> = Category.create({ name });
+            const categoryOrError = Category.create({ name });
 
             if (categoryOrError.isFailure) {
                 return left(
-                    Result.fail<Category>(categoryOrError.error!.toString())
-                ) as CreateCategoryResponse;
+                    Result.fail(categoryOrError.error!.toString())
+                );
             }
 
-            const category: Category = categoryOrError.getValue();
+            const category = categoryOrError.getValue();
             const categoryDb = CategoryMapper.toPersistence(category)
             try {
                 const id = await this._categoryRepository.create(categoryDb)
                 return right(Result.OK(id))
             } catch (error) {
-                return left(new ApplicationError.UnexpectedError(error)) as CreateCategoryResponse
+                console.error(error)
+                return left(new ApplicationError.UnexpectedError(error))
             }
         } 
         
         catch (error) {
-            return left(new ApplicationError.UnexpectedError(error)) as CreateCategoryResponse
+            console.error(error)
+            return left(new ApplicationError.UnexpectedError(error))
         }
     }
 }

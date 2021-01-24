@@ -19,6 +19,8 @@ import { CreateCategoryErrors } from "../useCases/commands/create/CreateCategory
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
 import { Response } from 'express';
 import { ApplicationError } from '../../../shared/core/ApplicationError';
+import { GetCategoryByIdErrors } from '../useCases/queries/getById/GetCategoryByIdErrors';
+import { UpdateCategoryErrors } from '../useCases/commands/update/UpdateCategoryErrors';
 
 @JsonController('/v1/categories')
 export class CategoryController extends BaseController {
@@ -38,8 +40,28 @@ export class CategoryController extends BaseController {
     }
 
     @Get('/:id([0-9a-f-]{36})')
-    async getById(@Params() param: GetCategoryByIdQueryDTO): Promise<GetCategoryByIdResponse> {
-        return await this._getCategoryByIdUseCase.execute(param);
+    async getById(@Params() param: GetCategoryByIdQueryDTO, @Res() res: Response): Promise<Response> {
+        try {
+            const result = await this._getCategoryByIdUseCase.execute(param)
+            const resultValue = result.value
+            
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case GetCategoryByIdErrors.NotFoundError:
+                        throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'id')
+                    case ApplicationError.UnexpectedError:
+                        throw new SystemError(MessageError.SOMETHING_WRONG)
+                    default:
+                        return this.fail(res, resultValue.errorValue())
+                }
+            } else {
+                return this.OK(res, resultValue.getValue())
+            }
+        }
+        catch (error) {
+            console.error(error)
+            return this.fail(res, error)
+        }
     }
 
     @Post('/')
@@ -50,7 +72,7 @@ export class CategoryController extends BaseController {
 
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
-                    case CreateCategoryErrors.NameAlreadyExistsError:
+                    case CreateCategoryErrors.AlreadyExistsError:
                         throw new SystemError(MessageError.PARAM_EXISTED, 'name')
                     case ApplicationError.UnexpectedError:
                         throw new SystemError(MessageError.SOMETHING_WRONG)
@@ -67,9 +89,32 @@ export class CategoryController extends BaseController {
     }
 
     @Put('/:id([0-9a-f-]{36})')
-    async update(@Param('id') id: string, @Body() param: UpdateCategoryCommandDTO): Promise<UpdateCategoryResponse> {
+    async update(@Param('id') id: string, @Body() param: UpdateCategoryCommandDTO, @Res() res: Response): Promise<Response> {
         param.id = id;
-        return await this._updateCategoryUseCase.execute(param);
+
+        try {
+            const result = await this._updateCategoryUseCase.execute(param);
+            const resultValue = result.value
+
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case UpdateCategoryErrors.NotFoundError:
+                        throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'id')
+                    case UpdateCategoryErrors.AlreadyExistsError:
+                        throw new SystemError(MessageError.PARAM_EXISTED, 'name')
+                    case ApplicationError.UnexpectedError:
+                        throw new SystemError(MessageError.SOMETHING_WRONG)
+                    default:
+                        return this.fail(res, resultValue.errorValue())
+                }
+            }
+            else {
+                return this.OK(res, resultValue.getValue())
+            }
+        } 
+        catch (error) {
+            return this.fail(res, error)
+        }
     }
     
     @Delete('/:id([0-9a-f-]{36})')

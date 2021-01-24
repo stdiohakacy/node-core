@@ -16,43 +16,47 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategory
     private _categoryRepository: CategoryRepository;
     
     async execute(param: UpdateCategoryCommandDTO): Promise<UpdateCategoryResponse> {
-        const isExist = await this._categoryRepository.getById(param.id)
-
-        if(!isExist)
-            return left(new UpdateCategoryErrors.NotFoundError()) as UpdateCategoryResponse
-        
         const categoryNameOrError = CategoryName.create({ value: param.name })
-        
-        if(categoryNameOrError.isFailure) {
-            return left(Result.fail<CategoryName>(categoryNameOrError.error)) as UpdateCategoryResponse;
-        }
-        const name: CategoryName = categoryNameOrError.getValue()
-        const categoryOrError: Result<Category> = Category.create({ name });
-
-        if(categoryOrError.isFailure) {
-            return left(Result.fail<Category>(categoryOrError.error)) as UpdateCategoryResponse
-        }
-        const category: Category = categoryOrError.getValue()
-        const categoryDb = CategoryMapper.toPersistence(category)
+        if(categoryNameOrError.isFailure)
+            return left(Result.fail(categoryNameOrError.error));
+        const name = categoryNameOrError.getValue();
 
         try {
-            const isExist = await this._categoryRepository.isExist(name)
-            if(isExist) {
+            const isExist = await this._categoryRepository.getById(param.id)
+            if(!isExist)
+                return left(new UpdateCategoryErrors.NotFoundError())
+                
+            const categoryOrError = Category.create({ name });
+
+            if (categoryOrError.isFailure) {
                 return left(
-                    new UpdateCategoryErrors.NameAlreadyExistsError()
-                ) as UpdateCategoryResponse
+                    Result.fail(categoryOrError.error!.toString())
+                );
             }
+            const category = categoryOrError.getValue()
+            const categoryDb = CategoryMapper.toPersistence(category)
+
             try {
-                const isUpdated = await this._categoryRepository.update(param.id, categoryDb)
-                return right(Result.OK<boolean>(isUpdated))
-            } 
-            catch (error) {
+                const isExist = await this._categoryRepository.isExist(name)
+                if(isExist)
+                    return left(new UpdateCategoryErrors.AlreadyExistsError())
+                try {
+                    const isUpdated = await this._categoryRepository.update(param.id, categoryDb)
+                    return right(Result.OK(isUpdated))
+                } 
+                catch (error) {
+                    console.error(error)
+                    return left(new ApplicationError.UnexpectedError(error))
+                }
+                
+            } catch (error) {
                 console.error(error)
                 return left(new ApplicationError.UnexpectedError(error))
             }
-            
-        } catch (error) {
-            
+        } 
+        catch (error) {
+            console.error(error)
+            return left(new ApplicationError.UnexpectedError(error))
         }
     }
 }

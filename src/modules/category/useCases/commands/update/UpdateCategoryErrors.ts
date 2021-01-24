@@ -5,15 +5,15 @@ export namespace UpdateCategoryErrors {
     export class NotFoundError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-                message: 'not found error'
+                message: 'Not found error'
             } as UseCaseError)
         }
     }
 
-    export class NameAlreadyExistsError extends Result<UseCaseError> {    
+    export class AlreadyExistsError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-            message: 'name already exist error'
+            message: 'Already exists error'
             } as UseCaseError)
         }
     }

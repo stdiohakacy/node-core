@@ -21,8 +21,9 @@ export class CategoryName extends ValueObject<IUserNameProps> {
     public static create (props: IUserNameProps): Result<CategoryName> {
         if(validator.isEmpty(props.value))
             throw new SystemError(MessageError.PARAM_REQUIRED, 'name')
-        if(!validator.minLength(props.value, this.minLength))
+        if(!validator.minLength(props.value, this.minLength)) {
             throw new SystemError(MessageError.PARAM_LEN_GREATER_OR_EQUAL, 'name', this.minLength)
+        }
         if(!validator.maxLength(props.value, this.maxLength))
             throw new SystemError(MessageError.PARAM_LEN_LESS_OR_EQUAL, 'name', this.maxLength)
 

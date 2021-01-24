@@ -5,7 +5,7 @@ export namespace GetCategoryByIdErrors {
     export class NotFoundError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-            message: 'not found error'
+                message: 'Not found error'
             } as UseCaseError)
         }
     }

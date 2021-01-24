@@ -30,7 +30,7 @@ export class Result<T> {
         return this._value as T
     }
   
-    public errorValue (): T {
+    public errorValue(): T {
         return this.error as T
     }
   
