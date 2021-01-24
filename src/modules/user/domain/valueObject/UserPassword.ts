@@ -1,4 +1,3 @@
-import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Result } from "../../../../shared/core/Result";
@@ -21,13 +20,13 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     }
 
     public static create(props: IUserPasswordProps): Result<UserPassword> {
-        if(validator.isEmpty(props.value))
-            return Result.fail<UserPassword>(
-                new MessageError(
-                    ContentError.PARAM_REQUIRED(), 
-                    'password'
-                    ).getMessage()
-                )
+        // if(validator.isEmpty(props.value))
+        //     return Result.fail<UserPassword>(
+        //         new MessageError(
+        //             ContentError.PARAM_REQUIRED(), 
+        //             'password'
+        //             ).getMessage()
+        //         )
 
         if(!props.hashed) {
             if(!validator.minLength(props.value, this.minLength) || !validator.maxLength(props.value, this.maxLength)) {

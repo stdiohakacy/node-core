@@ -1,4 +1,3 @@
-import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -17,18 +16,18 @@ export class UserArchivedAt extends ValueObject<IUserArchivedAtProps> {
     }
 
     public static create(props: IUserArchivedAtProps): Result<UserArchivedAt> {
-        if(validator.isEmpty(props.value)) {
-            return Result.fail<UserArchivedAt>(
-                new MessageError(
-                    ContentError.PARAM_REQUIRED(), 
-                    'address'
-                ).getMessage())
-        }
-        if(!validator.isDate(props.value)) {
-            return Result.fail<UserArchivedAt>(
-                new MessageError(ContentError.DATA_INVALID()).getMessage()
-            )
-        }
+        // if(validator.isEmpty(props.value)) {
+        //     return Result.fail<UserArchivedAt>(
+        //         new MessageError(
+        //             ContentError.PARAM_REQUIRED(), 
+        //             'address'
+        //         ).getMessage())
+        // }
+        // if(!validator.isDate(props.value)) {
+        //     return Result.fail<UserArchivedAt>(
+        //         new MessageError(ContentError.DATA_INVALID()).getMessage()
+        //     )
+        // }
         return Result.OK<UserArchivedAt>(new UserArchivedAt({value: props.value}))
     }
 }

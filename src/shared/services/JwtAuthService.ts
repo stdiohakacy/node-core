@@ -39,5 +39,4 @@ export class JwtAuthService implements IJwtAuthService {
             algorithms: 'HS256'
         } as unknown as jwt.VerifyOptions) as IJwtPayloadExtend
     }
-
 }

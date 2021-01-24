@@ -1,4 +1,3 @@
-import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -17,16 +16,16 @@ export class UserActivedAt extends ValueObject<IUserActivedAtProps> {
     }
 
     public static create(props: IUserActivedAtProps): Result<UserActivedAt> {
-        if(validator.isEmpty(props.value)) {
-            return Result.fail<UserActivedAt>(
-                new MessageError(ContentError.PARAM_REQUIRED(), 'actived at').getMessage()
-            )
-        }
-        if(!validator.isDate(props.value)) {
-            return Result.fail<UserActivedAt>(
-                new MessageError(ContentError.DATA_INVALID()).getMessage()
-            )
-        }
+        // if(validator.isEmpty(props.value)) {
+        //     return Result.fail<UserActivedAt>(
+        //         new MessageError(ContentError.PARAM_REQUIRED(), 'actived at').getMessage()
+        //     )
+        // }
+        // if(!validator.isDate(props.value)) {
+        //     return Result.fail<UserActivedAt>(
+        //         new MessageError(ContentError.DATA_INVALID()).getMessage()
+        //     )
+        // }
         return Result.OK<UserActivedAt>(
             new UserActivedAt({ value: props.value })
         )

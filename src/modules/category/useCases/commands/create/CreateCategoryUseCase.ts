@@ -8,6 +8,7 @@ import { Category } from '../../../domain/aggregateRoot/Category';
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { Inject, Service } from 'typedi';
 import { CategoryRepository } from '../../../repositories/CategoryRepository';
+import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 
 @Service()
 export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategoryCommandDTO, Promise<CreateCategoryResponse>> {
@@ -27,24 +28,26 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
                     new CreateCategoryErrors.NameAlreadyExistsError()
                 ) as CreateCategoryResponse
             }
+            const categoryOrError: Result<Category> = Category.create({ name });
+
+            if (categoryOrError.isFailure) {
+                return left(
+                    Result.fail<Category>(categoryOrError.error!.toString())
+                ) as CreateCategoryResponse;
+            }
+
+            const category: Category = categoryOrError.getValue();
+            const categoryDb = CategoryMapper.toPersistence(category)
+            try {
+                const id = await this._categoryRepository.create(categoryDb)
+                return right(Result.OK(id))
+            } catch (error) {
+                return left(new ApplicationError.UnexpectedError(error)) as CreateCategoryResponse
+            }
         } 
         
         catch (error) {
-            console.log(error)    
+            return left(new ApplicationError.UnexpectedError(error)) as CreateCategoryResponse
         }
-        const categoryOrError: Result<Category> = Category.create({ name });
-
-        if (categoryOrError.isFailure) {
-            return left(
-              Result.fail<Category>(categoryOrError.error!.toString())
-            ) as CreateCategoryResponse;
-        }
-
-        const category: Category = categoryOrError.getValue();
-
-        const categoryDb = CategoryMapper.toPersistence(category)
-        const id = await this._categoryRepository.create(categoryDb)
-
-        return right(Result.OK(id))
     }
 }

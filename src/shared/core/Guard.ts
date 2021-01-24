@@ -1,5 +1,4 @@
 import * as validator from 'class-validator'
-import { MessageError, ContentError } from './../exceptions/MessageError';
 
 export interface IGuardResult {
     succeeded: boolean;
@@ -9,7 +8,7 @@ export interface IGuardResult {
 export interface IGuardArgument {
     argument: any;
     argumentName: string;
-  }
+}
 
 export type GuardArgumentCollection = IGuardArgument[];
   
@@ -18,8 +17,11 @@ export class Guard {
         if(validator.isEmpty(argument))
             return {
                 succeeded: false,
-                message: new MessageError(ContentError.PARAM_INVALID(), argumentName).getMessage()
+                message: 'param invalid'
             }
+        return {
+            succeeded: true
+        }
     }
 
     public static againstNullOrUndefinedBulk(args: GuardArgumentCollection): IGuardResult {
@@ -29,7 +31,7 @@ export class Guard {
                 return result;
         }
     
-        return { 
+        return {
             succeeded: true 
         }
     }

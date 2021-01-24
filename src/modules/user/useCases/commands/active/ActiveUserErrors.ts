@@ -1,4 +1,3 @@
-import { MessageError, ContentError } from './../../../../../shared/exceptions/MessageError';
 import { Result } from "../../../../../shared/core/Result";
 import { UseCaseError } from "../../../../../shared/core/UseCaseError";
 
@@ -6,7 +5,7 @@ export namespace ActiveUserErrors {
     export class DataInvalidError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: new MessageError(ContentError.DATA_INVALID()).getMessage()
+                message: 'Data Invalid Error'
             } as UseCaseError)
         }
     }
@@ -14,7 +13,7 @@ export namespace ActiveUserErrors {
     export class ExpiredTimeError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: new MessageError(ContentError.PARAM_EXPIRED(), 'activation key').getMessage()
+                message: 'expired time error'
             })
         }
     }
@@ -22,7 +21,7 @@ export namespace ActiveUserErrors {
     export class CannotSaveError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: new MessageError(ContentError.DATA_CANNOT_SAVE()).getMessage()
+                message: 'cannot save error'
             })
         }
     }

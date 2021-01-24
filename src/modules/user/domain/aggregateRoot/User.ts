@@ -20,8 +20,6 @@ import { UserPhone } from "../valueObject/UserPhone";
 import { Result } from "../../../../shared/core/Result";
 import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
-import { UserStatusType } from "../../enums/UserStatusType";
-import { ContentError, MessageError } from "../../../../shared/exceptions/MessageError";
 import { UserStatus } from '../valueObject/UserStatus';
 
 interface IUserProps {

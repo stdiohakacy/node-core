@@ -1,4 +1,3 @@
-import { MessageError, ContentError } from './../../../../shared/exceptions/MessageError';
 import { GenderType } from './../../enums/GenderType';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
@@ -18,8 +17,8 @@ export class UserGender extends ValueObject<IUserGenderProps> {
     }
 
     public static create(props: IUserGenderProps): Result<UserGender> {
-        if(!validator.isEnum(props.value, GenderType))
-            return Result.fail<UserGender>(new MessageError(ContentError.DATA_INVALID()).getMessage())
+        // if(!validator.isEnum(props.value, GenderType))
+        //     return Result.fail<UserGender>(new MessageError(ContentError.DATA_INVALID()).getMessage())
         return Result.OK<UserGender>(new UserGender({value: props.value}))
     }
 }

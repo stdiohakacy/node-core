@@ -8,7 +8,6 @@ import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
 interface ICategoryProps {
     name: CategoryName;
 }
-
 export class Category extends AggregateRoot<ICategoryProps> {
     private constructor (props: ICategoryProps, id?: UniqueEntityId) {
         super(props, id)

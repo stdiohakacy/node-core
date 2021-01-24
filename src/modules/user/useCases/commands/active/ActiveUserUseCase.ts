@@ -1,3 +1,4 @@
+import { right } from './../../../../../shared/core/Result';
 import { UserDb } from './../../../infra/databases/typeorm/entities/UserDb';
 import { UserRepository } from './../../../repositories/UserRepository';
 import { UserEmail } from './../../../domain/valueObject/UserEmail';
@@ -26,7 +27,7 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
         ])
 
         if(dtoResults.isFailure) 
-            return left(Result.fail<void>(dtoResults.error())) as ActiveUserResponse
+            return left(Result.fail<void>(dtoResults.error))
 
         const activeKey: UserActiveKey = activeKeyOrError.getValue()
         const email: UserEmail = emailOrError.getValue()
@@ -34,10 +35,10 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
         try {
             const user = await this._userRepository.getByEmail(email)
             if(!user || user.activeKey !== activeKey || user.status.value === UserStatusType.ACTIVED) {
-                return left(new ActiveUserErrors.DataInvalidError()) as ActiveUserResponse
+                return left(new ActiveUserErrors.DataInvalidError())
             }
             if(!user.activeExpire.value || user.activeExpire.value < new Date())
-                return left(new ActiveUserErrors.ExpiredTimeError()) as ActiveUserResponse
+                return left(new ActiveUserErrors.ExpiredTimeError())
 
             const userDb = new UserDb()
             userDb.status = UserStatusType.ACTIVED
@@ -47,17 +48,17 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
             try {
                 const isUpdated = await this._userRepository.update(user.id.toString(), userDb)
                 if(!isUpdated)
-                    return left(new ActiveUserErrors.CannotSaveError()) as ActiveUserResponse
+                    return left(new ActiveUserErrors.CannotSaveError())
+                return right(Result.OK<boolean>(isUpdated))
             }
             catch (error) {
                 console.error(error)
-                return left(new ApplicationError.UnexpectedError(error)) as ActiveUserResponse
+                return left(new ApplicationError.UnexpectedError(error))
             }
         }
         catch (error) {
             console.error(error)
-            return left(new ApplicationError.UnexpectedError(error)) as ActiveUserResponse
+            return left(new ApplicationError.UnexpectedError(error))
         }
-
     }
 }

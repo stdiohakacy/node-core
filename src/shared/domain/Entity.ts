@@ -5,28 +5,25 @@ const isEntity = (v: any): v is Entity<any> => {
 };
 
 export abstract class Entity<T> {
-  protected readonly _id: UniqueEntityId;
-  public readonly props: T;
+    protected readonly _id: UniqueEntityId;
+    public readonly props: T;
 
-  constructor (props: T, id?: UniqueEntityId) {
-    this._id = id ? id : new UniqueEntityId();
-    this.props = props;
-  }
-
-  public equals (object?: Entity<T>) : boolean {
-
-    if (object == null || object == undefined) {
-      return false;
+    constructor (props: T, id?: UniqueEntityId) {
+        this._id = id ? id : new UniqueEntityId();
+        this.props = props;
     }
 
-    if (this === object) {
-      return true;
-    }
+    public equals (object?: Entity<T>) : boolean {
+        if (object == null || object == undefined) {
+            return false;
+        }
+        if (this === object) {
+            return true;
+        }
+        if (!isEntity(object)) {
+            return false;
+        }
 
-    if (!isEntity(object)) {
-      return false;
+        return this._id.equals(object._id);
     }
-
-    return this._id.equals(object._id);
-  }
 }

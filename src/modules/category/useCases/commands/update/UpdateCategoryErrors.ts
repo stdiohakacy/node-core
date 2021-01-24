@@ -1,4 +1,3 @@
-import { MessageError, ContentError } from './../../../../../shared/exceptions/MessageError';
 import { UseCaseError } from "../../../../../shared/core/UseCaseError"
 import { Result } from "../../../../../shared/core/Result"
 
@@ -6,7 +5,7 @@ export namespace UpdateCategoryErrors {
     export class NotFoundError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-                message: new MessageError(ContentError.PARAM_NOT_EXISTS(), 'category').getMessage()
+                message: 'not found error'
             } as UseCaseError)
         }
     }
@@ -14,7 +13,7 @@ export namespace UpdateCategoryErrors {
     export class NameAlreadyExistsError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-            message: new MessageError(ContentError.PARAM_EXISTED(), 'category').getMessage()
+            message: 'name already exist error'
             } as UseCaseError)
         }
     }

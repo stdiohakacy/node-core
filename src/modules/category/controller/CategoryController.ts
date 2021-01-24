@@ -1,5 +1,6 @@
-import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParams } from "routing-controllers";
 import Container from 'typedi';
+import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParams, Res } from "routing-controllers";
+import { MessageError, SystemError } from './../../../shared/exceptions/SystemError';
 import { FindCategoriesUseCase } from './../useCases/queries/find/FindCategoriesUseCase';
 import { FindCategoriesResponse } from './../useCases/queries/find/FindCategoriesResponse';
 import { FindCategoriesQueryDTO } from './../useCases/queries/find/FindCategoriesQueryDTO';
@@ -12,19 +13,24 @@ import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategor
 import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
 import { GetCategoryByIdQueryDTO } from '../useCases/queries/getById/GetCategoryByIdQueryDTO';
 import { CreateCategoryCommandDTO } from '../useCases/commands/create/CreateCategoryCommandDTO';
-import { CreateCategoryResponse } from '../useCases/commands/create/CreateCategoryResponse';
 import { UpdateCategoryCommandDTO } from '../useCases/commands/update/UpdateCategoryCommandDTO';
 import { DeleteCategoryResponse } from '../useCases/commands/delete/DeleteCategoryResponse';
+import { CreateCategoryErrors } from "../useCases/commands/create/CreateCategoryErrors";
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { Response } from 'express';
+import { ApplicationError } from '../../../shared/core/ApplicationError';
 
 @JsonController('/v1/categories')
-export class CategoryController {
+export class CategoryController extends BaseController {
     constructor(
         private readonly _findCategoriesUseCase: FindCategoriesUseCase = Container.get(FindCategoriesUseCase),
         private readonly _getCategoryByIdUseCase: GetCategoryByIdUseCase = Container.get(GetCategoryByIdUseCase),
         private readonly _createCategoryUseCase: CreateCategoryUseCase = Container.get(CreateCategoryUseCase),
         private readonly _updateCategoryUseCase: UpdateCategoryUseCase = Container.get(UpdateCategoryUseCase),
         private readonly _deleteCategoryUseCase: DeleteCategoryUseCase = Container.get(DeleteCategoryUseCase),
-    ) {}
+    ) {
+        super();
+    }
 
     @Get('/')
     async find(@QueryParams() param: FindCategoriesQueryDTO): Promise<FindCategoriesResponse> {
@@ -37,8 +43,27 @@ export class CategoryController {
     }
 
     @Post('/')
-    async post(@Body() param: CreateCategoryCommandDTO): Promise<CreateCategoryResponse> {
-        return await this._createCategoryUseCase.execute(param)
+    async post(@Body() param: CreateCategoryCommandDTO, @Res() res: Response): Promise<Response> {
+        try {
+            const result = await this._createCategoryUseCase.execute(param)
+            const resultValue = result.value
+
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case CreateCategoryErrors.NameAlreadyExistsError:
+                        throw new SystemError(MessageError.PARAM_EXISTED, 'name')
+                    case ApplicationError.UnexpectedError:
+                        throw new SystemError(MessageError.SOMETHING_WRONG)
+                    default:
+                        return this.fail(res, resultValue.errorValue())
+                }
+            } else {
+                return this.created(res, resultValue.getValue())
+            }
+        }
+        catch (error) {
+            return this.fail(res, error)
+        }
     }
 
     @Put('/:id([0-9a-f-]{36})')
