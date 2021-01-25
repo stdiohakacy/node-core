@@ -6,8 +6,6 @@ import { FindCategoriesResponse } from './../useCases/queries/find/FindCategorie
 import { FindCategoriesQueryDTO } from './../useCases/queries/find/FindCategoriesQueryDTO';
 import { DeleteCategoryUseCase } from '../useCases/commands/delete/DeleteCategoryUseCase';
 import { DeleteCategoryCommandDTO } from '../useCases/commands/delete/DeleteCategoryCommandDTO';
-import { UpdateCategoryResponse } from '../useCases/commands/update/UpdateCategoryResponse';
-import { GetCategoryByIdResponse } from '../useCases/queries/getById/GetCategoryByIdResponse';
 import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryByIdUseCase';
 import { UpdateCategoryUseCase } from '../useCases/commands/update/UpdateCategoryUseCase';
 import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategoryUseCase";
@@ -21,6 +19,7 @@ import { Response } from 'express';
 import { ApplicationError } from '../../../shared/core/ApplicationError';
 import { GetCategoryByIdErrors } from '../useCases/queries/getById/GetCategoryByIdErrors';
 import { UpdateCategoryErrors } from '../useCases/commands/update/UpdateCategoryErrors';
+import { DeleteCategoryErrors } from '../useCases/commands/delete/DeleteCategoryErrors';
 
 @JsonController('/v1/categories')
 export class CategoryController extends BaseController {
@@ -118,7 +117,27 @@ export class CategoryController extends BaseController {
     }
     
     @Delete('/:id([0-9a-f-]{36})')
-    async delete(@Params() param: DeleteCategoryCommandDTO): Promise<DeleteCategoryResponse> {
-        return await this._deleteCategoryUseCase.execute(param);
+    async delete(@Params() param: DeleteCategoryCommandDTO, @Res() res: Response): Promise<Response> {
+        try {
+            const result = await this._deleteCategoryUseCase.execute(param)
+            const resultValue = result.value
+
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case DeleteCategoryErrors.NotFoundError:
+                        throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'id')
+                    case ApplicationError.UnexpectedError:
+                        throw new SystemError(MessageError.SOMETHING_WRONG)
+                    default:
+                        return this.fail(res, resultValue.errorValue())
+                }
+            } else {
+                return this.OK(res, resultValue.getValue())
+            }
+        } 
+        catch (error) {
+            console.error(error)
+            return this.fail(res, error)
+        }
     }
 }
