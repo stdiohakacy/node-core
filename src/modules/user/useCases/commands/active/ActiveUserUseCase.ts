@@ -26,20 +26,23 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
             emailOrError,
         ])
 
-        if(dtoResults.isFailure) 
-            return left(Result.fail<void>(dtoResults.error))
+        if(dtoResults.isFailure)
+            return left(Result.fail(dtoResults.error))
 
-        const activeKey: UserActiveKey = activeKeyOrError.getValue()
-        const email: UserEmail = emailOrError.getValue()
+        const activeKey = activeKeyOrError.getValue()
+        const email = emailOrError.getValue()
 
         try {
             const user = await this._userRepository.getByEmail(email)
-            if(!user || user.activeKey !== activeKey || user.status.value === UserStatusType.ACTIVED) {
-                return left(new ActiveUserErrors.DataInvalidError())
-            }
-            if(!user.activeExpire.value || user.activeExpire.value < new Date())
-                return left(new ActiveUserErrors.ExpiredTimeError())
-
+            if (!user)
+                return left(new ActiveUserErrors.NotFoundError)
+            if(JSON.stringify(user.activeKey) !== JSON.stringify(activeKey))
+                return left(new ActiveUserErrors.ActiveKeyInvalid)
+            if(user.status.value === UserStatusType.ACTIVED)
+                return left(new ActiveUserErrors.UserStatusError)
+            if (!user.activeExpire || user.activeExpire.value < new Date())
+                return left(new ActiveUserErrors.ExpiredTimeError)
+                
             const userDb = new UserDb()
             userDb.status = UserStatusType.ACTIVED
             userDb.activeKey = ''
@@ -49,7 +52,7 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
                 const isUpdated = await this._userRepository.update(user.id.toString(), userDb)
                 if(!isUpdated)
                     return left(new ActiveUserErrors.CannotSaveError())
-                return right(Result.OK<boolean>(isUpdated))
+                return right(Result.OK(isUpdated))
             }
             catch (error) {
                 console.error(error)
@@ -60,5 +63,7 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
+
+        
     }
 }

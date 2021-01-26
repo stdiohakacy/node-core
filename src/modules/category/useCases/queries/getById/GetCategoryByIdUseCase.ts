@@ -28,10 +28,6 @@ export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryById
                 return left(new GetCategoryByIdErrors.NotFoundError())
 
             const categoryMapper = CategoryMapper.toDomain(category)
-            
-            if(!categoryMapper) 
-                return left(Result.fail(GetCategoryByIdErrors.NotFoundError))
-            
             return right(Result.OK(categoryMapper));
         } 
         catch (error) {

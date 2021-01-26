@@ -27,7 +27,7 @@ interface IUserProps {
     firstName: UserFirstName,
     lastName?: UserLastName,
     email: UserEmail,
-    password: UserPassword,
+    password?: UserPassword,
     avatar?: UserAvatar,
     gender?: UserGender,
     birthday?: UserBirthday,
@@ -123,7 +123,7 @@ export class User extends AggregateRoot<IUserProps> {
         const guard = Guard.againstNullOrUndefinedBulk([
             { argument: props.firstName, argumentName: 'firstName' },
             { argument: props.email, argumentName: 'email' },
-            { argument: props.password, argumentName: 'password' },
+            // { argument: props.password, argumentName: 'password' },
         ])
 
         if(!guard.succeeded)

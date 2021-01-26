@@ -5,25 +5,29 @@ import { IMapper } from './../../../shared/IMapper';
 import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
 import { UserStatus } from '../domain/valueObject/UserStatus';
 import { UserFirstName } from '../domain/valueObject/UserFirstName';
-import { UserPassword } from '../domain/valueObject/UserPassword';
 import { UserStatusType } from '../enums/UserStatusType';
+import { UserActiveKey } from '../domain/valueObject/UserActiveKey';
+import { UserActiveExpire } from '../domain/valueObject/UserActiveExpire';
 
 export class UserMapper implements IMapper<User> {
     public static toDomain (userDb: UserDb): User | null {
         const userStatusOrError = UserStatus.create({ value: userDb.status })
         const userFirstNameOrError = UserFirstName.create({ value: userDb.firstName })
-        const userEmailOrError = UserEmail.create({value: userDb.email })
-        const userPassword = UserPassword.create({ value: userDb.password })
+        const userEmailOrError = UserEmail.create({ value: userDb.email })
+        const userActiveKeyOrError = UserActiveKey.create({ value: userDb.activeKey })
+        const userActiveExpireOrError = UserActiveExpire.create({ value: userDb.activeExpire })
 
         const userOrError = User.create({
             firstName: userFirstNameOrError.getValue(),
             email: userEmailOrError.getValue(),
-            password: userPassword.getValue(),
-            status: userStatusOrError.getValue()
+            status: userStatusOrError.getValue(),
+            activeKey: userActiveKeyOrError.getValue(),
+            activeExpire: userActiveExpireOrError.getValue()
         }, new UniqueEntityId(userDb.id))
-        
-        if(userOrError.isFailure)
+
+        if(userOrError.isFailure) {
             console.log(userOrError.error)
+        }
 
         return userOrError.isSuccess ? userOrError.getValue() : null
     }
