@@ -18,6 +18,7 @@ import { left, Result, right } from '../../../../../shared/core/Result';
 import { SignUpUserErrors } from './SignUpUserErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserMapper } from '../../../infra/UserMapper';
+import { addSeconds } from '../../../../../shared/libs/date';
 
 
 @Service()
@@ -33,18 +34,18 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const lastNameOrError = UserLastName.create({ value: param.lastName })
         const emailOrError = UserEmail.create({ value: param.email })
         const passwordOrError = UserPassword.create({ value: param.password })
-        // const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
-        // const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
-        // const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
+        const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
+        const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
+        const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
 
         const dtoResults = Result.combine([
             firstNameOrError,
             lastNameOrError,
             emailOrError,
             passwordOrError,
-            // statusOrError,
-            // activeKeyOrError,
-            // activeExpireOrError
+            statusOrError,
+            activeKeyOrError,
+            activeExpireOrError
         ])
 
         if(dtoResults.isFailure) {
@@ -55,9 +56,9 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const lastName = lastNameOrError.getValue()
         const email = emailOrError.getValue()
         const password  = passwordOrError.getValue()
-        // const status: UserStatus = statusOrError.getValue()
-        // const activeKey: UserActiveKey = activeKeyOrError.getValue()
-        // const activeExpire: UserActiveExpire = activeExpireOrError.getValue()
+        const status = statusOrError.getValue()
+        const activeKey = activeKeyOrError.getValue()
+        const activeExpire = activeExpireOrError.getValue()
 
         try {
             const isEmailExist = await this._userRepository.isEmailExist(email)
@@ -72,9 +73,9 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
             lastName,
             email, 
             password,
-            // status: UserStatusType,
-            // activeKey,
-            // activeExpire
+            status,
+            activeKey,
+            activeExpire
         })
 
         if(userOrError.isFailure)
