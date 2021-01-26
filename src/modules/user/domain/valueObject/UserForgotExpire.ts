@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -16,18 +17,11 @@ export class UserForgotExpire extends ValueObject<IUserForgotExpireProps> {
     }
 
     public static create(props: IUserForgotExpireProps): Result<UserForgotExpire> {
-        // if(validator.isEmpty(props.value) || !props.value) {
-        //     return Result.fail<UserForgotExpire>(
-        //         new MessageError(
-        //             ContentError.PARAM_REQUIRED(), 
-        //             'forgot expire'
-        //         ).getMessage())
-        // }
-        // if(!validator.isDate(props.value)) {
-        //     return Result.fail<UserForgotExpire>(
-        //         new MessageError(ContentError.DATA_INVALID()).getMessage()
-        //     )
-        // }
+        if(validator.isEmpty(props.value) || !props.value)
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'forgot expire')
+        if(!validator.isDate(props.value))
+            throw new SystemError(MessageError.DATA_INVALID)
+            
         return Result.OK<UserForgotExpire>(new UserForgotExpire({value: props.value}))
     }
 }

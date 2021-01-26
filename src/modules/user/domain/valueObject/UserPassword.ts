@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Result } from "../../../../shared/core/Result";
@@ -20,21 +21,19 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     }
 
     public static create(props: IUserPasswordProps): Result<UserPassword> {
-        // if(validator.isEmpty(props.value))
-        //     return Result.fail<UserPassword>(
-        //         new MessageError(
-        //             ContentError.PARAM_REQUIRED(), 
-        //             'password'
-        //             ).getMessage()
-        //         )
-
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'password')
         if(!props.hashed) {
-            if(!validator.minLength(props.value, this.minLength) || !validator.maxLength(props.value, this.maxLength)) {
-                return Result.fail<UserPassword>(`Password doesn't meet criteria [6 - 32]`)
-            }
+            if(
+                !validator.minLength(props.value, this.minLength) || 
+                !validator.maxLength(props.value, this.maxLength)
+            )
+            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'password', 6, 12)
         }
+        if(!this.isStrong(props.value))
+            throw new SystemError(MessageError.PASSWORD_IS_NOT_STRONG)
 
-        return Result.OK<UserPassword>(
+        return Result.OK(
             new UserPassword({
                 value: props.value, 
                 hashed: !!props.hashed === true
@@ -80,5 +79,10 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
                 return resolve(compareResult)
             })
         })
+    }
+
+    public static isStrong(password: string): boolean {
+        const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+        return strongRegex.test(password)
     }
 }

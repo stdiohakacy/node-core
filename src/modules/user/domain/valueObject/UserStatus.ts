@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import { UserStatusType } from '../../enums/UserStatusType';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
@@ -17,10 +18,8 @@ export class UserStatus extends ValueObject<IUserStatusProps> {
     }
 
     public static create(props: IUserStatusProps): Result<UserStatus> {
-        // if(props.value && !validator.isEnum(props.value, UserStatusType)) {
-        //     return Result.fail<UserStatus>(
-        //         new MessageError(ContentError.PARAM_REQUIRED(), 'status').getMessage())
-        // }
+        if(props.value && !validator.isEnum(props.value, UserStatusType))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'status')
 
         return Result.OK<UserStatus>(new UserStatus({ value: props.value }))
     }

@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -18,26 +19,11 @@ export class UserLastName extends ValueObject<IUserLastName> {
     }
     
     public static create (props: IUserLastName): Result<UserLastName> {
-        // if(validator.isEmpty(props.value))
-        //     return Result.fail<UserLastName>(
-        //         new MessageError(ContentError.PARAM_REQUIRED(), 'last name').getMessage())
-        // if(!validator.minLength(props.value, this.minLength))
-        //     return Result.fail<UserLastName>(
-        //         new MessageError(
-        //             ContentError.PARAM_LEN_GREATER_OR_EQUAL(), 
-        //             'last name',
-        //             this.minLength)
-        //         .getMessage()
-        //     )
-        // if(!validator.maxLength(props.value, this.maxLength))
-        //     return Result.fail<UserLastName>(
-        //         new MessageError(
-        //             ContentError.PARAM_LEN_LESS_OR_EQUAL(), 
-        //             'last name',
-        //             this.maxLength)
-        //         .getMessage()
-        //     )
-    
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'last name')
+        if(!validator.minLength(props.value, this.minLength))
+            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'last name', this.minLength, this.maxLength)
+
         const userLastName = new UserLastName(props)
         return Result.OK<UserLastName>(userLastName);
     }

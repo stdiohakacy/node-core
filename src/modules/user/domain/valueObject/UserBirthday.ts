@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -16,10 +17,11 @@ export class UserBirthday extends ValueObject<IUserBirthdayProps> {
     }
 
     public static create(props: IUserBirthdayProps): Result<UserBirthday> {
-        // if(!validator.isDate(props.value))
-        //     return Result.fail<UserBirthday>(new MessageError(ContentError.DATA_INVALID()).getMessage())
-        // if(this.invalidBirthday(props.value))
-        //     return Result.fail<UserBirthday>(`Birthday must be past from now`)
+        if(!validator.isDate(props.value))
+            throw new SystemError(MessageError.DATA_INVALID)
+        if(this.invalidBirthday(props.value))
+            throw new SystemError(MessageError.PARAM_INVALID, 'birthday')
+        
         return Result.OK<UserBirthday>(new UserBirthday({ value: props.value }))
     }
 

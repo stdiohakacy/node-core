@@ -1,8 +1,8 @@
 import Container from 'typedi';
+import { Response } from 'express';
 import { Body, Delete, Get, JsonController, Param, Params, Post, Put, QueryParams, Res } from "routing-controllers";
 import { MessageError, SystemError } from './../../../shared/exceptions/SystemError';
 import { FindCategoriesUseCase } from './../useCases/queries/find/FindCategoriesUseCase';
-import { FindCategoriesResponse } from './../useCases/queries/find/FindCategoriesResponse';
 import { FindCategoriesQueryDTO } from './../useCases/queries/find/FindCategoriesQueryDTO';
 import { DeleteCategoryUseCase } from '../useCases/commands/delete/DeleteCategoryUseCase';
 import { DeleteCategoryCommandDTO } from '../useCases/commands/delete/DeleteCategoryCommandDTO';
@@ -12,10 +12,8 @@ import { CreateCategoryUseCase } from "../useCases/commands/create/CreateCategor
 import { GetCategoryByIdQueryDTO } from '../useCases/queries/getById/GetCategoryByIdQueryDTO';
 import { CreateCategoryCommandDTO } from '../useCases/commands/create/CreateCategoryCommandDTO';
 import { UpdateCategoryCommandDTO } from '../useCases/commands/update/UpdateCategoryCommandDTO';
-import { DeleteCategoryResponse } from '../useCases/commands/delete/DeleteCategoryResponse';
 import { CreateCategoryErrors } from "../useCases/commands/create/CreateCategoryErrors";
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { Response } from 'express';
 import { ApplicationError } from '../../../shared/core/ApplicationError';
 import { GetCategoryByIdErrors } from '../useCases/queries/getById/GetCategoryByIdErrors';
 import { UpdateCategoryErrors } from '../useCases/commands/update/UpdateCategoryErrors';
@@ -34,8 +32,25 @@ export class CategoryController extends BaseController {
     }
 
     @Get('/')
-    async find(@QueryParams() param: FindCategoriesQueryDTO): Promise<FindCategoriesResponse> {
-        return await this._findCategoriesUseCase.execute(param)
+    async find(@QueryParams() param: FindCategoriesQueryDTO, @Res() res: Response): Promise<Response> {
+        try {
+            const result = await this._findCategoriesUseCase.execute(param)
+            const resultValue = result.value
+
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case ApplicationError.UnexpectedError:
+                        throw new SystemError(MessageError.SOMETHING_WRONG)
+                }
+            }
+            else {
+                return this.OK(res, resultValue.getValue())
+            }
+        }
+        catch (error) {
+            console.error(error)
+            return this.fail(res, error)
+        }
     }
 
     @Get('/:id([0-9a-f-]{36})')

@@ -3,7 +3,7 @@ import { Response } from 'express'
 
 export abstract class BaseController {
     public static JsonResponse(@Res() res: Response, data?: any) {
-        return res.status(data.httpCode).json({ data })
+        return res.status(data.httpCode || 500).json({ data })
     }
 
     public fail(@Res() res: Response, error: Error | string) {

@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -16,13 +17,9 @@ export class UserForgotKey extends ValueObject<IUserForgotKeyProps> {
     }
 
     public static create(props: IUserForgotKeyProps): Result<UserForgotKey> {
-        // if(validator.isEmpty(props.value)) {
-        //     return Result.fail<UserForgotKey>(
-        //         new MessageError(
-        //             ContentError.PARAM_REQUIRED(), 
-        //             'forgot key'
-        //         ).getMessage())
-        // }
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'forgot key')
+
         return Result.OK<UserForgotKey>(new UserForgotKey({value: props.value}))
     }
 }

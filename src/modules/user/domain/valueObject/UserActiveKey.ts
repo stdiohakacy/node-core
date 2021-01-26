@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -16,11 +17,9 @@ export class UserActiveKey extends ValueObject<IUserActiveKeyProps> {
     }
 
     public static create(props: IUserActiveKeyProps): Result<UserActiveKey> {
-        // if(validator.isEmpty(props.value)) {
-        //     return Result.fail<UserActiveKey>(
-        //         new MessageError(ContentError.PARAM_REQUIRED(), 'active key').getMessage()
-        //     )
-        // }
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'active key')
+            
         return Result.OK<UserActiveKey>(
             new UserActiveKey({ value: props.value })
         )

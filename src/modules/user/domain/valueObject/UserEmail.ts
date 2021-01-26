@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -19,27 +20,14 @@ export class UserEmail extends ValueObject<IUserEmailProps> {
     }
 
     public static create(props: IUserEmailProps): Result<UserEmail> {
-        // if(!validator.isEmail(props.value)) {
-        //     return Result.fail<UserEmail>(new MessageError(ContentError.DATA_INVALID()).getMessage())
-        // }
-        // if(!validator.minLength(props.value, this.minLength))
-        //     return Result.fail<UserEmail>(
-        //         new MessageError(
-        //             ContentError.PARAM_LEN_GREATER_OR_EQUAL(), 
-        //             'email', 
-        //             this.minLength)
-        //         .getMessage()
-        //     )
-        // if(!validator.maxLength(props.value, this.maxLength))
-        //     return Result.fail<UserEmail>(
-        //         new MessageError(
-        //             ContentError.PARAM_LEN_LESS_OR_EQUAL(), 
-        //             'email', 
-        //             this.maxLength)
-        //         .getMessage()
-        //     )
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'email')
+        if(!validator.isEmail(props.value))
+            throw new SystemError(MessageError.PARAM_FORMAT_INVALID, 'email') 
+        if(!validator.minLength(props.value, this.minLength))
+            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'email', this.minLength, this.maxLength)
 
-        return Result.OK<UserEmail>(new UserEmail({value: this.format(props.value)}))
+        return Result.OK(new UserEmail({value: this.format(props.value)}))
     }
 
     // private static isValidEmail(email: string): boolean {

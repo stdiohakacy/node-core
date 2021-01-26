@@ -9,4 +9,11 @@ export namespace CreateCategoryErrors {
             } as UseCaseError)
         }
     }
+    export class DataCannotSave extends Result<UseCaseError> {    
+        constructor () {
+            super(false, {
+                message: 'Data cannot save'
+            } as UseCaseError)
+        }
+    }
 }

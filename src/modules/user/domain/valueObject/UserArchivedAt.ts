@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -16,18 +17,11 @@ export class UserArchivedAt extends ValueObject<IUserArchivedAtProps> {
     }
 
     public static create(props: IUserArchivedAtProps): Result<UserArchivedAt> {
-        // if(validator.isEmpty(props.value)) {
-        //     return Result.fail<UserArchivedAt>(
-        //         new MessageError(
-        //             ContentError.PARAM_REQUIRED(), 
-        //             'address'
-        //         ).getMessage())
-        // }
-        // if(!validator.isDate(props.value)) {
-        //     return Result.fail<UserArchivedAt>(
-        //         new MessageError(ContentError.DATA_INVALID()).getMessage()
-        //     )
-        // }
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'archived at')
+        if(!validator.isDate(props.value))
+            throw new SystemError(MessageError.DATA_INVALID)
+            
         return Result.OK<UserArchivedAt>(new UserArchivedAt({value: props.value}))
     }
 }

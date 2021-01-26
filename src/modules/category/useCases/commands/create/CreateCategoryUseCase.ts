@@ -40,6 +40,8 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
             const categoryDb = CategoryMapper.toPersistence(category)
             try {
                 const id = await this._categoryRepository.create(categoryDb)
+                if(!id)
+                    return left(new CreateCategoryErrors.DataCannotSave())
                 return right(Result.OK(id))
             } catch (error) {
                 console.error(error)

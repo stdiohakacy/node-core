@@ -42,6 +42,8 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategory
                     return left(new UpdateCategoryErrors.AlreadyExistsError())
                 try {
                     const isUpdated = await this._categoryRepository.update(param.id, categoryDb)
+                    if(!isUpdated)
+                        return left(new UpdateCategoryErrors.DataCannotSave())
                     return right(Result.OK(isUpdated))
                 } 
                 catch (error) {

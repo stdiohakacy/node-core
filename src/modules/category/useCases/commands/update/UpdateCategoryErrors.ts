@@ -10,6 +10,14 @@ export namespace UpdateCategoryErrors {
         }
     }
 
+    export class DataCannotSave extends Result<UseCaseError> {    
+        constructor () {
+            super(false, {
+                message: 'Data cannot save'
+            } as UseCaseError)
+        }
+    }
+
     export class AlreadyExistsError extends Result<UseCaseError> {    
         constructor () {
             super(false, {

@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import * as validator from 'class-validator'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
@@ -20,21 +21,10 @@ export class UserCurrency extends ValueObject<IUserCurrencyProps> {
     public static create(props: IUserCurrencyProps): Result<UserCurrency> {
         props.value = props.value.trim()
 
-        // if(validator.isEmpty(props.value)) {
-        //     return Result.fail<UserCurrency> (
-        //         new MessageError(
-        //             ContentError.PARAM_LEN_EQUAL(), 
-        //             'currency', 
-        //             this.maxLength
-        //         ).getMessage()
-        //     )
-        // }
-        // if(props.value.length !== this.maxLength)
-        //     new MessageError(
-        //         ContentError.PARAM_LEN_EQUAL(), 
-        //         'currency', 
-        //         this.maxLength
-        //     ).getMessage()
+        if(validator.isEmpty(props.value))
+            throw new SystemError(MessageError.PARAM_REQUIRED, 'currency')
+        if(props.value.length !== this.maxLength)
+            throw new SystemError(MessageError.PARAM_LEN_EQUAL, 'currency')
 
         return Result.OK<UserCurrency>(new UserCurrency({value: props.value}))
     }

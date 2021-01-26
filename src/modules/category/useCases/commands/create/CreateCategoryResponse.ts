@@ -4,6 +4,7 @@ import { CreateCategoryErrors } from "./CreateCategoryErrors";
 
 export type CreateCategoryResponse = Either<
   CreateCategoryErrors.AlreadyExistsError |
+  CreateCategoryErrors.DataCannotSave |
   ApplicationError.UnexpectedError |
   Result<any>,
   Result<string>
