@@ -7,7 +7,7 @@ export type ActiveUserResponse = Either<
     ActiveUserErrors.CannotSaveError |
     ActiveUserErrors.ExpiredTimeError |
     ActiveUserErrors.NotFoundError |
-    ActiveUserErrors.UserIsActiveError |
+    ActiveUserErrors.UserStatusError |
     ApplicationError.UnexpectedError |
     Result<any>,
     Result<boolean>

@@ -63,7 +63,5 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
-
-        
     }
 }

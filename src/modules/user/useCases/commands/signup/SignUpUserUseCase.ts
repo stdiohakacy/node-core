@@ -68,7 +68,7 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         catch (error) {
             return left(new ApplicationError.UnexpectedError(error))
         }
-        const userOrError: Result<User> = User.create({
+        const userOrError = User.create({
             firstName,
             lastName,
             email, 

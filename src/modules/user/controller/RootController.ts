@@ -11,12 +11,15 @@ import { SignUpUserErrors } from '../useCases/commands/signup/SignUpUserErrors';
 import { ApplicationError } from '../../../shared/core/ApplicationError';
 import { ActiveUserUseCase } from '../useCases/commands/active/ActiveUserUseCase';
 import { ActiveUserErrors } from '../useCases/commands/active/ActiveUserErrors';
+import { ResendActivationUserUseCase } from '../useCases/commands/resend-activation/ResendActivationUserUseCase';
+import { ResendActivationUserErrors } from '../useCases/commands/resend-activation/ResendActivationUserErrors';
 
 @JsonController('/v1')
 export class RootController extends BaseController {
     constructor(
         private readonly _signUpUserUseCase = Container.get(SignUpUserUseCase),
         private readonly _activeUserUseCase = Container.get(ActiveUserUseCase),
+        private readonly _resendActivationUserUseCase = Container.get(ResendActivationUserUseCase),
     ) {
         super()
     }
@@ -66,6 +69,33 @@ export class RootController extends BaseController {
                         throw new SystemError(MessageError.DATA_CANNOT_SAVE)
                     case ActiveUserErrors.ExpiredTimeError:
                         throw new SystemError(MessageError.PARAM_EXPIRED, 'active expire')
+                    default:
+                        return this.fail(res, resultValue.errorValue())
+                }
+            } else {
+                return this.OK(res, resultValue.getValue())
+            }
+        }
+        catch (error) {
+            console.error('ERROR', error)
+            return this.fail(res, error)
+        }
+    }
+
+    @Post('/resend-active')
+    async resendActivation(@Body() param: ActiveUserCommandDTO, @Res() res: Response): Promise<Response> {
+        try {
+            const result = await this._resendActivationUserUseCase.execute(param);
+            const resultValue = result.value
+            
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case ResendActivationUserErrors.CannotSaveError:
+                        throw new SystemError(MessageError.DATA_CANNOT_SAVE)
+                    case ResendActivationUserErrors.NotFoundError:
+                        throw new SystemError(MessageError.PARAM_NOT_FOUND, 'user')
+                    case ResendActivationUserErrors.UserStatusError:
+                        throw new SystemError(MessageError.PARAM_INCORRECT, 'user status')
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }
