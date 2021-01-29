@@ -1,6 +1,5 @@
 import { UserActiveExpire } from './../../../domain/valueObject/UserActiveExpire';
 import { UserActiveKey } from './../../../domain/valueObject/UserActiveKey';
-import * as crypto from 'crypto';
 import { JwtAuthService } from './../../../../../shared/services/JwtAuthService';
 import { Inject, Service } from 'typedi';
 import { UserStatusType } from './../../../enums/UserStatusType';
@@ -19,6 +18,7 @@ import { SignUpUserErrors } from './SignUpUserErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserMapper } from '../../../infra/UserMapper';
 import { addSeconds } from '../../../../../shared/libs/date';
+import { randomBytes } from 'crypto';
 
 
 @Service()
@@ -35,7 +35,7 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const emailOrError = UserEmail.create({ value: param.email })
         const passwordOrError = UserPassword.create({ value: param.password })
         const statusOrError = UserStatus.create({ value: UserStatusType.INACTIVE })
-        const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
+        const activeKeyOrError = UserActiveKey.create({value: randomBytes(32).toString('hex')})
         const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
 
         const dtoResults = Result.combine([

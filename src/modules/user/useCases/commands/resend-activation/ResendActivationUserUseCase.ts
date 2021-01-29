@@ -11,9 +11,9 @@ import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Inject, Service } from 'typedi';
 import { UserStatusType } from '../../../enums/UserStatusType';
 import { ResendActivationUserErrors } from './ResendActivationUserErrors';
-import * as crypto from 'crypto';
 import { addSeconds } from '../../../../../shared/libs/date';
 import { UserActiveExpire } from '../../../domain/valueObject/UserActiveExpire';
+import { randomBytes } from 'crypto';
 
 @Service()
 export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendActivationUserCommandDTO, Promise<ResendActivationUserResponse>> {
@@ -35,7 +35,7 @@ export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendAc
             if(user.status.value === UserStatusType.ACTIVED)
                 return left(new ResendActivationUserErrors.UserStatusError)
 
-            const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
+            const activeKeyOrError = UserActiveKey.create({value: randomBytes(32).toString('hex')})
             const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
 
             const dtoResults = Result.combine([
