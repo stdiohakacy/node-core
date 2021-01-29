@@ -38,7 +38,6 @@ export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendAc
             const activeKeyOrError = UserActiveKey.create({value: crypto.randomBytes(32).toString('hex')})
             const activeExpireOrError = UserActiveExpire.create({ value: addSeconds(new Date(), 3 * 24 * 60 * 60 ) })
 
-
             const dtoResults = Result.combine([
                 activeKeyOrError,
                 activeExpireOrError
@@ -71,7 +70,5 @@ export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendAc
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
-
-        
     }
 }

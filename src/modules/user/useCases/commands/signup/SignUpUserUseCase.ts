@@ -83,6 +83,7 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
 
         const user = userOrError.getValue()
         const userDb = await UserMapper.toPersistence(user)
+        
         try {
             const user = await this._userRepository.createGet(userDb)
             if(!user)
