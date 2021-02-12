@@ -3,11 +3,11 @@ import { Request, Response } from 'express'
 import { ICQRS } from "../../../core/ICQRS";
 
 export abstract class BaseController {
-    protected abstract executeImpl (req: ICQRS, res: Response): Promise<void | any>;
+    protected abstract executeImpl (req: ICQRS, res: Response, param?: string): Promise<void | any>;
 
-    public async execute (req: ICQRS, @Res() res: Response): Promise<void> {
+    public async execute (req: ICQRS, @Res() res: Response, param?: string): Promise<void> {
         try {
-            await this.executeImpl(req, res);
+            await this.executeImpl(req, res, param);
         } catch (err) {
             console.log(`[BaseController]: Uncaught controller error`);
             console.log(err);
@@ -22,7 +22,7 @@ export abstract class BaseController {
     public OK<T> (@Res() res: Response, dto?: T) {
         if (!!dto) {
             res.type('application/json');
-            return res.status(200).json(dto);
+            return res.status(200).json({data: dto});
         } 
         return res.sendStatus(200);
     }

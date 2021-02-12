@@ -3,10 +3,18 @@ import { Result } from "../../../../../shared/core/Result"
 
 export namespace UpdateCategoryErrors {
     export class NotFoundError extends Result<UseCaseError> {    
-        constructor () {
+        constructor (id: string) {
             super(false, {
-                message: 'Not found error'
-            } as UseCaseError)
+                message: `The category ${id} was not found!`
+            })
+        }
+    }
+
+    export class NameAlreadyExistsError extends Result<UseCaseError> {
+        constructor(name: string) {
+            super(false, {
+                message: `The category ${name} is already existed!`
+            })
         }
     }
 
@@ -14,15 +22,7 @@ export namespace UpdateCategoryErrors {
         constructor () {
             super(false, {
                 message: 'Data cannot save'
-            } as UseCaseError)
-        }
-    }
-
-    export class AlreadyExistsError extends Result<UseCaseError> {    
-        constructor () {
-            super(false, {
-            message: 'Already exists error'
-            } as UseCaseError)
+            })
         }
     }
 }

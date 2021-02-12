@@ -5,7 +5,7 @@ import { UpdateCategoryErrors } from "./UpdateCategoryErrors";
 
 export type UpdateCategoryResponse = Either<
     UpdateCategoryErrors.NotFoundError |
-    UpdateCategoryErrors.AlreadyExistsError |
+    UpdateCategoryErrors.NameAlreadyExistsError |
     UpdateCategoryErrors.DataCannotSave |
     ApplicationError.UnexpectedError |
     Result<any>,

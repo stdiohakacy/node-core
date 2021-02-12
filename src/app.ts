@@ -1,3 +1,4 @@
+import { UpdateCategoryController } from './modules/category/controller/UpdateCategoryController';
 import 'reflect-metadata';
 import { createExpressServer } from 'routing-controllers';
 import { createConnection } from "typeorm";
@@ -6,7 +7,7 @@ import { GetCategoryByIdController } from './modules/category/controller/GetCate
 
 const app = createExpressServer({
     controllers: [
-        CreateCategoryController, GetCategoryByIdController
+        CreateCategoryController, GetCategoryByIdController, UpdateCategoryController
     ]
 });
 
