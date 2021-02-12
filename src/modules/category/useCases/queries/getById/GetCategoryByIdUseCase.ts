@@ -7,7 +7,6 @@ import { CategoryId } from '../../../domain/entity/CategoryId';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { GetCategoryByIdErrors } from './GetCategoryByIdErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
-import { Category } from '../../../domain/aggregateRoot/Category';
 import { Inject, Service } from 'typedi';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 
@@ -25,7 +24,7 @@ export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryById
         try {
             const category = await this._categoryRepository.getById(categoryId.id.toString())
             if(!category)
-                return left(new GetCategoryByIdErrors.NotFoundError())
+                return left(new GetCategoryByIdErrors.NotFoundError(categoryId.id.toString()))
 
             const categoryMapper = CategoryMapper.toDomain(category)
             return right(Result.OK(categoryMapper));

@@ -4,8 +4,8 @@ import { Category } from "../../../domain/aggregateRoot/Category";
 import { GetCategoryByIdErrors } from "./GetCategoryByIdErrors";
 
 export type GetCategoryByIdResponse = Either<
-  GetCategoryByIdErrors.NotFoundError |
-  ApplicationError.UnexpectedError |
-  Result<any>,
-  Result<Category>
+    GetCategoryByIdErrors.NotFoundError |
+    ApplicationError.UnexpectedError |
+    Result<any>,
+    Result<Category>
 >

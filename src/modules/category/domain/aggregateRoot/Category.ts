@@ -22,9 +22,9 @@ export class Category extends AggregateRoot<ICategoryProps> {
     }
 
     public static create (props: ICategoryProps, id?: UniqueEntityId): Result<Category> {
-        const guard = Guard.againstNullOrUndefined(props.name, 'name')
-        if(!guard.succeeded)
-            return Result.fail<Category>(guard.message)
+        const guardResult = Guard.againstNullOrUndefined(props.name, 'name')
+        if(!guardResult.succeeded)
+            return Result.fail<Category>(guardResult.message)
 
         const category = new Category({...props}, id)
         return Result.OK<Category>(category);

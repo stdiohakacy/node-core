@@ -3,10 +3,10 @@ import { Result } from "../../../../../shared/core/Result"
 
 export namespace GetCategoryByIdErrors {
     export class NotFoundError extends Result<UseCaseError> {    
-        constructor () {
+        constructor (id: string) {
             super(false, {
-                message: 'Not found error'
-            } as UseCaseError)
+                message: `The category ${id} was not found!`
+            })
         }
     }
 }

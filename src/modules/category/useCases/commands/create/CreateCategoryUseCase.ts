@@ -23,18 +23,13 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
         const name = categoryNameOrError.getValue();
         try {
             const isExist = await this._categoryRepository.isExist(name)
-            if(isExist) {
-                return left(
-                    new CreateCategoryErrors.AlreadyExistsError()
-                )
-            }
+            if(isExist)
+                return left(new CreateCategoryErrors.NameAlreadyExistsError(name.value))
+            
             const categoryOrError = Category.create({ name });
 
-            if (categoryOrError.isFailure) {
-                return left(
-                    Result.fail(categoryOrError.error!.toString())
-                );
-            }
+            if (categoryOrError.isFailure)
+                return left(Result.fail(categoryOrError.error!.toString()));
 
             const category = categoryOrError.getValue();
             const categoryDb = CategoryMapper.toPersistence(category)
@@ -48,7 +43,6 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
                 return left(new ApplicationError.UnexpectedError(error))
             }
         } 
-        
         catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
