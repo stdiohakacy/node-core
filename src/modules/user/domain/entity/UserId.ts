@@ -5,25 +5,15 @@ import { Entity } from "../../../../shared/domain/Entity";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
 
 export class UserId extends Entity<any> {
-  private constructor (id?: UniqueEntityId) {
-    super(null, id)
-  }
-
-  get id (): UniqueEntityId {
-    return this._id;
-  }
-
-  public static create (id: UniqueEntityId): Result<UserId> {
-    if(validator.isEmpty(id)) {
-    //   return Result.fail<UserId>(new MessageError(ContentError.PARAM_REQUIRED(), 'id').getMessage())
-        throw new SystemError(MessageError.PARAM_REQUIRED, 'id')
+    private constructor (id?: UniqueEntityId) {
+        super(null, id)
     }
-    if(!validator.isUUID(id.toValue()))
-        // return Result.fail<UserId>(new MessageError(ContentError.PARAM_INVALID(), 'id').getMessage())
 
-        throw new SystemError(MessageError.PARAM_INVALID, 'id')
-        
-    const userId = new UserId(id) 
-    return Result.OK<UserId>(userId);
-  }
+    get id (): UniqueEntityId {
+        return this._id;
+    }
+
+    public static create (id: UniqueEntityId): Result<UserId> {
+        return Result.OK<UserId>(new UserId(id));
+    }
 }

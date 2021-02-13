@@ -11,23 +11,18 @@ import { UserActiveExpire } from '../domain/valueObject/UserActiveExpire';
 
 export class UserMapper implements IMapper<User> {
     public static toDomain (userDb: UserDb): User | null {
-        const userStatusOrError = UserStatus.create({ value: userDb.status })
-        const userFirstNameOrError = UserFirstName.create({ value: userDb.firstName })
-        const userEmailOrError = UserEmail.create({ value: userDb.email })
-        const userActiveKeyOrError = UserActiveKey.create({ value: userDb.activeKey })
-        const userActiveExpireOrError = UserActiveExpire.create({ value: userDb.activeExpire })
-
+        if(!userDb)
+            return null
         const userOrError = User.create({
-            firstName: userFirstNameOrError.getValue(),
-            email: userEmailOrError.getValue(),
-            status: userStatusOrError.getValue(),
-            activeKey: userActiveKeyOrError.getValue(),
-            activeExpire: userActiveExpireOrError.getValue()
+            firstName: UserFirstName.create({ value: userDb.firstName }).getValue(),
+            email: UserEmail.create({ value: userDb.email }).getValue(),
+            status: UserStatus.create({ value: userDb.status }).getValue(),
+            activeKey: userDb.activeKey ? UserActiveKey.create({ value: userDb.activeKey }).getValue() : null,
+            activeExpire: UserActiveExpire.create({ value: userDb.activeExpire }).getValue()
         }, new UniqueEntityId(userDb.id))
 
-        if(userOrError.isFailure) {
-            console.log(userOrError.error)
-        }
+        if(userOrError.isFailure)
+            console.error(userOrError.error)
 
         return userOrError.isSuccess ? userOrError.getValue() : null
     }

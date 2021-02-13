@@ -19,7 +19,6 @@ export class CreateCategoryController extends BaseController {
             const resultValue = result.value
             if(result.isLeft()) {
                 const error = result.value
-
                 switch (error.constructor) {
                     case CreateCategoryErrors.NameAlreadyExistsError:
                         return this.conflict(res, error.errorValue().message)

@@ -1,3 +1,4 @@
+import { ActiveUserController } from './modules/user/controller/ActiveUserController';
 import { SignUpUserController } from './modules/user/controller/SignUpUserController';
 import { FindCategoryController } from './modules/category/controller/FindCategoryController';
 import { DeleteCategoryController } from './modules/category/controller/DeleteCategoryController';
@@ -13,7 +14,7 @@ const app = createExpressServer({
         // Category
         CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
         // User
-        SignUpUserController
+        SignUpUserController, ActiveUserController
     ]
 });
 

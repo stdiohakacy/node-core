@@ -1,3 +1,4 @@
+import { Inject, Service } from 'typedi';
 import { right } from './../../../../../shared/core/Result';
 import { UserDb } from './../../../infra/databases/typeorm/entities/UserDb';
 import { UserRepository } from './../../../repositories/UserRepository';
@@ -8,7 +9,6 @@ import { ActiveUserCommandDTO } from './ActiveUserCommandDTO';
 import { IUseCaseCommandCQRS } from "../../../../../shared/core/IUseCase";
 import { left, Result } from '../../../../../shared/core/Result';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
-import { Inject, Service } from 'typedi';
 import { UserStatusType } from '../../../enums/UserStatusType';
 import { ActiveUserErrors } from './ActiveUserErrors';
 
@@ -29,17 +29,17 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
         if(dtoResults.isFailure)
             return left(Result.fail(dtoResults.error))
 
-        const activeKey = activeKeyOrError.getValue()
         const email = emailOrError.getValue()
 
         try {
             const user = await this._userRepository.getByEmail(email)
+
             if (!user)
-                return left(new ActiveUserErrors.NotFoundError)
-            if(JSON.stringify(user.activeKey) !== JSON.stringify(activeKey))
-                return left(new ActiveUserErrors.ActiveKeyInvalid)
-            if(user.status.value === UserStatusType.ACTIVED)
-                return left(new ActiveUserErrors.UserStatusError)
+                return left(new ActiveUserErrors.EmailNotFoundError(email.value))
+            if(user.status.value === UserStatusType.ACTIVED && !user.activeKey)
+                return left(new ActiveUserErrors.UserStatusError )
+            if(user.activeKey.value !== param.activeKey)
+                return left(new ActiveUserErrors.ActiveKeyInvalidError)
             if (!user.activeExpire || user.activeExpire.value < new Date())
                 return left(new ActiveUserErrors.ExpiredTimeError)
                 

@@ -2,17 +2,17 @@ import { Result } from "../../../../../shared/core/Result";
 import { UseCaseError } from "../../../../../shared/core/UseCaseError";
 
 export namespace ActiveUserErrors {
-    export class NotFoundError extends Result<UseCaseError> {    
-        constructor () {
+    export class EmailNotFoundError extends Result<UseCaseError> {    
+        constructor (email: string) {
             super(false, {
-                message: 'Not found error'
-            } as UseCaseError)
+                message: `The email ${email} was not found!`
+            })
         }
     }
-    export class ActiveKeyInvalid extends Result<UseCaseError> {
+    export class ActiveKeyInvalidError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'Active key invalid'
+                message: `The active key is invalid`
             } as UseCaseError)
         }
     }
@@ -20,7 +20,7 @@ export namespace ActiveUserErrors {
     export class ExpiredTimeError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'Expired time error'
+                message: 'The active key has expired'
             })
         }
     }
@@ -28,7 +28,7 @@ export namespace ActiveUserErrors {
     export class UserStatusError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'User status error'
+                message: 'The user has been activated'
             })
         }
     }

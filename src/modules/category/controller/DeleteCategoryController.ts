@@ -23,7 +23,7 @@ export class DeleteCategoryController extends BaseController {
                     case DeleteCategoryErrors.NotFoundError:
                         return this.notFound(res, resultValue.errorValue().message)
                     case DeleteCategoryErrors.DataCannotSave:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }
