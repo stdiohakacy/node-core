@@ -1,3 +1,5 @@
+import { FindCategoryController } from './modules/category/controller/FindCategoryController';
+import { DeleteCategoryController } from './modules/category/controller/DeleteCategoryController';
 import { UpdateCategoryController } from './modules/category/controller/UpdateCategoryController';
 import 'reflect-metadata';
 import { createExpressServer } from 'routing-controllers';
@@ -7,7 +9,7 @@ import { GetCategoryByIdController } from './modules/category/controller/GetCate
 
 const app = createExpressServer({
     controllers: [
-        CreateCategoryController, GetCategoryByIdController, UpdateCategoryController
+        CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController
     ]
 });
 
