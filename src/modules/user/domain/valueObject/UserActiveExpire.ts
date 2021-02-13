@@ -17,9 +17,9 @@ export class UserActiveExpire extends ValueObject<IUserActiveExpireProps> {
 
     public static create(props: IUserActiveExpireProps): Result<UserActiveExpire> {
         if(validator.isEmpty(props.value))
-            throw new SystemError(MessageError.PARAM_REQUIRED, 'active expired')
+            return Result.fail<UserActiveExpire>('The active expire is required')
         if(!validator.isDate(props.value))
-            throw new SystemError(MessageError.DATA_INVALID)
+            return Result.fail<UserActiveExpire>('The active expire is invalid')
 
         return Result.OK<UserActiveExpire>(
             new UserActiveExpire({value: props.value})

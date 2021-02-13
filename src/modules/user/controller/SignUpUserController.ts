@@ -1,5 +1,5 @@
-import { ActiveUserCommandDTO } from './../useCases/commands/active/ActiveUserCommandDTO';
-import { SystemError, MessageError } from './../../../shared/exceptions/SystemError';
+import { ActiveUserCommandDTO } from '../useCases/commands/active/ActiveUserCommandDTO';
+import { SystemError, MessageError } from '../../../shared/exceptions/SystemError';
 import { SignUpUserResponse } from '../useCases/commands/signup/SignUpUserResponse';
 import { SignUpUserUseCase } from '../useCases/commands/signup/SignUpUserUseCase';
 import { SignUpUserCommandDTO } from '../useCases/commands/signup/SignUpUserCommandDTO';
@@ -15,41 +15,38 @@ import { ResendActivationUserUseCase } from '../useCases/commands/resend-activat
 import { ResendActivationUserErrors } from '../useCases/commands/resend-activation/ResendActivationUserErrors';
 
 @JsonController('/v1')
-export class RootController {
-    // constructor(
-    //     private readonly _signUpUserUseCase = Container.get(SignUpUserUseCase),
-    //     private readonly _activeUserUseCase = Container.get(ActiveUserUseCase),
-    //     private readonly _resendActivationUserUseCase = Container.get(ResendActivationUserUseCase),
-    // ) {
-    //     // super()
-    // }
+export class SignUpUserController extends BaseController {
+    constructor(
+        private readonly _signUpUserUseCase = Container.get(SignUpUserUseCase),
+        // private readonly _activeUserUseCase = Container.get(ActiveUserUseCase),
+        // private readonly _resendActivationUserUseCase = Container.get(ResendActivationUserUseCase),
+    ) {
+        super()
+    }
 
-    // @Post('/register')
-    // async register(@Body() param: SignUpUserCommandDTO, @Res() res: Response): Promise<Response> {
-    //     try {
-    //         const result = await this._signUpUserUseCase.execute(param);
-    //         const resultValue = result.value
-    //         if(result.isLeft()) {
-    //             switch(resultValue.constructor) {
-    //                 case SignUpUserErrors.EmailAlreadyExistsError:
-    //                     throw new SystemError(MessageError.PARAM_EXISTED, 'email')
-    //                 case SignUpUserErrors.CannotSaveError:
-    //                     throw new SystemError(MessageError.DATA_CANNOT_SAVE)
-    //                 case ApplicationError.UnexpectedError:
-    //                     throw new SystemError(MessageError.SOMETHING_WRONG)
-    //                 default:
-    //                     return this.fail(res, resultValue.errorValue())
-    //             }
-    //         }
-    //         else {
-    //             return this.OK(res, resultValue.getValue())
-    //         }
-    //     } 
-    //     catch (error) {
-    //         console.error('ERR', error)
-    //         return this.fail(res, error)
-    //     }
-    // }
+    @Post('/register')
+    async executeImpl(@Body() param: SignUpUserCommandDTO, @Res() res: Response): Promise<Response> {
+        try {
+            const result = await this._signUpUserUseCase.execute(param);
+            const resultValue = result.value
+            if(result.isLeft()) {
+                switch(resultValue.constructor) {
+                    case SignUpUserErrors.EmailAlreadyExistsError:
+                        return this.conflict(res, resultValue.errorValue().message)
+                    case SignUpUserErrors.DataCannotSave:
+                        return this.fail(res, result.value.errorValue())
+                    default:
+                        return this.fail(res, resultValue.errorValue())
+                }
+            }
+            else 
+                return this.OK(res, resultValue.getValue())
+        } 
+        catch (error) {
+            console.error('ERR', error)
+            return this.fail(res, error)
+        }
+    }
 
     // @Post('/active')
     // async active(@Body() param: ActiveUserCommandDTO, @Res() res: Response): Promise<Response> {

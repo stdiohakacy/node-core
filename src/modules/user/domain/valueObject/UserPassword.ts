@@ -21,19 +21,19 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     }
 
     public static create(props: IUserPasswordProps): Result<UserPassword> {
-        if(validator.isEmpty(props.value)) {
-            
-            throw new SystemError(MessageError.PARAM_REQUIRED, 'password')
-        }
+        if(validator.isEmpty(props.value))
+            return Result.fail<UserPassword>('The password is required')
+        
         if(!props.hashed) {
             if(
                 !validator.minLength(props.value, this.minLength) || 
                 !validator.maxLength(props.value, this.maxLength)
             )
-                throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'password', 6, 12)
+            return Result.fail<UserPassword>(`The length of password must be between ${this.minLength} and ${this.maxLength}!`)
         }
         if(!this.isStrong(props.value))
-            throw new SystemError(MessageError.PASSWORD_IS_NOT_STRONG)
+            return Result.fail<UserPassword>(`The password is not strong`)
+
 
         return Result.OK(
             new UserPassword({

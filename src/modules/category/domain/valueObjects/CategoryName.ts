@@ -20,11 +20,12 @@ export class CategoryName extends ValueObject<ICategoryNameProps> {
 
     public static create (props: ICategoryNameProps): Result<CategoryName> {
         if(validator.isEmpty(props.value)) {
-            // throw new SystemError(MessageError.PARAM_REQUIRED, 'name')
             return Result.fail<CategoryName>('The category name is required')
         }
-        if(!validator.minLength(props.value, this.minLength)) {
-            // throw new SystemError(MessageError.PARAM_LEN_GREATER_OR_EQUAL, 'name', this.minLength)
+        if(
+            !validator.minLength(props.value, this.minLength) || 
+            !validator.maxLength(props.value, this.maxLength)
+        ) {
             return Result.fail<CategoryName>(`The length of category name must be between ${this.minLength} and ${this.maxLength}!`)
         }
         return Result.OK<CategoryName>(new CategoryName(props));

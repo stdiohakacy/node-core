@@ -61,11 +61,12 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const activeExpire = activeExpireOrError.getValue()
 
         try {
-            const isEmailExist = await this._userRepository.isEmailExist(email)
-            if(isEmailExist)
-                return left(new SignUpUserErrors.EmailAlreadyExistsError())
+            const isExist = await this._userRepository.isEmailExist(email)
+            if(isExist)
+                return left(new SignUpUserErrors.EmailAlreadyExistsError(email.value))
         } 
         catch (error) {
+            console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
         const userOrError = User.create({
@@ -87,9 +88,10 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         try {
             const user = await this._userRepository.createGet(userDb)
             if(!user)
-                return left(new SignUpUserErrors.CannotSaveError())
+                return left(new SignUpUserErrors.DataCannotSave())
         } 
         catch (error) {
+            console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
         const accessToken = this._jwtAuthService.sign(user)

@@ -20,11 +20,14 @@ export class UserLastName extends ValueObject<IUserLastName> {
     
     public static create (props: IUserLastName): Result<UserLastName> {
         if(validator.isEmpty(props.value))
-            throw new SystemError(MessageError.PARAM_REQUIRED, 'last name')
-        if(!validator.minLength(props.value, this.minLength))
-            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'last name', this.minLength, this.maxLength)
-
-        const userLastName = new UserLastName(props)
-        return Result.OK<UserLastName>(userLastName);
+            return Result.fail<UserLastName>('The last name is required')
+        if(
+            !validator.minLength(props.value, this.minLength) || 
+            !validator.maxLength(props.value, this.maxLength)
+        )
+            return Result.fail<UserLastName>(`The length of last name must be between ${this.minLength} and ${this.maxLength}!`)
+    
+        const userFirstName = new UserLastName(props)
+        return Result.OK<UserLastName>(userFirstName);
     }
 }

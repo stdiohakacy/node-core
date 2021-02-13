@@ -2,18 +2,18 @@ import { UseCaseError } from "../../../../../shared/core/UseCaseError"
 import { Result } from "../../../../../shared/core/Result"
 
 export namespace SignUpUserErrors {
-    export class EmailAlreadyExistsError extends Result<UseCaseError> {    
-        constructor () {
+    export class EmailAlreadyExistsError extends Result<UseCaseError> {
+        constructor(email: string) {
             super(false, {
-                message: 'Email already exists Error'
-            } as UseCaseError)
+                message: `The email ${email} is already existed!`
+            })
         }
     }
-    export class CannotSaveError extends Result<UseCaseError> {    
+    export class DataCannotSave extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-                message: 'Cannot Save Error'
-            } as UseCaseError)
+                message: 'Data cannot save'
+            })
         }
     }
 }

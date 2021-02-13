@@ -18,9 +18,10 @@ export class UserStatus extends ValueObject<IUserStatusProps> {
     }
 
     public static create(props: IUserStatusProps): Result<UserStatus> {
-        if(props.value && !validator.isEnum(props.value, UserStatusType))
-            throw new SystemError(MessageError.PARAM_REQUIRED, 'status')
-
+        if(validator.isEmpty(props.value))
+            return Result.fail<UserStatus>('The status is required')
+        if(!validator.isEnum(props.value, UserStatusType))
+            return Result.fail<UserStatus>('The status is invalid')
         return Result.OK<UserStatus>(new UserStatus({ value: props.value }))
     }
 }

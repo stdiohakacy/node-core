@@ -21,9 +21,12 @@ export class UserFirstName extends ValueObject<IUserFirstName> {
     
     public static create (props: IUserFirstName): Result<UserFirstName> {
         if(validator.isEmpty(props.value))
-            throw new SystemError(MessageError.PARAM_REQUIRED, 'first name')
-        if(!validator.minLength(props.value, this.minLength))
-            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'first name', this.minLength, this.maxLength)
+            return Result.fail<UserFirstName>('The first name is required')
+        if(
+            !validator.minLength(props.value, this.minLength) || 
+            !validator.maxLength(props.value, this.maxLength)
+        )
+            return Result.fail<UserFirstName>(`The length of first name must be between ${this.minLength} and ${this.maxLength}!`)
     
         const userFirstName = new UserFirstName(props)
         return Result.OK<UserFirstName>(userFirstName);

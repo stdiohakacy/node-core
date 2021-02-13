@@ -54,7 +54,6 @@ export class MessageError {
     static PARAM_LEN_LESS_OR_EQUAL = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be less than or equal to {1}!');
     static PARAM_LEN_GREATER_OR_EQUAL = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be greater than or equal to {1}!');
     static PARAM_LEN_BETWEEN = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be between {1} and {2}!');
-    static PASSWORD_IS_NOT_STRONG = new ErrorObject(ErrorCode.DATA_INVALID, 'The password is not strong!');
 }
 
 export class SystemError extends Error {

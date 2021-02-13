@@ -21,12 +21,15 @@ export class UserEmail extends ValueObject<IUserEmailProps> {
 
     public static create(props: IUserEmailProps): Result<UserEmail> {
         if(validator.isEmpty(props.value))
-            throw new SystemError(MessageError.PARAM_REQUIRED, 'email')
+            return Result.fail<UserEmail>('The email is required')
         if(!validator.isEmail(props.value))
-            throw new SystemError(MessageError.PARAM_FORMAT_INVALID, 'email') 
-        if(!validator.minLength(props.value, this.minLength))
-            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'email', this.minLength, this.maxLength)
-
+            return Result.fail<UserEmail>('The email is invalid')
+        if(
+            !validator.minLength(props.value, this.minLength) || 
+            !validator.maxLength(props.value, this.maxLength)
+        )
+            return Result.fail<UserEmail>(`The length of email must be between ${this.minLength} and ${this.maxLength}!`)
+        
         return Result.OK(new UserEmail({value: this.format(props.value)}))
     }
 
