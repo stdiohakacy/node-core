@@ -2,19 +2,19 @@ import { UseCaseError } from '../../../../../shared/core/UseCaseError';
 import { Result } from './../../../../../shared/core/Result';
 
 export namespace ResendActivationUserErrors {
-    export class NotFoundError extends Result<UseCaseError> {    
-        constructor () {
+    export class EmailNotFoundError extends Result<UseCaseError> {    
+        constructor (email: string) {
             super(false, {
-                message: 'Not found error'
-            } as UseCaseError)
+                message: `The email ${email} was not found!`
+            })
         }
     }
 
-    export class UserStatusError extends Result<UseCaseError> {    
-        constructor () {
+    export class UserStatusError extends Result<UseCaseError> {
+        constructor() {
             super(false, {
-                message: 'User status error'
-            } as UseCaseError)
+                message: 'The user has been activated'
+            })
         }
     }
 

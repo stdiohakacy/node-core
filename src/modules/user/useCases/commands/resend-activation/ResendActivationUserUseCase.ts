@@ -31,8 +31,8 @@ export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendAc
         try {
             const user = await this._userRepository.getByEmail(email)
             if (!user)
-                return left(new ResendActivationUserErrors.NotFoundError)
-            if(user.status.value === UserStatusType.ACTIVED)
+                return left(new ResendActivationUserErrors.EmailNotFoundError(email.value))
+            if(user.status.value === UserStatusType.ACTIVED && !user.activeKey)
                 return left(new ResendActivationUserErrors.UserStatusError)
 
             const activeKeyOrError = UserActiveKey.create({value: randomBytes(32).toString('hex')})
