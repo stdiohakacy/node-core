@@ -42,6 +42,11 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
             }))
     }
 
+    public static isStrong(password: string): boolean {
+        const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+        return strongRegex.test(password)
+    }
+
     public getHashedValue(): Promise<string> {
         return new Promise(resolve => {
             if(this.isAlreadyHashed())
@@ -81,10 +86,5 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
                 return resolve(compareResult)
             })
         })
-    }
-
-    public static isStrong(password: string): boolean {
-        const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-        return strongRegex.test(password)
     }
 }

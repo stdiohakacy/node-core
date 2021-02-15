@@ -35,7 +35,7 @@ export abstract class BaseController {
         return BaseController.jsonResponse(res, 400, message || 'Unauthorized');
     }
     
-    public unauthorized(@Res() res: Response, message?: string) {
+    public unAuthorized(@Res() res: Response, message?: string) {
         return BaseController.jsonResponse(res, 401, message || 'Unauthorized');
     }
     

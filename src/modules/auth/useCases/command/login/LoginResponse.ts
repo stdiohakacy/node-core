@@ -7,5 +7,5 @@ export type LoginResponse = Either<
     LoginErrors.AccountStatusError |
     ApplicationError.UnexpectedError |
     Result<any>,
-    Result<boolean>
+    Result<string>
 >

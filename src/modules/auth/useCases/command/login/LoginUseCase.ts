@@ -1,3 +1,4 @@
+import { JwtAuthService } from './../../../../../shared/services/auth/JwtAuthService';
 import { left, Result, right } from './../../../../../shared/core/Result';
 import { UserEmail } from './../../../../user/domain/valueObject/UserEmail';
 import { Inject, Service } from 'typedi';
@@ -8,11 +9,15 @@ import { UserPassword } from '../../../../user/domain/valueObject/UserPassword';
 import { AuthRepository } from '../../../repositories/AuthRepository';
 import { LoginErrors } from './LoginErrors';
 import { UserStatusType } from '../../../../user/enums/UserStatusType';
+import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 
 @Service()
 export class LoginUseCase implements IUseCaseCommandCQRS<LoginCommandDTO, Promise<LoginResponse>> {
     @Inject('auth.repository')
     private _authRepository: AuthRepository;
+
+    @Inject('jwt.auth.service')
+    private readonly _jwtAuthService: JwtAuthService;
     
     async execute(param: LoginCommandDTO): Promise<LoginResponse> {
         const emailOrError = UserEmail.create({ value: param.email })
@@ -35,9 +40,12 @@ export class LoginUseCase implements IUseCaseCommandCQRS<LoginCommandDTO, Promis
                 return left(new LoginErrors.AccountInvalidError())
             if(user.status.value === UserStatusType.INACTIVE)
                 return left(new LoginErrors.AccountStatusError())
-            return right(Result.OK(true))
+                
+            const accessToken = this._jwtAuthService.sign(user)
+            return right(Result.OK(accessToken)) 
         } catch (error) {
             console.error(error)
+            return left(new ApplicationError.UnexpectedError(error))
         }
     }
 }
