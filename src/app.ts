@@ -12,7 +12,6 @@ import { DeleteCategoryController } from './modules/category/controller/DeleteCa
 import { UpdateCategoryController } from './modules/category/controller/UpdateCategoryController';
 import { CreateCategoryController } from './modules/category/controller/CreateCategoryController';
 import { GetCategoryByIdController } from './modules/category/controller/GetCategoryByIdController';
-import Container from 'typedi';
 import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 
 const app = createExpressServer({

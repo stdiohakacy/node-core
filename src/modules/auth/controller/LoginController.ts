@@ -1,11 +1,10 @@
 import Container from 'typedi';
+import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
 import { LoginUseCase } from './../useCases/command/login/LoginUseCase';
 import { LoginCommandDTO } from '../useCases/command/login/LoginCommandDTO';
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { Response } from 'express';
 import { LoginErrors } from '../useCases/command/login/LoginErrors';
-
 
 @JsonController('/v1')
 export class LoginController extends BaseController {
