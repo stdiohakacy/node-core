@@ -3,10 +3,10 @@ import { Either, Result } from './../../../../../shared/core/Result';
 import { ActiveUserErrors } from './ActiveUserErrors';
 
 export type ActiveUserResponse = Either<
-    ActiveUserErrors.ActiveKeyInvalid |
+    ActiveUserErrors.ActiveKeyInvalidError |
     ActiveUserErrors.CannotSaveError |
     ActiveUserErrors.ExpiredTimeError |
-    ActiveUserErrors.NotFoundError |
+    ActiveUserErrors.EmailNotFoundError |
     ActiveUserErrors.UserStatusError |
     ApplicationError.UnexpectedError |
     Result<any>,

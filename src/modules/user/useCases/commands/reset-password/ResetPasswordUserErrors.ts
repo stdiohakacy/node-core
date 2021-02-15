@@ -22,7 +22,7 @@ export namespace ResetPasswordUserErrors {
         constructor() {
             super(false, {
                 message: `The forgot key is invalid`
-            } as UseCaseError)
+            })
         }
     }
 

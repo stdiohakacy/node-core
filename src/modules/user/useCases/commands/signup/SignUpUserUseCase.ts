@@ -1,6 +1,6 @@
 import { UserActiveExpire } from './../../../domain/valueObject/UserActiveExpire';
 import { UserActiveKey } from './../../../domain/valueObject/UserActiveKey';
-import { JwtAuthService } from './../../../../../shared/services/JwtAuthService';
+import { JwtAuthService } from '../../../../../shared/services/auth/JwtAuthService';
 import { Inject, Service } from 'typedi';
 import { UserStatusType } from './../../../enums/UserStatusType';
 import { User } from './../../../domain/aggregateRoot/User';

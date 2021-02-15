@@ -1,8 +1,8 @@
-import { User } from './../../modules/user/domain/aggregateRoot/User';
+import { User } from '../../../modules/user/domain/aggregateRoot/User';
 import * as jwt from 'jsonwebtoken';
 import { Service } from 'typedi';
 
-export interface IJwtPayload {
+interface IJwtPayload {
     sub: string; // Subject
     exp: number; // Expiration time
     iat: number; // Issued at
@@ -10,11 +10,11 @@ export interface IJwtPayload {
     aud: string; // Audience
 }
 
-export interface IJwtPayloadExtend extends IJwtPayload {
+interface IJwtPayloadExtend extends IJwtPayload {
     roleId: string;
 }
 
-export interface IJwtAuthService {
+interface IJwtAuthService {
     sign(user: User): string;
     verify(token: string): IJwtPayloadExtend;
 }
@@ -29,7 +29,7 @@ export class JwtAuthService implements IJwtAuthService {
             issuer: 'node-core',
             audience: `${'http'}://${'localhost'}`,
             algorithm: 'HS256'
-        } as unknown as jwt.SignOptions);
+        } as jwt.SignOptions);
     }
 
     verify(token: string): IJwtPayloadExtend {

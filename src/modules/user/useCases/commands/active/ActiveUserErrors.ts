@@ -13,7 +13,7 @@ export namespace ActiveUserErrors {
         constructor() {
             super(false, {
                 message: `The active key is invalid`
-            } as UseCaseError)
+            })
         }
     }
 

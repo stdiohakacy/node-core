@@ -18,12 +18,11 @@ export class CreateCategoryController extends BaseController {
             const result = await this._createCategoryUseCase.execute(param)
             const resultValue = result.value
             if(result.isLeft()) {
-                const error = result.value
-                switch (error.constructor) {
+                switch (resultValue.constructor) {
                     case CreateCategoryErrors.NameAlreadyExistsError:
-                        return this.conflict(res, error.errorValue().message)
+                        return this.conflict(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, error.errorValue().message)
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             }
             else 

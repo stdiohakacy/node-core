@@ -22,7 +22,7 @@ export namespace ResendActivationUserErrors {
         constructor () {
             super(false, {
                 message: 'Cannot save error'
-            } as UseCaseError)
+            })
         }
     }
 }

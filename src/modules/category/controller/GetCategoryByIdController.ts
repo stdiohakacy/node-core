@@ -5,7 +5,6 @@ import { BaseController } from '../../../shared/infra/http/models/BaseController
 import { GetCategoryByIdUseCase } from '../useCases/queries/getById/GetCategoryByIdUseCase';
 import { GetCategoryByIdQueryDTO } from '../useCases/queries/getById/GetCategoryByIdQueryDTO';
 import { GetCategoryByIdErrors } from '../useCases/queries/getById/GetCategoryByIdErrors';
-import { ApplicationError } from '../../../shared/core/ApplicationError';
 
 @JsonController('/v1/categories')
 export class GetCategoryByIdController extends BaseController {

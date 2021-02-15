@@ -1,3 +1,4 @@
+import { LoginController } from './modules/auth/controller/LoginController';
 import { ResetPasswordUserController } from './modules/user/controller/ResetPasswordUserController';
 import 'reflect-metadata';
 import { createConnection } from "typeorm";
@@ -17,7 +18,9 @@ const app = createExpressServer({
         // Category
         CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
         // User
-        SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController
+        SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController,
+        // Auth
+        LoginController
     ]
 });
 
