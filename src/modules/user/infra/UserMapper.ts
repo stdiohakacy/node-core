@@ -8,6 +8,8 @@ import { UserFirstName } from '../domain/valueObject/UserFirstName';
 import { UserStatusType } from '../enums/UserStatusType';
 import { UserActiveKey } from '../domain/valueObject/UserActiveKey';
 import { UserActiveExpire } from '../domain/valueObject/UserActiveExpire';
+import { UserForgotKey } from '../domain/valueObject/UserForgotKey';
+import { UserForgotExpire } from '../domain/valueObject/UserForgotExpire';
 
 export class UserMapper implements IMapper<User> {
     public static toDomain (userDb: UserDb): User | null {
@@ -18,7 +20,9 @@ export class UserMapper implements IMapper<User> {
             email: UserEmail.create({ value: userDb.email }).getValue(),
             status: UserStatus.create({ value: userDb.status }).getValue(),
             activeKey: userDb.activeKey ? UserActiveKey.create({ value: userDb.activeKey }).getValue() : null,
-            activeExpire: UserActiveExpire.create({ value: userDb.activeExpire }).getValue()
+            activeExpire: UserActiveExpire.create({ value: userDb.activeExpire }).getValue(),
+            forgotKey: userDb.forgotKey ? UserForgotKey.create({ value: userDb.forgotKey }).getValue() : null,
+            forgotExpire: UserForgotExpire.create({value: userDb.forgotExpire}).getValue()
         }, new UniqueEntityId(userDb.id))
 
         if(userOrError.isFailure)
