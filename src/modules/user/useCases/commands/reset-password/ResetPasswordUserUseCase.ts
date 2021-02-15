@@ -46,7 +46,7 @@ export class ResetPasswordUserUseCase implements IUseCaseCommandCQRS<ResetPasswo
                 return left(new ResetPasswordUserErrors.ExpiredTimeError())
                 
             const userDb = new UserDb()
-            userDb.password = password.value
+            userDb.password = await password.getHashedValue()
             userDb.forgotKey = ''
 
             try {

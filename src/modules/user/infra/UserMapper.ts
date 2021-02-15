@@ -10,6 +10,7 @@ import { UserActiveKey } from '../domain/valueObject/UserActiveKey';
 import { UserActiveExpire } from '../domain/valueObject/UserActiveExpire';
 import { UserForgotKey } from '../domain/valueObject/UserForgotKey';
 import { UserForgotExpire } from '../domain/valueObject/UserForgotExpire';
+import { UserPassword } from '../domain/valueObject/UserPassword';
 
 export class UserMapper implements IMapper<User> {
     public static toDomain (userDb: UserDb): User | null {
@@ -18,6 +19,7 @@ export class UserMapper implements IMapper<User> {
         const userOrError = User.create({
             firstName: UserFirstName.create({ value: userDb.firstName }).getValue(),
             email: UserEmail.create({ value: userDb.email }).getValue(),
+            password: UserPassword.create({ value: userDb.password, hashed: true }).getValue(),
             status: UserStatus.create({ value: userDb.status }).getValue(),
             activeKey: userDb.activeKey ? UserActiveKey.create({ value: userDb.activeKey }).getValue() : null,
             activeExpire: UserActiveExpire.create({ value: userDb.activeExpire }).getValue(),
@@ -38,7 +40,7 @@ export class UserMapper implements IMapper<User> {
             if(user.password.isAlreadyHashed())
                 password = user.password.value
             password = await user.password.getHashedValue()
-        } 
+        }
 
         userDb.status = UserStatusType.INACTIVE
         userDb.firstName = user.firstName.value

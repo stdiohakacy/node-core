@@ -3,6 +3,7 @@ import * as validator from 'class-validator'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
+import { Guard } from '../../../../shared/core/Guard';
 
 export interface IUserPasswordProps {
     value: string
@@ -21,25 +22,19 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     }
 
     public static create(props: IUserPasswordProps): Result<UserPassword> {
-        if(validator.isEmpty(props.value))
-            return Result.fail<UserPassword>('The password is required')
-        
-        if(!props.hashed) {
-            if(
-                !validator.minLength(props.value, this.minLength) || 
-                !validator.maxLength(props.value, this.maxLength)
-            )
-            return Result.fail<UserPassword>(`The length of password must be between ${this.minLength} and ${this.maxLength}!`)
-        }
-        if(!this.isStrong(props.value))
-            return Result.fail<UserPassword>(`The password is not strong`)
+        const propsResult = Guard.againstNullOrUndefined(props.value, 'password');
+        if (!propsResult.succeeded)
+            return Result.fail<UserPassword>(propsResult.message);
+        else {
+            if (!props.hashed)
+                if (!this.isAppropriateLength(props.value))
+                    return Result.fail<UserPassword>('Password doesnt meet criteria [8 chars min].');
 
-
-        return Result.OK(
-            new UserPassword({
-                value: props.value, 
+            return Result.OK<UserPassword>(new UserPassword({
+                value: props.value,
                 hashed: !!props.hashed === true
-            }))
+            }));
+        }
     }
 
     public static isStrong(password: string): boolean {
@@ -61,6 +56,8 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
             hashed = this.props.value
             return this.bcryptCompare(plainTextPassword, hashed)
         }
+        console.log('this.props.value', this.props.value)
+        console.log('plainTextPassword', plainTextPassword)
         return this.props.value === plainTextPassword
     }
 
@@ -86,5 +83,9 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
                 return resolve(compareResult)
             })
         })
+    }
+
+    private static isAppropriateLength (password: string): boolean {
+        return password.length >= this.minLength;
     }
 }

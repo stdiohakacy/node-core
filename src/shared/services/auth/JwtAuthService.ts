@@ -11,11 +11,11 @@ interface IJwtPayload {
     aud: string; // Audience
 }
 
-interface IJwtPayloadExtend extends IJwtPayload {
+export interface IJwtPayloadExtend extends IJwtPayload {
     roleId: string;
 }
 
-interface IJwtAuthService {
+export interface IJwtAuthService {
     sign(user: User): JWTToken;
     decode(token: JWTToken): IJwtPayloadExtend;
 }

@@ -10,11 +10,12 @@ import { AuthRepository } from '../../../repositories/AuthRepository';
 import { LoginErrors } from './LoginErrors';
 import { UserStatusType } from '../../../../user/enums/UserStatusType';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
+import { UserRepository } from '../../../../user/repositories/UserRepository';
 
 @Service()
 export class LoginUseCase implements IUseCaseCommandCQRS<LoginCommandDTO, Promise<LoginResponse>> {
-    @Inject('auth.repository')
-    private _authRepository: AuthRepository;
+    @Inject('user.repository')
+    private _userRepository: UserRepository;
 
     @Inject('jwt.auth.service')
     private readonly _jwtAuthService: JwtAuthService;
@@ -32,11 +33,14 @@ export class LoginUseCase implements IUseCaseCommandCQRS<LoginCommandDTO, Promis
             return left(Result.fail(dtoResults.error))
         
         const email = emailOrError.getValue()
-        const password  = passwordOrError.getValue()
+        const password = passwordOrError.getValue()
 
         try {
-            const user = await this._authRepository.getByEmailPassword(email, password)
+            const user = await this._userRepository.getByEmail(email)
             if(!user)
+                return left(new LoginErrors.AccountInvalidError())
+            const isPasswordValid = await user.password.comparePassword(password.value)
+            if(user && !isPasswordValid)
                 return left(new LoginErrors.AccountInvalidError())
             if(user.status.value === UserStatusType.INACTIVE)
                 return left(new LoginErrors.AccountStatusError())

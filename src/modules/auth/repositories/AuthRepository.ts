@@ -23,7 +23,7 @@ export class AuthRepository extends BaseRepository<UserDb, string> implements IA
         const result = await this.repository
             .createQueryBuilder('user')
             .where(`LOWER(user.email) = LOWER(:email)`, { email: userEmail.value })
-            .andWhere(`user.password = :password`, { password: userPassword.value })
+            .andWhere(`user.password = :password`, { password: userPassword.comparePassword(userPassword.value) })
             .getOne();
         
         return UserMapper.toDomain(result)

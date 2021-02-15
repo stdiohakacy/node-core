@@ -29,5 +29,6 @@ app.listen(3000, () => {
     createConnection().then(async connection => {
         const redis = new RedisContext()
         redis.createConnection()
+        console.log('OK')
     }).catch(error => console.log("Error: ", error));
 })
