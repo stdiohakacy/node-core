@@ -1,6 +1,5 @@
 import { UserActiveExpire } from './../../../domain/valueObject/UserActiveExpire';
 import { UserActiveKey } from './../../../domain/valueObject/UserActiveKey';
-import { JwtAuthService } from '../../../../../shared/services/auth/JwtAuthService';
 import { Inject, Service } from 'typedi';
 import { UserStatusType } from './../../../enums/UserStatusType';
 import { User } from './../../../domain/aggregateRoot/User';
@@ -25,9 +24,6 @@ import { randomBytes } from 'crypto';
 export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandDTO, Promise<SignUpUserResponse>> {
     @Inject('user.repository')
     private _userRepository: UserRepository;
-    
-    @Inject('jwt.auth.service')
-    private readonly _jwtAuthService: JwtAuthService;
 
     async execute(param: SignUpUserCommandDTO): Promise<SignUpUserResponse> {
         const firstNameOrError = UserFirstName.create({ value: param.firstName })
@@ -89,12 +85,11 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
             const user = await this._userRepository.createGet(userDb)
             if(!user)
                 return left(new SignUpUserErrors.DataCannotSave())
+            return right(Result.OK(true))
         } 
         catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
-        const accessToken = this._jwtAuthService.sign(user)
-        return right(Result.OK(accessToken))
     }
 }

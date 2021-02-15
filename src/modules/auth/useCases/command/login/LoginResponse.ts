@@ -1,12 +1,17 @@
-import { JWTToken } from './../../../../../shared/alias/TokenAlias';
+import { JWTToken, RefreshToken } from './../../../../../shared/alias/TokenAlias';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Either, Result } from './../../../../../shared/core/Result';
 import { LoginErrors } from './LoginErrors';
+
+type LoginDTOResponse = {
+    accessToken: JWTToken,
+    refreshToken: RefreshToken
+}
 
 export type LoginResponse = Either<
     LoginErrors.AccountInvalidError |
     LoginErrors.AccountStatusError |
     ApplicationError.UnexpectedError |
     Result<any>,
-    Result<JWTToken>
+    Result<LoginDTOResponse>
 >

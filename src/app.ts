@@ -13,6 +13,7 @@ import { UpdateCategoryController } from './modules/category/controller/UpdateCa
 import { CreateCategoryController } from './modules/category/controller/CreateCategoryController';
 import { GetCategoryByIdController } from './modules/category/controller/GetCategoryByIdController';
 import { RedisContext } from './shared/infra/databases/redis/RedisContext';
+import Container from 'typedi';
 
 const app = createExpressServer({
     controllers: [
@@ -27,8 +28,8 @@ const app = createExpressServer({
 
 app.listen(3000, () => {
     createConnection().then(async connection => {
-        const redis = new RedisContext()
-        redis.createConnection()
+        const redisContext = Container.get<RedisContext>('redis.context');
+        redisContext.createConnection();
         console.log('OK')
     }).catch(error => console.log("Error: ", error));
 })

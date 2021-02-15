@@ -1,3 +1,4 @@
+import { JWTToken, RefreshToken } from './../../../../shared/alias/TokenAlias';
 import { Guard } from './../../../../shared/core/Guard';
 import * as validator from 'class-validator'
 import { UserId } from "../entity/UserId";
@@ -40,6 +41,8 @@ interface IUserProps {
     activedAt?: UserActivedAt,
     forgotKey?: UserForgotKey,
     forgotExpire?: UserForgotExpire
+    accessToken?: JWTToken
+    refreshToken?: RefreshToken
 }
 
 export class User extends AggregateRoot<IUserProps> {
@@ -119,6 +122,14 @@ export class User extends AggregateRoot<IUserProps> {
         return this.props.forgotExpire
     }
 
+    get accessToken(): JWTToken {
+        return this.props.accessToken
+    }
+
+    get refreshToken(): RefreshToken {
+        return this.props.refreshToken
+    }
+
     public static create(props: IUserProps, id?: UniqueEntityId): Result<User> {
         const guard = Guard.againstNullOrUndefinedBulk([
             { argument: props.firstName, argumentName: 'firstName' },
@@ -131,5 +142,14 @@ export class User extends AggregateRoot<IUserProps> {
         
         const user = new User({...props}, id)
         return Result.OK<User>(user)
+    }
+
+    public setToken(accessToken: JWTToken, refreshToken: RefreshToken): void {
+        this.props.accessToken = accessToken
+        this.props.refreshToken = refreshToken
+    }
+
+    public isLogin(): boolean {
+        return !!this.props.accessToken && !!this.props.refreshToken
     }
 }

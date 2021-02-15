@@ -7,5 +7,5 @@ export type SignUpUserResponse = Either<
     SignUpUserErrors.EmailAlreadyExistsError |
     ApplicationError.UnexpectedError |
     Result<any>,
-    Result<JWTToken>
+    Result<boolean>
 >
