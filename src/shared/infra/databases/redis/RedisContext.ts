@@ -78,6 +78,4 @@ export class RedisContext implements IRedisContext {
     deleteOne(key: string): Promise<number> {
         throw new Error('Method not implemented.');
     }
-
-    
 }

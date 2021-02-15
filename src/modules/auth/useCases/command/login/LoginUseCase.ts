@@ -1,4 +1,4 @@
-import { RedisAuthService } from './../../../services/RedisAuthService';
+import { RedisAuthService } from './../../../../../shared/services/auth/RedisAuthService';
 import { left, Result, right } from './../../../../../shared/core/Result';
 import { UserEmail } from './../../../../user/domain/valueObject/UserEmail';
 import { Inject, Service } from 'typedi';

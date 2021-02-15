@@ -1,14 +1,32 @@
-import { RedisContext } from './../../../shared/infra/databases/redis/RedisContext';
-import { uid } from 'rand-token';
-import { JWTToken, RefreshToken } from './../../../shared/alias/TokenAlias';
-import { IJwtAuthService, IJwtPayloadExtend } from './../../../shared/services/auth/JwtAuthService';
-import { User } from '../../user/domain/aggregateRoot/User';
-import * as jwt from 'jsonwebtoken';
+import { RedisContext } from '../../infra/databases/redis/RedisContext';
+import { JWTToken, RefreshToken } from '../../alias/TokenAlias';
+import { User } from '../../../modules/user/domain/aggregateRoot/User';
 import { Inject, Service } from 'typedi';
+import * as jwt from 'jsonwebtoken';
+import { uid } from 'rand-token';
+
+interface IJwtPayload {
+    sub: string; // Subject
+    exp: number; // Expiration time
+    iat: number; // Issued at
+    iss: string; // Issuer
+    aud: string; // Audience
+}
+
+export interface IJwtPayloadExtend extends IJwtPayload {
+    roleId: string;
+}
+
+export interface IJwtAuthService {
+    signJWT(user: User): JWTToken;
+    decodeJWT(token: JWTToken): IJwtPayloadExtend;
+    createRefreshToken(): RefreshToken;
+    getToken(user: User): Promise<string>
+    addToken(user: User): Promise<any>
+}
 
 @Service('redis.auth.service')
 export class RedisAuthService implements IJwtAuthService {
-    
     @Inject('redis.context')
     private readonly _redisContext: RedisContext;
 
@@ -42,10 +60,6 @@ export class RedisAuthService implements IJwtAuthService {
             await this.addToken(user)
     }
 
-    public constructKey(refreshToken: RefreshToken, email: string): string {
-        return `refresh-${refreshToken}.${this.jwtHashName}.${email}`
-    }
-
     public addToken(user: User): Promise<any> {
         const constructKey = this.constructKey(user.refreshToken, user.email.value)
         return this._redisContext.set(constructKey, user.accessToken)
@@ -54,4 +68,8 @@ export class RedisAuthService implements IJwtAuthService {
     public getToken(user: User): Promise<string> {
         return this._redisContext.getOne(this.constructKey(user.refreshToken, user.email.value))
     }
-} 
+
+    private constructKey(refreshToken: RefreshToken, email: string): string {
+        return `refresh-${refreshToken}.${this.jwtHashName}.${email}`
+    }
+}
