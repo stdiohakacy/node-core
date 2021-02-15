@@ -1,3 +1,4 @@
+import { UserCreated } from './../events/UserCreated';
 import { UserLoggedIn } from './../events/UserLoggedIn';
 import { JWTToken, RefreshToken } from '../../../../shared/services/auth/TokenAlias';
 import { Guard } from './../../../../shared/core/Guard';
@@ -141,6 +142,7 @@ export class User extends AggregateRoot<IUserProps> {
             return Result.fail<User>(guard.message)
         
         const user = new User({...props}, id)
+        user.addDomainEvent(new UserCreated(user))
         return Result.OK<User>(user)
     }
 
