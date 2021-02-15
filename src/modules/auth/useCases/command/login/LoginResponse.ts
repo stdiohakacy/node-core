@@ -1,4 +1,4 @@
-import { JWTToken, RefreshToken } from './../../../../../shared/alias/TokenAlias';
+import { JWTToken, RefreshToken } from '../../../../../shared/services/auth/TokenAlias';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Either, Result } from './../../../../../shared/core/Result';
 import { LoginErrors } from './LoginErrors';

@@ -12,11 +12,15 @@ import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserStatusType } from '../../../enums/UserStatusType';
 import { ForgotPasswordUserErrors } from './ForgotPasswordUserErrors';
 import { addSeconds } from '../../../../../shared/libs/date';
+import { MailService } from '../../../../../shared/services/mail/MailService';
 
 @Service()
 export class ForgotPasswordUserUseCase implements IUseCaseCommandCQRS<ForgotPasswordUserCommandDTO, Promise<ForgotPasswordUserResponse>> {
     @Inject('user.repository')
     private readonly _userRepository: UserRepository
+
+    @Inject('mail.service')
+    private readonly _mailService: MailService;
 
     async execute(param: ForgotPasswordUserCommandDTO): Promise<ForgotPasswordUserResponse> {
         const emailOrError = UserEmail.create({ value: param.email })
@@ -43,6 +47,7 @@ export class ForgotPasswordUserUseCase implements IUseCaseCommandCQRS<ForgotPass
                 const isUpdated = await this._userRepository.update(user.id.toString(), userDb)
                 if(!isUpdated)
                     return left(new ForgotPasswordUserErrors.CannotSaveError())
+                this._mailService.sendForgotPassword(user)
                 return right(Result.OK(isUpdated))
             }
             catch (error) {

@@ -1,4 +1,4 @@
-import { JWTToken, RefreshToken } from './../../../../shared/alias/TokenAlias';
+import { JWTToken, RefreshToken } from '../../../../shared/services/auth/TokenAlias';
 import { Guard } from './../../../../shared/core/Guard';
 import * as validator from 'class-validator'
 import { UserId } from "../entity/UserId";
