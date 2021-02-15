@@ -1,0 +1,36 @@
+import { Result, right } from './../../../../../shared/core/Result';
+import { RedisAuthService } from './../../../../../shared/services/auth/RedisAuthService';
+import { AuthenticateResponse, UserAuthenticated } from './AuthenticateResponse';
+import { AuthenticateCommandDTO } from './AuthenticateCommandDTO';
+import { IUseCaseCommandCQRS } from './../../../../../shared/core/IUseCase';
+import { Inject, Service } from "typedi";
+import { left } from '../../../../../shared/core/Result';
+import * as validator from 'class-validator'
+import { AuthenticateErrors } from './AuthenticateErrors';
+
+@Service()
+export class AuthenticateUseCase implements IUseCaseCommandCQRS<AuthenticateCommandDTO, Promise<AuthenticateResponse>> {
+    @Inject('redis.auth.service')
+    private readonly _redisAuthService: RedisAuthService;
+
+    async execute(param: AuthenticateCommandDTO): Promise<AuthenticateResponse> {
+        if(!param.token)
+            return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+        if(!validator.isJWT(param.token))
+            return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+        let payload
+        try {
+            payload = this._redisAuthService.decodeJWT(param.token)
+        } catch (error) {
+            if(error.name === 'TokenExpiredError')
+                return left(Result.fail(new AuthenticateErrors.TokenExpireTimeError()))
+            else
+                return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+        }
+
+        if(!payload || !payload.sub)
+            return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+
+        return right(Result.OK(new UserAuthenticated(param.token, payload.sub)))
+    }
+}

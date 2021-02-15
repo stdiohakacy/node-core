@@ -6,7 +6,7 @@ import { LoginCommandDTO } from '../useCases/command/login/LoginCommandDTO';
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
 import { LoginErrors } from '../useCases/command/login/LoginErrors';
 
-@JsonController('/v1')
+@JsonController('/v1/auth')
 export class LoginController extends BaseController {
     constructor(
         private readonly _loginUseCase = Container.get(LoginUseCase),

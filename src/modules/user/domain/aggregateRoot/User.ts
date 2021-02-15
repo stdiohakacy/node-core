@@ -141,8 +141,11 @@ export class User extends AggregateRoot<IUserProps> {
         if(!guard.succeeded)
             return Result.fail<User>(guard.message)
         
+        const isNewUser = !!id === false;
+
         const user = new User({...props}, id)
-        user.addDomainEvent(new UserCreated(user))
+        if(isNewUser)
+            user.addDomainEvent(new UserCreated(user))
         return Result.OK<User>(user)
     }
 

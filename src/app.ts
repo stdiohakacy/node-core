@@ -1,3 +1,4 @@
+import { AuthController } from './modules/auth/controller/AuthenticateController';
 import { LoginController } from './modules/auth/controller/LoginController';
 import { ResetPasswordUserController } from './modules/user/controller/ResetPasswordUserController';
 import 'reflect-metadata';
@@ -22,7 +23,7 @@ const app = createExpressServer({
         // User
         SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController,
         // Auth
-        LoginController
+        LoginController, AuthController
     ]
 });
 
