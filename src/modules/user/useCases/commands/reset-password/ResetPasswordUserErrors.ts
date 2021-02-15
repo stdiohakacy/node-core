@@ -25,4 +25,12 @@ export namespace ResetPasswordUserErrors {
             } as UseCaseError)
         }
     }
+
+    export class ExpiredTimeError extends Result<UseCaseError> {
+        constructor() {
+            super(false, {
+                message: 'The forgot key has expired'
+            })
+        }
+    }
 }

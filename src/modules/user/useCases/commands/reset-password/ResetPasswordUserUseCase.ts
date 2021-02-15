@@ -40,10 +40,11 @@ export class ResetPasswordUserUseCase implements IUseCaseCommandCQRS<ResetPasswo
 
             if(!user)
                 return left(new ResetPasswordUserErrors.EmailNotFoundError(email.value))
-
             if(JSON.stringify(user.forgotKey) !== JSON.stringify(forgotKey))
                 return left(new ResetPasswordUserErrors.ForgotKeyInvalidError())
-
+            if (!user.forgotKey || user.forgotExpire.value < new Date())
+                return left(new ResetPasswordUserErrors.ExpiredTimeError())
+                
             const userDb = new UserDb()
             userDb.password = password.value
             userDb.forgotKey = ''

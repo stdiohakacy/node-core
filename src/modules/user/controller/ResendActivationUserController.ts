@@ -6,7 +6,7 @@ import { BaseController } from '../../../shared/infra/http/models/BaseController
 import { ResendActivationUserUseCase } from '../useCases/commands/resend-activation/ResendActivationUserUseCase';
 import { ResendActivationUserErrors } from '../useCases/commands/resend-activation/ResendActivationUserErrors';
 
-@JsonController('/v1')
+@JsonController('/v1/user')
 export class ResendActivationUserController extends BaseController {
     constructor(
         private readonly _resendActivationUserUseCase = Container.get(ResendActivationUserUseCase),

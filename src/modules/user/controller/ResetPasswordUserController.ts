@@ -6,7 +6,7 @@ import { BaseController } from '../../../shared/infra/http/models/BaseController
 import { ResetPasswordUserCommandDTO } from '../useCases/commands/reset-password/ResetPasswordUserCommandDTO';
 import { ResetPasswordUserErrors } from '../useCases/commands/reset-password/ResetPasswordUserErrors';
 
-@JsonController('/v1')
+@JsonController('/v1/user')
 export class ResetPasswordUserController extends BaseController {
     constructor(
         private readonly _resetPasswordUserUseCase = Container.get(ResetPasswordUserUseCase),
@@ -22,6 +22,8 @@ export class ResetPasswordUserController extends BaseController {
                     case ResetPasswordUserErrors.EmailNotFoundError:
                         return this.notFound(res, resultValue.errorValue().message)
                     case ResetPasswordUserErrors.ForgotKeyInvalidError:
+                        return this.clientError(res, resultValue.errorValue().message)
+                    case ResetPasswordUserErrors.ExpiredTimeError:
                         return this.clientError(res, resultValue.errorValue().message)
                     case ResetPasswordUserErrors.CannotSaveError:
                         return this.fail(res, resultValue.errorValue().message)

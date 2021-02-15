@@ -6,7 +6,7 @@ import { BaseController } from '../../../shared/infra/http/models/BaseController
 import { Response } from 'express';
 import { SignUpUserErrors } from '../useCases/commands/signup/SignUpUserErrors';
 
-@JsonController('/v1')
+@JsonController('/v1/user')
 export class SignUpUserController extends BaseController {
     constructor(
         private readonly _signUpUserUseCase = Container.get(SignUpUserUseCase),

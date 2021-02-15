@@ -6,7 +6,7 @@ import { BaseController } from '../../../shared/infra/http/models/BaseController
 import { ActiveUserUseCase } from '../useCases/commands/active/ActiveUserUseCase';
 import { ActiveUserErrors } from '../useCases/commands/active/ActiveUserErrors';
 
-@JsonController('/v1')
+@JsonController('/v1/user')
 export class ActiveUserController extends BaseController {
     constructor(
         private readonly _activeUserUseCase = Container.get(ActiveUserUseCase),

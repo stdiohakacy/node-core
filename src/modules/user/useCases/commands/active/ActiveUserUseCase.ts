@@ -30,6 +30,7 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
             return left(Result.fail(dtoResults.error))
 
         const email = emailOrError.getValue()
+        const activeKey = activeKeyOrError.getValue()
 
         try {
             const user = await this._userRepository.getByEmail(email)
@@ -38,7 +39,7 @@ export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandD
                 return left(new ActiveUserErrors.EmailNotFoundError(email.value))
             if(user.status.value === UserStatusType.ACTIVED && !user.activeKey)
                 return left(new ActiveUserErrors.UserStatusError )
-            if(user.activeKey.value !== param.activeKey)
+            if( JSON.stringify(user.activeKey) !== JSON.stringify(activeKey))
                 return left(new ActiveUserErrors.ActiveKeyInvalidError)
             if (!user.activeExpire || user.activeExpire.value < new Date())
                 return left(new ActiveUserErrors.ExpiredTimeError)

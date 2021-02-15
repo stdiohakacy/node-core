@@ -7,7 +7,7 @@ import { BaseController } from '../../../shared/infra/http/models/BaseController
 import { ForgotPasswordUserErrors } from '../useCases/commands/forgot-password/ForgotPasswordUserErrors';
 import { ForgotPasswordUserCommandDTO } from '../useCases/commands/forgot-password/ForgotPasswordUserCommandDTO';
 
-@JsonController('/v1')
+@JsonController('/v1/user')
 export class ForgotPasswordUserController extends BaseController {
     constructor(
         private readonly _forgotPasswordUserUseCase = Container.get(ForgotPasswordUserUseCase),
