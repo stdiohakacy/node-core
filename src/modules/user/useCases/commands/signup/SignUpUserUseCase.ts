@@ -18,6 +18,7 @@ import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserMapper } from '../../../infra/UserMapper';
 import { addSeconds } from '../../../../../shared/libs/date';
 import { randomBytes } from 'crypto';
+import { MailService } from '../../../../../shared/services/mail/MailService';
 
 
 @Service()
@@ -25,6 +26,9 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
     @Inject('user.repository')
     private _userRepository: UserRepository;
 
+    @Inject('mail.service')
+    private readonly _mailService: MailService;
+    
     async execute(param: SignUpUserCommandDTO): Promise<SignUpUserResponse> {
         const firstNameOrError = UserFirstName.create({ value: param.firstName })
         const lastNameOrError = UserLastName.create({ value: param.lastName })
@@ -82,9 +86,10 @@ export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandD
         const userDb = await UserMapper.toPersistence(user)
         
         try {
-            const user = await this._userRepository.createGet(userDb)
-            if(!user)
+            const isCreated = await this._userRepository.createGet(userDb)
+            if(!isCreated)
                 return left(new SignUpUserErrors.DataCannotSave())
+            this._mailService.sendUserActivation(user)
             return right(Result.OK(true))
         } 
         catch (error) {

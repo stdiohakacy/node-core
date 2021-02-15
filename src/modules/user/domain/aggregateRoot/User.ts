@@ -1,6 +1,6 @@
+import { UserLoggedIn } from './../events/UserLoggedIn';
 import { JWTToken, RefreshToken } from '../../../../shared/services/auth/TokenAlias';
 import { Guard } from './../../../../shared/core/Guard';
-import * as validator from 'class-validator'
 import { UserId } from "../entity/UserId";
 import { UserActivedAt } from "../valueObject/UserActivedAt";
 import { UserActiveExpire } from "../valueObject/UserActiveExpire";
@@ -147,6 +147,7 @@ export class User extends AggregateRoot<IUserProps> {
     public setToken(accessToken: JWTToken, refreshToken: RefreshToken): void {
         this.props.accessToken = accessToken
         this.props.refreshToken = refreshToken
+        this.addDomainEvent(new UserLoggedIn(this))
     }
 
     public isLogin(): boolean {

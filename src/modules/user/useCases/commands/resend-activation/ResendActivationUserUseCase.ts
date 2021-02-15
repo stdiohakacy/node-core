@@ -14,12 +14,16 @@ import { ResendActivationUserErrors } from './ResendActivationUserErrors';
 import { addSeconds } from '../../../../../shared/libs/date';
 import { UserActiveExpire } from '../../../domain/valueObject/UserActiveExpire';
 import { randomBytes } from 'crypto';
+import { MailService } from '../../../../../shared/services/mail/MailService';
 
 @Service()
 export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendActivationUserCommandDTO, Promise<ResendActivationUserResponse>> {
     @Inject('user.repository')
     private readonly _userRepository: UserRepository
 
+    @Inject('mail.service')
+    private readonly _mailService: MailService;
+    
     async execute(param: ResendActivationUserCommandDTO): Promise<ResendActivationUserResponse> {
         const emailOrError = UserEmail.create({ value: param.email })
 
@@ -58,7 +62,7 @@ export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendAc
                 const isUpdated = await this._userRepository.update(user.id.toString(), userDb)
                 if(!isUpdated)
                     return left(new ResendActivationUserErrors.CannotSaveError())
-                    
+                this._mailService.resendUserActivation(user)
                 return right(Result.OK(isUpdated))
             }
             catch (error) {
