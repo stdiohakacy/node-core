@@ -5,11 +5,13 @@ import { AuthenticateErrors } from './AuthenticateErrors';
 
 export class UserAuthenticated {
     token: JWTToken
+    email: string
     userId: string
 
-    constructor(token: JWTToken, userId: string) {
+    constructor(token: JWTToken, userId: string, email: string) {
         this.token = token
         this.userId = userId
+        this.email = email
     }
 }
 

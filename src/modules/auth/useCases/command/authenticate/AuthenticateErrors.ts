@@ -17,7 +17,7 @@ export namespace AuthenticateErrors {
             })
         }
     }
-    
+
     export class AccessDeniedError extends Result<UseCaseError> {    
         constructor () {
             super(false, {

@@ -1,5 +1,5 @@
 import { Req, Res } from "routing-controllers";
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { ICQRS } from "../../../core/ICQRS";
 
 export abstract class BaseController {

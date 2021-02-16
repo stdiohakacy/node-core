@@ -1,9 +1,10 @@
+import { ApiAuthenticator } from './shared/middleware/ApiAuthenticator';
 import { AuthController } from './modules/auth/controller/AuthenticateController';
 import { LoginController } from './modules/auth/controller/LoginController';
 import { ResetPasswordUserController } from './modules/user/controller/ResetPasswordUserController';
 import 'reflect-metadata';
 import { createConnection } from "typeorm";
-import { createExpressServer } from 'routing-controllers';
+import { Action, createExpressServer } from 'routing-controllers';
 import { ForgotPasswordUserController } from './modules/user/controller/ForgotPasswordUserController';
 import { ResendActivationUserController } from './modules/user/controller/ResendActivationUserController';
 import { ActiveUserController } from './modules/user/controller/ActiveUserController';
@@ -17,6 +18,7 @@ import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
 
 const app = createExpressServer({
+    authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
     controllers: [
         // Category
         CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,

@@ -72,9 +72,24 @@ export class RedisContext implements IRedisContext {
     getAllKeys(wildCard: string): Promise<string[]> {
         throw new Error('Method not implemented.');
     }
+
     getAllKeyValue(wildCard: string): Promise<any[]> {
-        throw new Error('Method not implemented.');
+        return new Promise((resolve, reject) => {
+            return this._connection.keys(wildCard, 
+                async (error: Error, results: string[]) => {
+                    if(error)
+                        return reject(error)
+                    const allResults = await Promise.all(
+                        results.map(async (key) => {
+                            const value = await this.getOne(key)
+                            return { key, value }
+                        })
+                    )
+                    resolve(allResults)
+                })
+        })
     }
+    
     deleteOne(key: string): Promise<number> {
         throw new Error('Method not implemented.');
     }

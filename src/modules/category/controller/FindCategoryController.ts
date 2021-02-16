@@ -1,6 +1,6 @@
 import Container from 'typedi';
 import { Response } from 'express';
-import { Get, JsonController, QueryParams, Res } from "routing-controllers";
+import { Authorized, Get, JsonController, QueryParams, Res } from "routing-controllers";
 import { FindCategoriesUseCase } from './../useCases/queries/find/FindCategoriesUseCase';
 import { FindCategoriesQueryDTO } from './../useCases/queries/find/FindCategoriesQueryDTO';
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
@@ -11,6 +11,7 @@ export class FindCategoryController extends BaseController {
         private readonly _findCategoriesUseCase: FindCategoriesUseCase = Container.get(FindCategoriesUseCase),
     ) {super()}
 
+    @Authorized()
     @Get('/')
     async executeImpl(@QueryParams() param: FindCategoriesQueryDTO, @Res() res: Response): Promise<Response> {
         try {

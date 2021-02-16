@@ -14,14 +14,15 @@ interface IJwtPayload {
 }
 
 export interface IJwtPayloadExtend extends IJwtPayload {
-    roleId: string;
+    email: string;
 }
 
 export interface IJwtAuthService {
     signJWT(user: User): JWTToken;
-    decodeJWT(token: JWTToken): IJwtPayloadExtend;
+    decodeJWT(token: JWTToken): Promise<IJwtPayloadExtend>;
     createRefreshToken(): RefreshToken;
     getToken(user: User): Promise<string>
+    getTokens(email: string): Promise<string[]>
     addToken(user: User): Promise<any>
 }
 
@@ -32,8 +33,9 @@ export class RedisAuthService implements IJwtAuthService {
 
     public jwtHashName = 'activeJwtClients'
     
-    signJWT(user: User): JWTToken {
+    public signJWT(user: User): JWTToken {
         return jwt.sign({
+            email: user.email.value
         }, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {
             subject: user.id.toString(),
             expiresIn: 24 * 60 * 60,
@@ -43,12 +45,21 @@ export class RedisAuthService implements IJwtAuthService {
         } as jwt.SignOptions);
     }
 
-    decodeJWT(token: JWTToken): IJwtPayloadExtend {
-        return jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {
-            issuer: 'node-core',
-            audience: `${'http'}://${'localhost'}`,
-            algorithms: 'HS256'
-        } as unknown as jwt.VerifyOptions) as IJwtPayloadExtend
+    public decodeJWT(token: JWTToken): Promise<IJwtPayloadExtend>  {
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {}, (error, decoded) => {
+                if(error) {
+                    console.error(error)
+                    return reject(error)
+                }
+                return resolve(decoded as IJwtPayloadExtend) 
+            })
+        })
+        // return jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {
+        //     issuer: 'node-core',
+        //     audience: `${'http'}://${'localhost'}`,
+        //     algorithms: 'HS256'
+        // } as unknown as jwt.VerifyOptions) as IJwtPayloadExtend
     }
 
     public createRefreshToken(): RefreshToken {
@@ -67,6 +78,11 @@ export class RedisAuthService implements IJwtAuthService {
 
     public getToken(user: User): Promise<string> {
         return this._redisContext.getOne(this.constructKey(user.refreshToken, user.email.value))
+    }
+
+    async getTokens(email: string): Promise<string[]> {
+        const keyValues = await this._redisContext.getAllKeyValue(`*${this.jwtHashName}.${email}`)
+        return keyValues.map((kv) => kv.value)
     }
 
     private constructKey(refreshToken: RefreshToken, email: string): string {

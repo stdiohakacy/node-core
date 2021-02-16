@@ -15,22 +15,26 @@ export class AuthenticateUseCase implements IUseCaseCommandCQRS<AuthenticateComm
 
     async execute(param: AuthenticateCommandDTO): Promise<AuthenticateResponse> {
         if(!param.token)
-            return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+            return left(new AuthenticateErrors.TokenInvalidError())
         if(!validator.isJWT(param.token))
-            return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+            return left(new AuthenticateErrors.TokenInvalidError())
         let payload
         try {
-            payload = this._redisAuthService.decodeJWT(param.token)
+            payload = await this._redisAuthService.decodeJWT(param.token)
         } catch (error) {
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@')
+            console.log(error.name)
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@')
+
             if(error.name === 'TokenExpiredError')
-                return left(Result.fail(new AuthenticateErrors.TokenExpireTimeError()))
+                return left(new AuthenticateErrors.TokenExpireTimeError())
             else
-                return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+                return left(new AuthenticateErrors.TokenInvalidError())
         }
 
         if(!payload || !payload.sub)
-            return left(Result.fail(new AuthenticateErrors.TokenInvalidError()))
+            return left(new AuthenticateErrors.TokenInvalidError())
 
-        return right(Result.OK(new UserAuthenticated(param.token, payload.sub)))
+        return right(Result.OK(new UserAuthenticated(param.token, payload.sub, payload.email)))
     }
 }
