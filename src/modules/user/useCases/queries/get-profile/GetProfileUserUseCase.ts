@@ -1,12 +1,8 @@
 import { UserMapper } from './../../../infra/UserMapper';
 import { GetProfileUserResponse, GetProfileUserResult } from './GetProfileUserResponse';
-import { RedisAuthService } from './../../../../../shared/services/auth/RedisAuthService';
 import { left, Result, right } from './../../../../../shared/core/Result';
-import { UserEmail } from './../../../../user/domain/valueObject/UserEmail';
 import { Inject, Service } from 'typedi';
 import { IUseCaseQueryCQRS } from '../../../../../shared/core/IUseCase';
-import { UserPassword } from '../../../../user/domain/valueObject/UserPassword';
-import { UserStatusType } from '../../../../user/enums/UserStatusType';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserRepository } from '../../../../user/repositories/UserRepository';
 import { GetProfileUserQueryDTO } from './GetProfileUserQueryDTO';
@@ -32,7 +28,6 @@ export class GetProfileUserUseCase implements IUseCaseQueryCQRS<GetProfileUserQu
                 return left(new GetProfileUserErrors.NotFoundError(userId.id.toString()))
 
             const userMapper = UserMapper.toDomain(user)
-            console.log(new GetProfileUserResult(userMapper))
             return right(Result.OK(new GetProfileUserResult(userMapper)));
         } 
         catch (error) {

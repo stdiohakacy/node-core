@@ -1,5 +1,5 @@
-import { User } from './../../../../modules/user/domain/aggregateRoot/User';
 import * as Mailgen from 'mailgen';
+import { User } from '../../../../modules/user/domain/aggregateRoot/User';
 
 export class ForgotPasswordTemplate {
     static getTemplate(user: User): Mailgen.Content {
@@ -12,7 +12,7 @@ export class ForgotPasswordTemplate {
                     button: {
                         color: '#DC4D2F',
                         text: 'Reset your password',
-                        link: `${'http'}://${'localhost'}/reset-password?email=${user.email.value}&key=${user.forgotKey.value}`
+                        link: `${'http'}://${'localhost'}/reset-password?email=${user.email && user.email.value || ''}&key=${user.forgotKey && user.forgotKey.value || ''}`
                     }
                 },
                 outro: 'If you did not request a password reset, no further action is required on your part.'

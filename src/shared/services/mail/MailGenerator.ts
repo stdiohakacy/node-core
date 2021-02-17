@@ -1,23 +1,26 @@
-import * as MailGen from 'mailgen'
+import * as Mailgen from 'mailgen';
 
 export class MailGenerator {
-    private readonly _mailGenerator: MailGen
+    private readonly _mailGenerator: Mailgen;
 
     constructor() {
-        this._mailGenerator = new MailGen({
+        this._mailGenerator = new Mailgen({
             theme: 'default',
             product: {
-                name: 'Node Core',
-                link: `http://localhost`
+                // Appears in header & footer of e-mails
+                name: 'Node core',
+                link: `${'http'}://${'localhost'}`
+                // Optional product logo
+                // logo: 'https://mailgen.js/img/logo.png'
             }
-        })
+        });
     }
 
-    generatePlainText(params: MailGen.Content): string {
-        return this._mailGenerator.generatePlaintext(params)
+    generatePlaintext(params: Mailgen.Content): string {
+        return this._mailGenerator.generatePlaintext(params);
     }
 
-    generateHtmlContent(params: MailGen.Content): string {
-        return this._mailGenerator.generate(params)
+    generateHtmlContent(params: Mailgen.Content): string {
+        return this._mailGenerator.generate(params);
     }
 }

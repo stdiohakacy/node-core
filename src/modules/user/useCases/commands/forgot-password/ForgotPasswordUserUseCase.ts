@@ -47,6 +47,7 @@ export class ForgotPasswordUserUseCase implements IUseCaseCommandCQRS<ForgotPass
                 const isUpdated = await this._userRepository.update(user.id.toString(), userDb)
                 if(!isUpdated)
                     return left(new ForgotPasswordUserErrors.CannotSaveError())
+                // 
                 this._mailService.sendForgotPassword(user)
                 return right(Result.OK(isUpdated))
             }
