@@ -20,12 +20,8 @@ export class AuthenticateUseCase implements IUseCaseCommandCQRS<AuthenticateComm
             return left(new AuthenticateErrors.TokenInvalidError())
         let payload
         try {
-            payload = await this._redisAuthService.decodeJWT(param.token)
+            payload = this._redisAuthService.decodeJWT(param.token)
         } catch (error) {
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log(error.name)
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@')
-
             if(error.name === 'TokenExpiredError')
                 return left(new AuthenticateErrors.TokenExpireTimeError())
             else

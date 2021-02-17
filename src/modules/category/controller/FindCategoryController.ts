@@ -10,9 +10,9 @@ export class FindCategoryController extends BaseController {
     constructor(
         private readonly _findCategoriesUseCase: FindCategoriesUseCase = Container.get(FindCategoriesUseCase),
     ) {super()}
-
-    @Authorized()
+    
     @Get('/')
+    @Authorized()
     async executeImpl(@QueryParams() param: FindCategoriesQueryDTO, @Res() res: Response): Promise<Response> {
         try {
             const result = await this._findCategoriesUseCase.execute(param)

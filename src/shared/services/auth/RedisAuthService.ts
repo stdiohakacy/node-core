@@ -19,7 +19,7 @@ export interface IJwtPayloadExtend extends IJwtPayload {
 
 export interface IJwtAuthService {
     signJWT(user: User): JWTToken;
-    decodeJWT(token: JWTToken): Promise<IJwtPayloadExtend>;
+    decodeJWT(token: JWTToken): IJwtPayloadExtend;
     createRefreshToken(): RefreshToken;
     getToken(user: User): Promise<string>
     getTokens(email: string): Promise<string[]>
@@ -45,21 +45,21 @@ export class RedisAuthService implements IJwtAuthService {
         } as jwt.SignOptions);
     }
 
-    public decodeJWT(token: JWTToken): Promise<IJwtPayloadExtend>  {
-        return new Promise((resolve, reject) => {
-            jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {}, (error, decoded) => {
-                if(error) {
-                    console.error(error)
-                    return reject(error)
-                }
-                return resolve(decoded as IJwtPayloadExtend) 
-            })
-        })
-        // return jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {
-        //     issuer: 'node-core',
-        //     audience: `${'http'}://${'localhost'}`,
-        //     algorithms: 'HS256'
-        // } as unknown as jwt.VerifyOptions) as IJwtPayloadExtend
+    public decodeJWT(token: JWTToken): IJwtPayloadExtend  {
+        // return new Promise((resolve, reject) => {
+        //     jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {}, (error, decoded) => {
+        //         if(error) {
+        //             console.error(error)
+        //             return reject(error)
+        //         }
+        //         return resolve(decoded as IJwtPayloadExtend) 
+        //     })
+        // })
+        return jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {
+            issuer: 'node-core',
+            audience: `${'http'}://${'localhost'}`,
+            algorithms: 'HS256'
+        } as unknown as jwt.VerifyOptions) as IJwtPayloadExtend
     }
 
     public createRefreshToken(): RefreshToken {
