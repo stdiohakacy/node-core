@@ -1,10 +1,11 @@
+import { GetProfileUserController } from './modules/user/controller/GetProfileUserController';
 import { ApiAuthenticator } from './shared/middleware/ApiAuthenticator';
 import { AuthController } from './modules/auth/controller/AuthenticateController';
 import { LoginController } from './modules/auth/controller/LoginController';
 import { ResetPasswordUserController } from './modules/user/controller/ResetPasswordUserController';
 import 'reflect-metadata';
 import { createConnection } from "typeorm";
-import { Action, createExpressServer } from 'routing-controllers';
+import { createExpressServer } from 'routing-controllers';
 import { ForgotPasswordUserController } from './modules/user/controller/ForgotPasswordUserController';
 import { ResendActivationUserController } from './modules/user/controller/ResendActivationUserController';
 import { ActiveUserController } from './modules/user/controller/ActiveUserController';
@@ -23,11 +24,13 @@ const app = createExpressServer({
         // Category
         CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
         // User
-        SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController,
+        SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController,
         // Auth
-        LoginController, AuthController
+        LoginController, AuthController,
     ]
 });
+
+// app.use(rateLimiterUsingThirdParty)
 
 app.listen(3000, () => {
     createConnection().then(async connection => {

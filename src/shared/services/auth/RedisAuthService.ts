@@ -46,15 +46,6 @@ export class RedisAuthService implements IJwtAuthService {
     }
 
     public decodeJWT(token: JWTToken): IJwtPayloadExtend  {
-        // return new Promise((resolve, reject) => {
-        //     jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {}, (error, decoded) => {
-        //         if(error) {
-        //             console.error(error)
-        //             return reject(error)
-        //         }
-        //         return resolve(decoded as IJwtPayloadExtend) 
-        //     })
-        // })
         return jwt.verify(token, 'mwGAPb8uwN9MMGdg9CbzPhssARDL9E7fggHdLbwRb5A4p4w9NHAAJjN4sZXyWWMrCnCfj4quCyG2qKmY2C9Qnk5j5MRDV8rTJXfKvaM9S2wLkGjERWvtmmakzHeGZV6r', {
             issuer: 'node-core',
             audience: `${'http'}://${'localhost'}`,

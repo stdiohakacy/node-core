@@ -15,11 +15,13 @@
       "typescript": "3.9.5"
    },
    "dependencies": {
+      "@types/express-rate-limit": "5.1.1",
       "@types/jsonwebtoken": "8.5.0",
       "@types/redis": "2.8.22",
       "bcrypt-nodejs": "0.0.3",
       "cors": "2.8.5",
       "express": "4.17.1",
+      "express-rate-limit": "5.0.0",
       "inversify": "5.0.5",
       "jsonwebtoken": "8.5.1",
       "mailgen": "2.0.14",
