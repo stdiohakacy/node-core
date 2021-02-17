@@ -1,4 +1,3 @@
-import { GetProfileUserController } from './modules/user/controller/GetProfileUserController';
 import { ApiAuthenticator } from './shared/middleware/ApiAuthenticator';
 import { AuthController } from './modules/auth/controller/AuthenticateController';
 import { LoginController } from './modules/auth/controller/LoginController';
@@ -17,9 +16,11 @@ import { CreateCategoryController } from './modules/category/controller/CreateCa
 import { GetCategoryByIdController } from './modules/category/controller/GetCategoryByIdController';
 import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
+import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 
 const app = createExpressServer({
     authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
+    currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
     controllers: [
         // Category
         CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,

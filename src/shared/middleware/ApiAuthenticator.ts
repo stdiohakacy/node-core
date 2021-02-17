@@ -39,4 +39,8 @@ export class ApiAuthenticator {
 
         return !!action.request.userAuth;
     }
+
+    userAuthChecker = (action: Action) => {
+        return action.request.userAuth
+    }
 }

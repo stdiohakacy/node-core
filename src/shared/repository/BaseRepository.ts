@@ -27,7 +27,6 @@ implements IBaseRepository<IEntity, TIdentityType> {
             .createQueryBuilder(this._schema.TABLE_NAME)
             .whereInIds(id)
             .getOne()
-
         return result
     }
 
