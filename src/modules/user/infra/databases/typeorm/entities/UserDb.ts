@@ -1,13 +1,17 @@
 import { DateTransformer } from './../transformers/DateTransformer';
 import { GenderType } from './../../../../enums/GenderType';
 import { UserStatusType } from '../../../../enums/UserStatusType';
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
+import { ChannelUserDb } from '../../../../../chat/infra/databases/typeorm/entities/ChannelUserDb';
 
 @Entity('user')
 export class UserDb extends BaseEntity {
     @PrimaryGeneratedColumn('uuid', { name: 'id'})
     id: string;
+
+    @OneToMany(() => ChannelUserDb, channelUser => channelUser.channel)
+    channelUsers: ChannelUserDb[];
 
     @Column('enum', { name: 'status', enum: UserStatusType, default: UserStatusType.ACTIVED })
     status: UserStatusType;
