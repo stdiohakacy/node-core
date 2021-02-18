@@ -42,12 +42,11 @@ export class ExpressServer {
                 ]
             })
 
-
             ExpressServer.app.listen(3000, () => {
                 createConnection().then(async connection => {
                     const redisContext = Container.get<RedisContext>('redis.context');
                     redisContext.createConnection();
-                    console.log('OK')
+                    console.log('Express Server listening on port : 3000')
                 }).catch(error => console.log("Error: ", error));
             })
 
@@ -66,9 +65,9 @@ export class ExpressServer {
     static run(port: string) {
         appSocket(ExpressServer.server);
 
-        ExpressServer.server.listen(this.normalizePort(port));
-        //   .on('listening', () => this.onListening(ExpressServer.server))
-        //   .on('error', (error) => this.onError(ExpressServer.server, error));
+        ExpressServer.server.listen(this.normalizePort(port))
+          .on('listening', () => this.onListening(ExpressServer.server))
+          .on('error', (error) => this.onError(ExpressServer.server, error));
 
         // log.debug('ExpressServer was started on environment %s', process.env.NODE_ENV);
         return ExpressServer;
@@ -92,6 +91,7 @@ export class ExpressServer {
     }
 
     private static onListening(server: http.Server): void {
+        console.log('Socket server on listening at port : 5000')
     }
 
     private static onError(server: http.Server, error: Error): void {
