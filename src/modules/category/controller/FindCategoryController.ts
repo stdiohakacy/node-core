@@ -12,7 +12,6 @@ export class FindCategoryController extends BaseController {
     ) {super()}
     
     @Get('/')
-    @Authorized()
     async executeImpl(@QueryParams() param: FindCategoriesQueryDTO, @Res() res: Response): Promise<Response> {
         try {
             const result = await this._findCategoriesUseCase.execute(param)
