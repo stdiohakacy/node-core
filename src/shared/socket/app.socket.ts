@@ -10,8 +10,6 @@ export const appSocket = server => {
 
     io.on('connection', async(socket: socketIO.Socket) => {
         const socketId = socket.id
-        console.log('@@@@@@@@@@@@@@@@@@@2')
-        console.log(socketId)
-        console.log('@@@@@@@@@@@@@@@@@@@2')
+        console.log(`Connection socket id = ${socketId} - time ${new Date().toLocaleString()}`)
     })
 }
