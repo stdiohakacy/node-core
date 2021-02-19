@@ -1,12 +1,13 @@
+import Container from 'typedi';
 import * as http from 'http';
-import * as express from 'express';
 import { createServer } from 'http';
+import * as express from 'express';
+import 'reflect-metadata';
+import { createConnection } from "typeorm";
 import { ApiAuthenticator } from './shared/middleware/ApiAuthenticator';
 import { AuthController } from './modules/auth/controller/AuthenticateController';
 import { LoginController } from './modules/auth/controller/LoginController';
 import { ResetPasswordUserController } from './modules/user/controller/ResetPasswordUserController';
-import 'reflect-metadata';
-import { createConnection } from "typeorm";
 import { createExpressServer } from 'routing-controllers';
 import { ForgotPasswordUserController } from './modules/user/controller/ForgotPasswordUserController';
 import { ResendActivationUserController } from './modules/user/controller/ResendActivationUserController';
@@ -18,7 +19,6 @@ import { UpdateCategoryController } from './modules/category/controller/UpdateCa
 import { CreateCategoryController } from './modules/category/controller/CreateCategoryController';
 import { GetCategoryByIdController } from './modules/category/controller/GetCategoryByIdController';
 import { RedisContext } from './shared/infra/databases/redis/RedisContext';
-import Container from 'typedi';
 import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 import { appSocket } from './shared/socket/app.socket';
 import { GetChannelSingleController } from './modules/chat/controller/GetChannelSingleController';
@@ -34,14 +34,14 @@ export class ExpressServer {
                 authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
                 currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
                 controllers: [
-                    // Chat
-                    GetChannelSingleController,
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User
                     SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController,
                     // Auth
                     LoginController, AuthController,
+                    // Channel
+                    GetChannelSingleController
                 ]
             })
 

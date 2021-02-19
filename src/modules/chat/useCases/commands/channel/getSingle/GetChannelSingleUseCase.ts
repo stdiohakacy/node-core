@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
-import { UserRepository } from './../../../../../user/repositories/UserRepository';
-import { left, Result, right } from './../../../../../../shared/core/Result';
+import { UserRepository } from '../../../../../user/repositories/UserRepository';
+import { left, Result, right } from '../../../../../../shared/core/Result';
 import { IUseCaseQueryCQRS } from "../../../../../../shared/core/IUseCase";
 import { ChannelRepository } from "../../../../repositories/ChannelRepository";
 import { GetChannelSingleQueryDTO } from "./GetChannelSingleQueryDTO";
@@ -15,7 +15,6 @@ import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
 import { UserId } from '../../../../../user/domain/entity/UserId';
 import { ChannelId } from '../../../../domain/entity/ChannelId';
 import { ChannelUserMapper } from '../../../../infra/ChannelUserMapper';
-import { ChannelUsers } from "../../../../watchedList/ChannelUsers";
 
 @Service()
 export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSingleQueryDTO, Promise<GetChannelSingleResponse>> {
@@ -28,9 +27,6 @@ export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSing
 
     async execute(param: GetChannelSingleQueryDTO): Promise<GetChannelSingleResponse> {
         const userAuthenticated = param.userAuthenticated
-
-        if (!userAuthenticated)
-            return left(new GetChannelSingleErrors.TokenInvalidError())
 
         try {
             const toUser = await this._userRepository.getById(param.toUserId)
