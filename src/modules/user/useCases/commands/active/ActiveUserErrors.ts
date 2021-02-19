@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
 import { Result } from "../../../../../shared/core/Result";
 import { UseCaseError } from "../../../../../shared/core/UseCaseError";
 
@@ -5,14 +6,14 @@ export namespace ActiveUserErrors {
     export class EmailNotFoundError extends Result<UseCaseError> {    
         constructor (email: string) {
             super(false, {
-                message: `The email ${email} was not found!`
+                message: new SystemError(MessageError.PARAM_NOT_EXISTS, `email ${email}`).message
             })
         }
     }
     export class ActiveKeyInvalidError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: `The active key is invalid`
+                message: new SystemError(MessageError.PARAM_INVALID, 'active key').message
             })
         }
     }
@@ -20,7 +21,7 @@ export namespace ActiveUserErrors {
     export class ExpiredTimeError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'The active key has expired'
+                message: new SystemError(MessageError.PARAM_EXPIRED, 'active key').message
             })
         }
     }
@@ -28,7 +29,7 @@ export namespace ActiveUserErrors {
     export class UserStatusError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'The user has been activated'
+                message: new SystemError(MessageError.PARAM_ACTIVATED, 'user').message
             })
         }
     }
@@ -36,7 +37,7 @@ export namespace ActiveUserErrors {
     export class CannotSaveError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'Cannot save error'
+                message: new SystemError(MessageError.DATA_CANNOT_SAVE).message
             })
         }
     }

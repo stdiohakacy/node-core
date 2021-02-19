@@ -2,8 +2,8 @@ import { UniqueEntityId } from "../../../shared/domain/UniqueEntityId"
 import { IMapper } from "../../../shared/IMapper"
 import { Channel } from "../domain/aggregateRoot/Channel"
 import { ChannelDb } from "./databases/typeorm/entities/ChannelDb"
-import { ChannelName } from '../domain/valueObjects/ChannelName';
-import { ChannelDescription } from "../domain/valueObjects/ChannelDescription";
+import { ChannelDescription } from "../domain/valueObjects/channel/ChannelDescription";
+import { ChannelName } from "../domain/valueObjects/channel/ChannelName";
 
 export class ChannelMapper implements IMapper<Channel> {
     public static toDomain(channelDb: ChannelDb): Channel | null {

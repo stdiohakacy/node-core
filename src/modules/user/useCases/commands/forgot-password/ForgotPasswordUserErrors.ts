@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
 import { Result } from "../../../../../shared/core/Result";
 import { UseCaseError } from "../../../../../shared/core/UseCaseError";
 
@@ -5,7 +6,7 @@ export namespace ForgotPasswordUserErrors {
     export class EmailNotFoundError extends Result<UseCaseError> {    
         constructor (email: string) {
             super(false, {
-                message: `The email ${email} was not found!`
+                message: new SystemError(MessageError.PARAM_NOT_EXISTS, `email ${email}`).message
             })
         }
     }
@@ -13,7 +14,7 @@ export namespace ForgotPasswordUserErrors {
     export class DataInvalidError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-                message: `Data is invalid!`
+                message: new SystemError(MessageError.DATA_INVALID).message
             })
         }
     }
@@ -21,7 +22,7 @@ export namespace ForgotPasswordUserErrors {
     export class CannotSaveError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'Cannot save error'
+                message: new SystemError(MessageError.DATA_CANNOT_SAVE).message
             })
         }
     }

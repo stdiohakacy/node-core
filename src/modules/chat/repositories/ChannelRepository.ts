@@ -37,7 +37,7 @@ export class ChannelRepository extends BaseRepository<ChannelDb, string> impleme
         return ChannelMapper.toDomain(channel)
     }
 
-    async getExistedSingleChannel(firstUserId: string, secondUserId: string): Promise<any> {
+    async getExistedSingleChannel(firstUserId: string, secondUserId: string): Promise<Channel> {
         const query = await this.repository
             .createQueryBuilder('channel')
             .andWhere('channel.isDirect = TRUE')
@@ -46,7 +46,7 @@ export class ChannelRepository extends BaseRepository<ChannelDb, string> impleme
                 'channel_user',
                 'channelUser',
                 `channelUser.channelId = channel.id
-            AND channelUser.userId IN (:...userIds)`,
+                AND channelUser.userId IN (:...userIds)`,
                 { userIds: [firstUserId, secondUserId] }
             )
             .select('channel.id', 'id')

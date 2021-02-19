@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
 import { UseCaseError } from '../../../../../shared/core/UseCaseError';
 import { Result } from './../../../../../shared/core/Result';
 
@@ -5,7 +6,7 @@ export namespace ResendActivationUserErrors {
     export class EmailNotFoundError extends Result<UseCaseError> {    
         constructor (email: string) {
             super(false, {
-                message: `The email ${email} was not found!`
+                message: new SystemError(MessageError.PARAM_NOT_EXISTS, `email ${email}`).message
             })
         }
     }
@@ -13,7 +14,7 @@ export namespace ResendActivationUserErrors {
     export class UserStatusError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'The user has been activated'
+                message: new SystemError(MessageError.PARAM_ACTIVATED, 'user').message
             })
         }
     }
@@ -21,7 +22,7 @@ export namespace ResendActivationUserErrors {
     export class CannotSaveError extends Result<UseCaseError> {    
         constructor () {
             super(false, {
-                message: 'Cannot save error'
+                message: new SystemError(MessageError.DATA_CANNOT_SAVE).message
             })
         }
     }

@@ -15,6 +15,7 @@ import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
 import { UserId } from '../../../../../user/domain/entity/UserId';
 import { ChannelId } from '../../../../domain/entity/ChannelId';
 import { ChannelUserMapper } from '../../../../infra/ChannelUserMapper';
+import { ChannelUsers } from "../../../../watchedList/ChannelUsers";
 
 @Service()
 export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSingleQueryDTO, Promise<GetChannelSingleResponse>> {
@@ -55,17 +56,16 @@ export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSing
                     if(!channelId)
                         return left(new GetChannelSingleErrors.DataCannotSave())
 
-                    const channelUser = ChannelUser.create({
-                        userId: UserId.create(new UniqueEntityId(toUser.id.toString())).getValue(),
+                    const userIds = [toUser.id.toString(), userAuthenticated.userId]
+                    const channelUsers = userIds.map(userId => ChannelUser.create({
+                        userId: UserId.create(new UniqueEntityId(userId as string)).getValue(),
                         channelId: ChannelId.create(new UniqueEntityId(channelId.toString())).getValue(),
                         isMute: false
-                    })
+                    }))
 
-                    if(channelUser.isFailure)
-                        return left(Result.fail(channelUser.error))
-                    const channelUserDb = ChannelUserMapper.toPersistence(channelUser.getValue())
+                    const ChannelUsersDb = channelUsers.map(channelUser => ChannelUserMapper.toPersistence(channelUser.getValue()))
                     try {
-                        const channelUserIds = await this._channelUserRepository.createMultiple([channelUserDb])
+                        const channelUserIds = await this._channelUserRepository.createMultiple(ChannelUsersDb)
                         if(channelUserIds.length > 0) 
                             return right(Result.OK(channelId))
                     } catch (error) {
@@ -78,6 +78,7 @@ export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSing
                     return left(new ApplicationError.UnexpectedError(error))
                 }
             }
+            return right(Result.OK(getChannel.id.toString()))
         } catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))

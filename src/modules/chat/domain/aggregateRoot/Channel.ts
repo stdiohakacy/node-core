@@ -3,9 +3,9 @@ import { AggregateRoot } from '../../../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
 import { Result } from '../../../../shared/core/Result';
 import { ChannelId } from '../entity/ChannelId';
-import { ChannelName } from '../valueObjects/ChannelName';
-import { ChannelDescription } from '../valueObjects/ChannelDescription';
+import { ChannelDescription } from '../valueObjects/channel/ChannelDescription';
 import { ChannelUsers } from '../../watchedList/ChannelUsers';
+import { ChannelName } from '../valueObjects/channel/ChannelName';
 export interface IChannelProps {
     name?: ChannelName,
     description?: ChannelDescription,

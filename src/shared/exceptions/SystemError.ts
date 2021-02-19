@@ -21,7 +21,9 @@ export class ErrorCode {
     static DATA_NOT_EXISTS = 'DATA_NOT_EXISTS_ERR';
     static DATA_EXPIRED = 'DATA_EXPIRED_ERR';
     static DATA_NOT_ACTIVATED = 'DATA_NOT_ACTIVATED_ERR';
+    static DATA_ACTIVATED = 'DATA_ACTIVATED_ERR';
     static DATA_NOT_VERIFIED = 'DATA_NOT_VERIFIED_ERR';
+    static ACCOUNT_WRONG = 'ACCOUNT_WRONG_ERR';
 }
 
 
@@ -40,6 +42,7 @@ export class MessageError {
     static PARAM_NOT_EXISTS = new ErrorObject(ErrorCode.DATA_NOT_EXISTS, 'The {0} is not exists!');
     static PARAM_EXPIRED = new ErrorObject(ErrorCode.DATA_EXPIRED, 'The {0} has expired!');
     static PARAM_NOT_ACTIVATED = new ErrorObject(ErrorCode.DATA_NOT_ACTIVATED, 'The {0} has not been activated!');
+    static PARAM_ACTIVATED = new ErrorObject(ErrorCode.DATA_ACTIVATED, 'The {0} has been activated!');
     static PARAM_NOT_VERIFIED = new ErrorObject(ErrorCode.DATA_NOT_VERIFIED, 'The {0} has not been verified!');
     static DATA_INVALID = new ErrorObject(ErrorCode.DATA_INVALID, 'Data is invalid!');
     static PARAM_INVALID = new ErrorObject(ErrorCode.DATA_INVALID, 'The {0} is invalid!');
@@ -54,6 +57,7 @@ export class MessageError {
     static PARAM_LEN_LESS_OR_EQUAL = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be less than or equal to {1}!');
     static PARAM_LEN_GREATER_OR_EQUAL = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be greater than or equal to {1}!');
     static PARAM_LEN_BETWEEN = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be between {1} and {2}!');
+    static ACCOUNT_WRONG = new ErrorObject(ErrorCode.ACCOUNT_WRONG, 'Wrong email or password!');
 }
 
 export class SystemError extends Error {

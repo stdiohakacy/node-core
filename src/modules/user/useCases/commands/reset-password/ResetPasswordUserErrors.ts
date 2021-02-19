@@ -1,3 +1,4 @@
+import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
 import { Result } from "../../../../../shared/core/Result";
 import { UseCaseError } from "../../../../../shared/core/UseCaseError";
 
@@ -5,7 +6,7 @@ export namespace ResetPasswordUserErrors {
     export class EmailNotFoundError extends Result<UseCaseError> {    
         constructor (email: string) {
             super(false, {
-                message: `The email ${email} was not found!`
+                message: new SystemError(MessageError.PARAM_NOT_EXISTS, `email ${email}`).message
             })
         }
     }
@@ -13,7 +14,7 @@ export namespace ResetPasswordUserErrors {
     export class CannotSaveError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'Cannot save error'
+                message: new SystemError(MessageError.DATA_CANNOT_SAVE).message
             })
         }
     }
@@ -21,7 +22,7 @@ export namespace ResetPasswordUserErrors {
     export class ForgotKeyInvalidError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: `The forgot key is invalid`
+                message: new SystemError(MessageError.PARAM_INVALID, 'forgot key').message
             })
         }
     }
@@ -29,7 +30,7 @@ export namespace ResetPasswordUserErrors {
     export class ExpiredTimeError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: 'The forgot key has expired'
+                message: new SystemError(MessageError.PARAM_EXPIRED, 'forgot key').message
             })
         }
     }
