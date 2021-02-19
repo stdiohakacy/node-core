@@ -21,7 +21,7 @@ export class CategoryMapper implements IMapper<Category> {
     public static toPersistence (category: Category): CategoryDb {
         const categoryDb = new CategoryDb()
 
-        categoryDb.name = category.name.value
+        categoryDb.name = category.name && category.name.value
 
         return categoryDb
     }

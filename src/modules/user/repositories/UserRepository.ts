@@ -7,7 +7,6 @@ import { Service } from 'typedi';
 import { BaseRepository } from '../../../shared/repository/BaseRepository';
 export interface IUserRepository extends IBaseRepository<UserDb, string> {
     getByEmail(userEmail: UserEmail): Promise<User>
-    // 
     isEmailExist(userEmail: UserEmail): Promise<boolean>
 }
 

@@ -15,9 +15,9 @@ export class GetProfileUserController extends BaseController {
 
     @Get('/me')
     @Authorized()
-    async executeImpl(@CurrentUser() userAuth: UserAuthenticated, @Res() res: Response): Promise<Response> {
+    async executeImpl(@CurrentUser() userAuthenticated: UserAuthenticated, @Res() res: Response): Promise<Response> {
         const param = new GetProfileUserQueryDTO()
-        param.id = userAuth.userId
+        param.id = userAuthenticated.userId
 
         try {
             const result = await this._getProfileUserUseCase.execute(param);

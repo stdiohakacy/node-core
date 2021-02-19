@@ -21,6 +21,7 @@ import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
 import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 import { appSocket } from './shared/socket/app.socket';
+import { GetChannelSingleController } from './modules/chat/controller/GetChannelSingleController';
 
 
 export class ExpressServer {
@@ -33,6 +34,8 @@ export class ExpressServer {
                 authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
                 currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
                 controllers: [
+                    // Chat
+                    GetChannelSingleController,
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User

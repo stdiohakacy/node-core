@@ -12,12 +12,12 @@ export class ChannelDb extends BaseEntity {
     channelUsers: ChannelUserDb[];
 
     @Column({ name: 'name', type: 'varchar', nullable: true })
-    name: string;
+    name?: string;
 
     @Column({ name: 'description', type: 'varchar', nullable: true })
-    description: string;
+    description?: string;
 
-    @Column({ name: 'is_direct', type: 'boolean', default: false })
+    @Column({ name: 'is_direct', type: 'boolean', default: true })
     isDirect: boolean;
 
     @Column({ name: 'is_private', type: 'boolean', default: true })
@@ -39,5 +39,5 @@ export class ChannelDb extends BaseEntity {
         default: () => 'CURRENT_TIMESTAMP',
         nullable: true,
     })
-    lastMessageCreatedAt: Date;
+    lastMessageCreatedAt?: Date;
 }

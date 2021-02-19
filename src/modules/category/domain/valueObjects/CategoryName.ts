@@ -1,7 +1,6 @@
 import { Result } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
 import * as validator from 'class-validator'
-import { MessageError, SystemError } from "../../../../shared/exceptions/SystemError";
 interface ICategoryNameProps {
     value: string;
 }

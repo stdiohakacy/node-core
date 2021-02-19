@@ -1,6 +1,4 @@
-import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
 import { Result } from "../../../../shared/core/Result";
-import * as validator from 'class-validator'
 import { Entity } from "../../../../shared/domain/Entity";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
 

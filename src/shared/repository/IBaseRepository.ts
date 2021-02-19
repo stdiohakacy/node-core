@@ -5,6 +5,8 @@ export interface IBaseRepository<TEntity, TIdentityType> {
     
     create(data: TEntity): Promise<TIdentityType>
 
+    createMultiple(list: TEntity[]): Promise<TIdentityType[]>;
+
     createGet(data: TEntity): Promise<TEntity>
     
     update(id: TIdentityType, data: TEntity): Promise<boolean>

@@ -21,6 +21,7 @@ export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryById
             return left(Result.fail(idOrError.error));
 
         const categoryId = idOrError.getValue()
+
         try {
             const category = await this._categoryRepository.getById(categoryId.id.toString())
             if(!category)
