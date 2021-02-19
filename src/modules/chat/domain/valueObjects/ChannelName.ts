@@ -1,7 +1,7 @@
+import { SystemError, MessageError } from './../../../../shared/exceptions/SystemError';
+import { Result } from './../../../../shared/core/Result';
+import { ValueObject } from "../../../../shared/domain/ValueObject";
 import * as validator from 'class-validator'
-import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
-import { Result } from './../../../../../shared/core/Result';
-import { ValueObject } from '../../../../../shared/domain/ValueObject';
 
 interface IChannelNameProps {
     value: string;

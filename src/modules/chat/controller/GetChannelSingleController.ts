@@ -2,10 +2,10 @@ import Container from 'typedi';
 import { Response } from 'express';
 import { Authorized, Body, BodyParam, CurrentUser, JsonController, Post, Res } from "routing-controllers";
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { GetChannelSingleUseCase } from '../useCases/queries/channel/get-single/GetChannelSingleUseCase';
-import { GetChannelSingleQueryDTO } from '../useCases/queries/channel/get-single/GetChannelSingleQueryDTO';
-import { GetChannelSingleErrors } from '../useCases/queries/channel/get-single/GetChannelSingleErrors';
 import { UserAuthenticated } from '../../auth/useCases/command/authenticate/AuthenticateResponse';
+import { GetChannelSingleUseCase } from '../useCases/commands/channel/getSingle/GetChannelSingleUseCase';
+import { GetChannelSingleQueryDTO } from '../useCases/commands/channel/getSingle/GetChannelSingleQueryDTO';
+import { GetChannelSingleErrors } from '../useCases/commands/channel/getSingle/GetChannelSingleErrors';
 
 @JsonController('/v1/chat')
 export class GetChannelSingleController extends BaseController {
@@ -30,8 +30,6 @@ export class GetChannelSingleController extends BaseController {
                         return this.fail(res, resultValue.errorValue().message)
                     case GetChannelSingleErrors.ReceiverNotfoundError:
                         return this.notFound(res, resultValue.errorValue().message)
-                    case GetChannelSingleErrors.TokenInvalidError:
-                        return this.unAuthorized(res, resultValue.errorValue().message)
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

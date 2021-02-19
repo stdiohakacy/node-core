@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
-import { UserRepository } from './../../../../../user/repositories/UserRepository';
-import { left, Result, right } from './../../../../../../shared/core/Result';
+import { UserRepository } from '../../../../../user/repositories/UserRepository';
+import { left, Result, right } from '../../../../../../shared/core/Result';
 import { IUseCaseQueryCQRS } from "../../../../../../shared/core/IUseCase";
 import { ChannelRepository } from "../../../../repositories/ChannelRepository";
 import { GetChannelSingleQueryDTO } from "./GetChannelSingleQueryDTO";
@@ -15,7 +15,6 @@ import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
 import { UserId } from '../../../../../user/domain/entity/UserId';
 import { ChannelId } from '../../../../domain/entity/ChannelId';
 import { ChannelUserMapper } from '../../../../infra/ChannelUserMapper';
-import { ChannelUsers } from "../../../../watchedList/ChannelUsers";
 
 @Service()
 export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSingleQueryDTO, Promise<GetChannelSingleResponse>> {
@@ -28,9 +27,6 @@ export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSing
 
     async execute(param: GetChannelSingleQueryDTO): Promise<GetChannelSingleResponse> {
         const userAuthenticated = param.userAuthenticated
-
-        if (!userAuthenticated)
-            return left(new GetChannelSingleErrors.TokenInvalidError())
 
         try {
             const toUser = await this._userRepository.getById(param.toUserId)
@@ -46,27 +42,30 @@ export class GetChannelSingleUseCase implements IUseCaseQueryCQRS<GetChannelSing
                     lastMessageCreatedAt: new Date()
                 })
 
-                if(channelOrError.isFailure)
+                if (channelOrError.isFailure)
                     return left(Result.fail(channelOrError.error))
-                
+
                 const channel = channelOrError.getValue()
                 const channelDb = ChannelMapper.toPersistence(channel)
                 try {
                     const channelId = await this._channelRepository.create(channelDb)
-                    if(!channelId)
+                    if (!channelId)
                         return left(new GetChannelSingleErrors.DataCannotSave())
 
-                    const userIds = [toUser.id.toString(), userAuthenticated.userId]
+                    const userIds = [toUser.id.toString(), userAuthenticated.userId.toString()]
+
                     const channelUsers = userIds.map(userId => ChannelUser.create({
-                        userId: UserId.create(new UniqueEntityId(userId as string)).getValue(),
-                        channelId: ChannelId.create(new UniqueEntityId(channelId.toString())).getValue(),
+                        userId: UserId.create(new UniqueEntityId(userId)).getValue(),
+                        channelId: ChannelId.create(new UniqueEntityId(channelId)).getValue(),
                         isMute: false
                     }))
 
-                    const ChannelUsersDb = channelUsers.map(channelUser => ChannelUserMapper.toPersistence(channelUser.getValue()))
+                    const channelUsersDb = channelUsers.map(
+                        channelUser => ChannelUserMapper.toPersistence(channelUser.getValue())
+                    )
                     try {
-                        const channelUserIds = await this._channelUserRepository.createMultiple(ChannelUsersDb)
-                        if(channelUserIds.length > 0) 
+                        const channelUserIds = await this._channelUserRepository.createMultiple(channelUsersDb)
+                        if (channelUserIds.length > 0)
                             return right(Result.OK(channelId))
                     } catch (error) {
                         console.error(error)
