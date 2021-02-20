@@ -23,6 +23,7 @@ import { GetProfileUserController } from './modules/user/useCases/queries/get-pr
 import { appSocket } from './shared/socket/app.socket';
 import { GetChannelSingleController } from './modules/chat/controller/GetChannelSingleController';
 import { CreateProductController } from './modules/product/CreateProductController';
+import { GetChannelByIdController } from './modules/chat/controller/GetChannelByIdController';
 
 
 export class ExpressServer {
@@ -30,13 +31,13 @@ export class ExpressServer {
     static server: http.Server;
 
     static init(cb: (app: express.Application) => any) {
-        if (!ExpressServer.app) {
-            ExpressServer.app = createExpressServer({
+        if (!this.app) {
+            this.app = createExpressServer({
                 authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
                 currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
                 controllers: [
                     // Chat
-                    GetChannelSingleController,
+                    GetChannelSingleController, GetChannelByIdController,
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User
@@ -48,7 +49,7 @@ export class ExpressServer {
                 ]
             })
 
-            ExpressServer.app.listen(3000, () => {
+            this.app.listen(3000, () => {
                 createConnection().then(async connection => {
                     const redisContext = Container.get<RedisContext>('redis.context');
                     redisContext.createConnection();
@@ -57,23 +58,23 @@ export class ExpressServer {
             })
 
             if (cb) {
-                cb(ExpressServer.app);
+                cb(this.app);
             }
         }
         return ExpressServer;
     }
 
     static createServer() {
-        ExpressServer.server = createServer(ExpressServer.app);
+        this.server = createServer(this.app);
         return ExpressServer;
     }
 
     static run(port: string) {
-        appSocket(ExpressServer.server);
+        appSocket(this.server);
 
-        ExpressServer.server.listen(this.normalizePort(port))
-          .on('listening', () => this.onListening(ExpressServer.server))
-          .on('error', (error) => this.onError(ExpressServer.server, error));
+        this.server.listen(this.normalizePort(port))
+          .on('listening', () => this.onListening(this.server))
+          .on('error', (error) => this.onError(this.server, error));
 
         // log.debug('ExpressServer was started on environment %s', process.env.NODE_ENV);
         return ExpressServer;

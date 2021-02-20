@@ -15,7 +15,11 @@ export class GetChannelSingleController extends BaseController {
 
     @Post('/channel/get-single')
     @Authorized()
-    async executeImpl(@CurrentUser() userAuthenticated: UserAuthenticated, @Res() res: Response, @BodyParam('toUserId') toUserId: string): Promise<Response> {
+    async executeImpl(
+        @CurrentUser() userAuthenticated: UserAuthenticated, 
+        @Res() res: Response, 
+        @BodyParam('toUserId') toUserId: string
+    ): Promise<Response> {
         const param = new GetChannelSingleQueryDTO()
         param.toUserId = toUserId
         param.userAuthenticated = userAuthenticated
