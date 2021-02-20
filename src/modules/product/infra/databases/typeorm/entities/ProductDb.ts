@@ -5,18 +5,18 @@ import { CategoryDb } from "../../../../../category/infra/databases/typeorm/enti
 @Entity('product')
 export class ProductDb extends BaseEntity {
     @PrimaryGeneratedColumn('uuid', { name: 'id' })
-    id!: string;
+    id: string;
 
     @Column({ name: 'category_id', type: 'uuid' })
     categoryId!: string;
 
     @Column({ name: 'name', length: 150 })
-    name!: string;
+    name: string;
 
     @Column({ name: 'price', type: 'integer' })
-    price!: number;
+    price: number;
 
     @ManyToOne(() => CategoryDb, category => category.products)
     @JoinColumn({ name: 'category_id' })
-    category!: CategoryDb;
+    category: CategoryDb;
 }

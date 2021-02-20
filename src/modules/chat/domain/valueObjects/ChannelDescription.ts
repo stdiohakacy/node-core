@@ -28,9 +28,14 @@ export class ChannelDescription extends ValueObject<IChannelDescriptionProps> {
         if(
             !validator.minLength(props.value, this.minLength) || 
             !validator.maxLength(props.value, this.maxLength)
-        ) {
-            return Result.fail<ChannelDescription>(new SystemError(MessageError.PARAM_LEN_BETWEEN, this.minLength, this.maxLength).message.toString())
-        }
+        )
+            return Result.fail<ChannelDescription>(
+                new SystemError(
+                    MessageError.PARAM_LEN_BETWEEN, 
+                    'channel description', 
+                    this.minLength, 
+                    this.maxLength
+                ).message)
         return Result.OK<ChannelDescription>(new ChannelDescription(props));
     }
 }
