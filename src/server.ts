@@ -22,6 +22,7 @@ import Container from 'typedi';
 import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 import { appSocket } from './shared/socket/app.socket';
 import { GetChannelSingleController } from './modules/chat/controller/GetChannelSingleController';
+import { CreateProductController } from './modules/product/CreateProductController';
 
 
 export class ExpressServer {
@@ -42,6 +43,8 @@ export class ExpressServer {
                     SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController,
                     // Auth
                     LoginController, AuthController,
+                    // Product
+                    CreateProductController
                 ]
             })
 
