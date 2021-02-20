@@ -25,7 +25,12 @@ export class UserAddress extends ValueObject<IUserAddressProps> {
         if(validator.isEmpty(props.value))
             throw new SystemError(MessageError.PARAM_REQUIRED, 'address')
         if(!validator.minLength(props.value, this.minLength))
-            throw new SystemError(MessageError.PARAM_LEN_BETWEEN, 'address', this.minLength, this.maxLength)
+            throw new SystemError(
+                MessageError.PARAM_LEN_BETWEEN, 
+                'address', 
+                this.minLength, 
+                this.maxLength
+            ).message
 
         return Result.OK<UserAddress>(new UserAddress({value: props.value}))
     }

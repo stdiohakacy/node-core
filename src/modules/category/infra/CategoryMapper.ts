@@ -8,8 +8,7 @@ export class CategoryMapper implements IMapper<Category> {
     public static toDomain (categoryDb: CategoryDb): Category | null {
         const categoryNameOrError = CategoryName.create({ value: categoryDb.name })
 
-        const categoryOrError = Category.create(
-            { name: categoryNameOrError.getValue() }, 
+        const categoryOrError = Category.create({ name: categoryNameOrError.getValue() },
             new UniqueEntityId(categoryDb.id)
         )
 

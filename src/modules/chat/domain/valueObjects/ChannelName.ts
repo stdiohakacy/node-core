@@ -29,7 +29,13 @@ export class ChannelName extends ValueObject<IChannelNameProps> {
             !validator.minLength(props.value, this.minLength) || 
             !validator.maxLength(props.value, this.maxLength)
         ) {
-            return Result.fail<ChannelName>(new SystemError(MessageError.PARAM_LEN_BETWEEN, this.minLength, this.maxLength).message.toString())
+            return Result.fail<ChannelName>(
+                new SystemError(
+                    MessageError.PARAM_LEN_BETWEEN, 
+                    'channel name', 
+                    this.minLength, 
+                    this.maxLength
+                ).message)
         }
         return Result.OK<ChannelName>(new ChannelName(props));
     }
