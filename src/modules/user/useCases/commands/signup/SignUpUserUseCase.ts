@@ -24,7 +24,7 @@ import { MailService } from '../../../../../shared/services/mail/MailService';
 @Service()
 export class SignUpUserUseCase implements IUseCaseCommandCQRS<SignUpUserCommandDTO, Promise<SignUpUserResponse>> {
     @Inject('user.repository')
-    private _userRepository: UserRepository;
+    private readonly _userRepository: UserRepository;
 
     @Inject('mail.service')
     private readonly _mailService: MailService;

@@ -11,9 +11,12 @@ import { UpdateCategoryErrors } from './UpdateCategoryErrors';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 
 @Service()
-export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<UpdateCategoryCommandDTO, Promise<UpdateCategoryResponse>> {
+export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<
+    UpdateCategoryCommandDTO, 
+    Promise<UpdateCategoryResponse>
+> {
     @Inject('category.repository')
-    private _categoryRepository: CategoryRepository;
+    private readonly _categoryRepository: CategoryRepository;
     
     async execute(param: UpdateCategoryCommandDTO): Promise<UpdateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ value: param.name })

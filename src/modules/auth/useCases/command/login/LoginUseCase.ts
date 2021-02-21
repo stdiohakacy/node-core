@@ -14,7 +14,7 @@ import { UserRepository } from '../../../../user/repositories/UserRepository';
 @Service()
 export class LoginUseCase implements IUseCaseCommandCQRS<LoginCommandDTO, Promise<LoginResponse>> {
     @Inject('user.repository')
-    private _userRepository: UserRepository;
+    private readonly _userRepository: UserRepository;
 
     @Inject('redis.auth.service')
     private readonly _redisAuthService: RedisAuthService;

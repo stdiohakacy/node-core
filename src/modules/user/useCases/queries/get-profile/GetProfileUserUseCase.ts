@@ -13,7 +13,7 @@ import { GetProfileUserErrors } from './GetProfileUserErrors';
 @Service()
 export class GetProfileUserUseCase implements IUseCaseQueryCQRS<GetProfileUserQueryDTO, Promise<GetProfileUserResponse>> {
     @Inject('user.repository')
-    private _userRepository: UserRepository;
+    private readonly _userRepository: UserRepository;
     
     async execute(param: GetProfileUserQueryDTO): Promise<GetProfileUserResponse> {
         const idOrError = UserId.create(new UniqueEntityId(param.id))

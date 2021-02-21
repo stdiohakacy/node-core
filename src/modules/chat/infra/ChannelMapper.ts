@@ -28,13 +28,20 @@ export class ChannelMapper implements IMapper<Channel> {
     public static toPersistence(channel: Channel): ChannelDb {
         const channelDb = new ChannelDb()
 
-        channelDb.name = channel.name && channel.name.value
-        channelDb.description = channel.description && channel.description.value
-        channelDb.isDirect = channel.isDirect
-        channelDb.isPrivate = channel.isPrivate
-        channelDb.lastSeen = channel.lastSeen && channel.lastSeen.value
-        channelDb.lastMessageId = channel.lastMessageId
-        channelDb.lastMessageCreatedAt = channel.lastMessageCreatedAt
+        if(channel.name) 
+            channelDb.name = channel.name.value
+        if(channel.description)
+            channelDb.description = channel.description.value
+        if(channel.isDirect)
+            channelDb.isDirect = channel.isDirect
+        if(channel.isPrivate)
+            channelDb.isPrivate = channel.isPrivate
+        if(channel.lastSeen)
+            channelDb.lastSeen = channel.lastSeen.value
+        if(channel.lastMessageId)
+            channelDb.lastMessageId = channel.lastMessageId
+        if(channel.lastMessageCreatedAt)
+            channelDb.lastMessageCreatedAt = channel.lastMessageCreatedAt
 
         return channelDb
     }
