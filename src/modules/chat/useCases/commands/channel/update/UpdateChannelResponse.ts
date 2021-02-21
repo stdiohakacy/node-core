@@ -1,5 +1,5 @@
-import { ApplicationError } from "../../shared/core/ApplicationError";
-import { Either, Result } from "../../shared/core/Result";
+import { ApplicationError } from "../../../../../../shared/core/ApplicationError";
+import { Either, Result } from "../../../../../../shared/core/Result";
 import { UpdateChannelErrors } from "./UpdateChannelErrors";
 
 export type UpdateChannelResponse = Either<

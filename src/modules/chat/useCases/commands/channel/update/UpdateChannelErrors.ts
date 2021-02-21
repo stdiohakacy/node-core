@@ -1,6 +1,6 @@
-import { SystemError, MessageError } from './../../shared/exceptions/SystemError';
-import { Result } from './../../shared/core/Result';
-import { UseCaseError } from "../../shared/core/UseCaseError"
+import { Result } from "../../../../../../shared/core/Result"
+import { UseCaseError } from "../../../../../../shared/core/UseCaseError"
+import { MessageError, SystemError } from "../../../../../../shared/exceptions/SystemError"
 
 export namespace UpdateChannelErrors {
     export class NotFoundError extends Result<UseCaseError> {    

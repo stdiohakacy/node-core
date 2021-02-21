@@ -28,7 +28,7 @@ import { appSocket } from './shared/socket/app.socket';
 import { GetChannelSingleController } from './modules/chat/controller/GetChannelSingleController';
 import { CreateProductController } from './modules/product/CreateProductController';
 import { GetChannelByIdController } from './modules/chat/controller/GetChannelByIdController';
-import { UpdateChannelController } from './modules/chat/UpdateChannelController';
+import { UpdateChannelController } from './modules/chat/controller/UpdateChannelController';
 
 
 export class ExpressServer {

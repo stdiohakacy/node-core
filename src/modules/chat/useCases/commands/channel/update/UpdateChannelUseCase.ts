@@ -1,18 +1,18 @@
-import { ChannelDb } from './infra/databases/typeorm/entities/ChannelDb';
-import { ChannelId } from './domain/entity/ChannelId';
+import { ChannelDb } from '../../../../infra/databases/typeorm/entities/ChannelDb';
+import { ChannelId } from '../../../../domain/entity/ChannelId';
 import { UpdateChannelResponse } from './UpdateChannelResponse';
 import { Inject, Service } from 'typedi';
-import { IUseCaseCommandCQRS } from '../../shared/core/IUseCase';
-import { ChannelRepository } from './repositories/ChannelRepository';
+import { IUseCaseCommandCQRS } from '../../../../../../shared/core/IUseCase';
+import { ChannelRepository } from '../../../../repositories/ChannelRepository';
 import { UpdateChannelCommandDTO } from './UpdateChannelCommandDTO';
-import { ChannelName } from './domain/valueObjects/ChannelName';
-import { ChannelDescription } from './domain/valueObjects/ChannelDescription';
-import { left, Result, right } from '../../shared/core/Result';
-import { ApplicationError } from '../../shared/core/ApplicationError';
-import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
+import { ChannelName } from '../../../../domain/valueObjects/ChannelName';
+import { ChannelDescription } from '../../../../domain/valueObjects/ChannelDescription';
+import { left, Result, right } from '../../../../../../shared/core/Result';
+import { ApplicationError } from '../../../../../../shared/core/ApplicationError';
+import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
 import { UpdateChannelErrors } from './UpdateChannelErrors';
-import { Channel, IChannelProps } from './domain/aggregateRoot/Channel';
-import { ChannelMapper } from './infra/ChannelMapper';
+import { Channel, IChannelProps } from '../../../../domain/aggregateRoot/Channel';
+import { ChannelMapper } from '../../../../infra/ChannelMapper';
 
 @Service()
 export class UpdateChannelUseCase implements IUseCaseCommandCQRS<
@@ -42,6 +42,7 @@ export class UpdateChannelUseCase implements IUseCaseCommandCQRS<
             channelProps.description = channelDescriptionOrError.getValue()
         if(param.isPrivate)
             channelProps.isPrivate = param.isPrivate
+
         const channelOrError = Channel.create(channelProps)
         if(channelOrError.isFailure)
             return left(Result.fail(channelOrError.error!.toString()));

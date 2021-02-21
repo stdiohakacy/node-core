@@ -1,10 +1,10 @@
-import { UpdateChannelCommandDTO } from './UpdateChannelCommandDTO';
+import { UpdateChannelCommandDTO } from '../useCases/commands/channel/update/UpdateChannelCommandDTO';
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Param, Put, Res } from "routing-controllers";
-import { BaseController } from '../../shared/infra/http/models/BaseController';
-import { UpdateChannelUseCase } from './UpdateChannelUseCase';
-import { UpdateChannelErrors } from './UpdateChannelErrors';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { UpdateChannelUseCase } from '../useCases/commands/channel/update/UpdateChannelUseCase';
+import { UpdateChannelErrors } from '../useCases/commands/channel/update/UpdateChannelErrors';
 
 @JsonController('/v1/chat')
 export class UpdateChannelController extends BaseController {
