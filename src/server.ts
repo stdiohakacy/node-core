@@ -25,11 +25,11 @@ import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
 import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 import { appSocket } from './shared/socket/app.socket';
-import { GetChannelSingleController } from './modules/chat/controller/GetChannelSingleController';
+import { GetChannelSingleController } from './modules/chat/channel/controller/GetChannelSingleController';
 import { CreateProductController } from './modules/product/CreateProductController';
-import { GetChannelByIdController } from './modules/chat/controller/GetChannelByIdController';
-import { UpdateChannelController } from './modules/chat/controller/UpdateChannelController';
-import { DeleteChannelController } from './modules/chat/controller/DeleteChannelController';
+import { GetChannelByIdController } from './modules/chat/channel/controller/GetChannelByIdController';
+import { UpdateChannelController } from './modules/chat/channel/controller/UpdateChannelController';
+import { DeleteChannelController } from './modules/chat/channel/controller/DeleteChannelController';
 
 
 export class ExpressServer {

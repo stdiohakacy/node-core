@@ -3,7 +3,7 @@ import { GenderType } from './../../../../enums/GenderType';
 import { UserStatusType } from '../../../../enums/UserStatusType';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
-import { ChannelUserDb } from '../../../../../chat/infra/databases/typeorm/entities/ChannelUserDb';
+import { ChannelUserDb } from '../../../../../chat/channel/infra/databases/typeorm/entities/ChannelUserDb';
 
 @Entity('user')
 export class UserDb extends BaseEntity {
