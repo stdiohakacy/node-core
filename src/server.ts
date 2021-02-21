@@ -1,3 +1,4 @@
+import { UpdateChannelController } from './modules/chat/controller/UpdateChannelController';
 import * as http from 'http';
 import * as express from 'express';
 import { createServer } from 'http';
@@ -12,11 +13,15 @@ import { ForgotPasswordUserController } from './modules/user/controller/ForgotPa
 import { ResendActivationUserController } from './modules/user/controller/ResendActivationUserController';
 import { ActiveUserController } from './modules/user/controller/ActiveUserController';
 import { SignUpUserController } from './modules/user/controller/SignUpUserController';
-import { FindCategoryController } from './modules/category/controller/FindCategoryController';
-import { DeleteCategoryController } from './modules/category/controller/DeleteCategoryController';
-import { UpdateCategoryController } from './modules/category/controller/UpdateCategoryController';
-import { CreateCategoryController } from './modules/category/controller/CreateCategoryController';
-import { GetCategoryByIdController } from './modules/category/controller/GetCategoryByIdController';
+
+import { 
+    CreateCategoryController, 
+    GetCategoryByIdController,
+    UpdateCategoryController,
+    DeleteCategoryController,
+    FindCategoryController 
+} from './modules/category/controller';
+
 import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
 import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
@@ -37,7 +42,7 @@ export class ExpressServer {
                 currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
                 controllers: [
                     // Chat
-                    GetChannelSingleController, GetChannelByIdController,
+                    GetChannelSingleController, GetChannelByIdController, UpdateChannelController,
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User

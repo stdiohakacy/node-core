@@ -6,7 +6,6 @@ import { GetChannelByIdResponse } from './GetChannelByIdResponse';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { GetChannelByIdErrors } from './GetChannelByIdErrors';
-import { ChannelMapper } from '../../../infra/ChannelMapper';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 
 @Service()
@@ -31,7 +30,6 @@ export class GetChannelByIdUseCase {
             if(!channel)
                 return left(new GetChannelByIdErrors.NotFoundError(channelId.id.toString()))
 
-            // const channelMapper = ChannelMapper.toDomain(channel)
             return right(Result.OK(channel));
         } 
         catch (error) {
