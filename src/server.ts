@@ -29,6 +29,7 @@ import { GetChannelSingleController } from './modules/chat/controller/GetChannel
 import { CreateProductController } from './modules/product/CreateProductController';
 import { GetChannelByIdController } from './modules/chat/controller/GetChannelByIdController';
 import { UpdateChannelController } from './modules/chat/controller/UpdateChannelController';
+import { DeleteChannelController } from './modules/chat/controller/DeleteChannelController';
 
 
 export class ExpressServer {
@@ -42,7 +43,7 @@ export class ExpressServer {
                 currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
                 controllers: [
                     // Chat
-                    GetChannelSingleController, GetChannelByIdController, UpdateChannelController,
+                    GetChannelSingleController, GetChannelByIdController, UpdateChannelController, DeleteChannelController,
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User
