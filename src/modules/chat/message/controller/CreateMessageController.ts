@@ -1,12 +1,11 @@
-import { CreateMessageResponse } from './CreateMessageResponse';
-import { CreateMessageUseCase } from './CreateMesasgeUseCase';
+import { CreateMessageUseCase } from '../useCases/commands/create/CreateMesasgeUseCase';
 import Container from 'typedi';
 import { Response } from 'express';
 import { Authorized, Body, CurrentUser, JsonController, Post, Res } from "routing-controllers";
-import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { CreateMessageErrors } from './CreateMessageErrors';
-import { CreateMessageCommandDTO } from './CreateMessageCommandDTO';
-import { UserAuthenticated } from '../../auth/useCases/command/authenticate/AuthenticateResponse';
+import { BaseController } from '../../../../shared/infra/http/models/BaseController';
+import { UserAuthenticated } from '../../../auth/useCases/command/authenticate/AuthenticateResponse';
+import { CreateMessageCommandDTO } from '../useCases/commands/create/CreateMessageCommandDTO';
+import { CreateMessageErrors } from '../useCases/commands/create/CreateMessageErrors';
 
 @JsonController('/v1/chat')
 export class CreateMessageController extends BaseController {

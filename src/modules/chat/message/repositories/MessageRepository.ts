@@ -1,6 +1,6 @@
-import { MessageDb } from './../channel/infra/databases/typeorm/entities/MessageDb';
 import { Service } from 'typedi';
-import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
+import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
+import { MessageDb } from '../infra/databases/typeorm/entities/MessageDb';
 
 export interface IMessageRepository extends IBaseRepository<MessageDb, string> {}
 

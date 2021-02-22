@@ -1,18 +1,18 @@
-import { MessageMapper } from './MessageMapper';
-import { left, Result, right } from './../../../shared/core/Result';
-import { MessageContent } from './MessageContent';
+import { MessageMapper } from './../../../infra/MessageMapper';
+import { left, Result, right } from '../../../../../../shared/core/Result';
 import { CreateMessageResponse } from './CreateMessageResponse';
-import { MessageRepository } from './MessageRepository';
 import { Inject, Service } from "typedi"
+import { ChannelRepository } from '../../../../channel/repositories/ChannelRepository';
+import { ApplicationError } from '../../../../../../shared/core/ApplicationError';
+import { ChannelId } from '../../../../channel/domain/entity/ChannelId';
+import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
+import { UserId } from '../../../../../user/domain/entity/UserId';
+import { IUseCaseCommandCQRS } from '../../../../../../shared/core/IUseCase';
 import { CreateMessageCommandDTO } from './CreateMessageCommandDTO';
-import { ChannelRepository } from '../channel/repositories/ChannelRepository';
+import { MessageContent } from '../../../domain/valueObject/MessageContent';
 import { CreateMessageErrors } from './CreateMessageErrors';
-import { ApplicationError } from '../../../shared/core/ApplicationError';
-import { Message } from './Message';
-import { ChannelId } from '../channel/domain/entity/ChannelId';
-import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
-import { UserId } from '../../user/domain/entity/UserId';
-import { IUseCaseCommandCQRS } from '../../../shared/core/IUseCase';
+import { Message } from '../../../domain/aggregateRoot/Message';
+import { MessageRepository } from '../../../repositories/MessageRepository';
 
 @Service()
 export class CreateMessageUseCase implements IUseCaseCommandCQRS<CreateMessageCommandDTO, Promise<CreateMessageResponse>> {

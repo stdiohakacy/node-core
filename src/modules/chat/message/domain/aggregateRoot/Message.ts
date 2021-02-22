@@ -1,11 +1,11 @@
-import { Guard } from './../../../shared/core/Guard';
-import { MessageContent } from './MessageContent';
-import { MessageId } from './MessageId';
-import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
-import { UniqueEntityId } from "../../../shared/domain/UniqueEntityId";
-import { Result } from '../../../shared/core/Result';
-import { ChannelId } from '../channel/domain/entity/ChannelId';
-import { UserId } from '../../user/domain/entity/UserId';
+import { Result } from './../../../../../shared/core/Result';
+import { Guard } from './../../../../../shared/core/Guard';
+import { MessageId } from './../entity/MessageId';
+import { UniqueEntityId } from './../../../../../shared/domain/UniqueEntityId';
+import { AggregateRoot } from "../../../../../shared/domain/AggregateRoot";
+import { UserId } from "../../../../user/domain/entity/UserId";
+import { ChannelId } from "../../../channel/domain/entity/ChannelId";
+import { MessageContent } from "../valueObject/MessageContent";
 
 interface IMessageProps {
     content: MessageContent

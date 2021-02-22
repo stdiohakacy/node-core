@@ -2,8 +2,8 @@ import { PrimaryGeneratedColumn } from 'typeorm';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../../../../../shared/infra/databases/typeorm/entity/BaseEntity';
 import { UserDb } from '../../../../../../user/infra/databases/typeorm/entities/UserDb';
-import { MESSAGE_STATUS } from '../../../../enums/MessageStatus';
-import { MESSAGE_TYPE } from '../../../../enums/MessageType';
+import { MESSAGE_STATUS } from '../../../../../channel/enums/MessageStatus';
+import { MESSAGE_TYPE } from '../../../../../channel/enums/MessageType';
 
 @Entity({ name: 'message' })
 export class MessageDb extends BaseEntity {

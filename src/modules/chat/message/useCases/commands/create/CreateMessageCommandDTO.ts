@@ -1,4 +1,4 @@
-import { ICommand } from "../../../shared/core/ICQRS";
+import { ICommand } from "../../../../../../shared/core/ICQRS"
 
 export class CreateMessageCommandDTO implements ICommand {
     userId: string
