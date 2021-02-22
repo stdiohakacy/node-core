@@ -30,6 +30,7 @@ import { CreateProductController } from './modules/product/CreateProductControll
 import { GetChannelByIdController } from './modules/chat/channel/controller/GetChannelByIdController';
 import { UpdateChannelController } from './modules/chat/channel/controller/UpdateChannelController';
 import { DeleteChannelController } from './modules/chat/channel/controller/DeleteChannelController';
+import { CreateMessageController } from './modules/chat/message/CreateMessageController';
 
 
 export class ExpressServer {
@@ -51,7 +52,9 @@ export class ExpressServer {
                     // Auth
                     LoginController, AuthController,
                     // Product
-                    CreateProductController
+                    CreateProductController,
+                    // Message
+                    CreateMessageController
                 ]
             })
 

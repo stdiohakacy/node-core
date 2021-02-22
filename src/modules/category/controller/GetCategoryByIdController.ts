@@ -11,7 +11,7 @@ export class GetCategoryByIdController extends BaseController {
     constructor(
         private readonly _getCategoryByIdUseCase: GetCategoryByIdUseCase = Container.get(GetCategoryByIdUseCase),
 
-    ) {super()}
+    ) { super() }
 
     @Get('/:id([0-9a-f-]{36})')
     async executeImpl(@Params() param: GetCategoryByIdQueryDTO, @Res() res: Response): Promise<Response> {

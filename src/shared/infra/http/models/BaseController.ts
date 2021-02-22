@@ -3,7 +3,7 @@ import { Response } from 'express'
 import { ICQRS } from "../../../core/ICQRS";
 
 export abstract class BaseController {
-    protected abstract executeImpl (req: ICQRS, res: Response, param?: string): Promise<void | any>;
+    protected abstract executeImpl (req: ICQRS, res: Response, param?: string | ICQRS): Promise<void | any>;
 
     public async execute (req: ICQRS, @Res() res: Response, param?: string): Promise<void> {
         try {
