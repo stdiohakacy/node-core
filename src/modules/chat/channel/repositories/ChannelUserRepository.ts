@@ -1,6 +1,5 @@
 import { Service } from 'typedi';
-import { BaseRepository } from '../../../../shared/repository/BaseRepository';
-import { IBaseRepository } from '../../../../shared/repository/IBaseRepository';
+import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
 import { ChannelUserDb } from '../infra/databases/typeorm/entities/ChannelUserDb';
 
 export interface IChannelUserRepository extends IBaseRepository<ChannelUserDb, string> {

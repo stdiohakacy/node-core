@@ -1,7 +1,6 @@
 import { ProductName } from './ProductName';
 import { Service } from 'typedi';
-import { BaseRepository } from '../../shared/repository/BaseRepository';
-import { IBaseRepository } from '../../shared/repository/IBaseRepository';
+import { BaseRepository, IBaseRepository } from '../../shared/repository/BaseRepository';
 import { ProductDb } from './infra/databases/typeorm/entities/ProductDb';
 
 export interface IProductRepository extends IBaseRepository<ProductDb, string> {

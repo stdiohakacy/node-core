@@ -1,10 +1,9 @@
 import { UserMapper } from './../infra/UserMapper';
 import { User } from './../domain/aggregateRoot/User';
-import { IBaseRepository } from '../../../shared/repository/IBaseRepository';
 import { UserEmail } from '../domain/valueObject/UserEmail';
 import { UserDb } from './../infra/databases/typeorm/entities/UserDb';
 import { Service } from 'typedi';
-import { BaseRepository } from '../../../shared/repository/BaseRepository';
+import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
 export interface IUserRepository extends IBaseRepository<UserDb, string> {
     getByEmail(userEmail: UserEmail): Promise<User>
     isEmailExist(userEmail: UserEmail): Promise<boolean>

@@ -1,5 +1,16 @@
 import { getRepository, Repository } from "typeorm";
-import { IBaseRepository } from "./IBaseRepository";
+
+export interface IBaseRepository<TEntity, TIdentityType> {
+    findAndCount(filter: any): Promise<[TEntity[], number]>
+    getById(id: TIdentityType): Promise<TEntity>
+    create(data: TEntity): Promise<TIdentityType>
+    createMultiple(list: TEntity[]): Promise<TIdentityType[]>;
+    createGet(data: TEntity): Promise<TEntity>
+    update(id: TIdentityType, data: TEntity): Promise<boolean>
+    delete(id: TIdentityType | TIdentityType[]): Promise<boolean>
+    softDelete(ids: TIdentityType | TIdentityType[]): Promise<boolean>;
+}
+
 
 export abstract class BaseRepository<IEntity, TIdentityType> 
 implements IBaseRepository<IEntity, TIdentityType> {

@@ -1,6 +1,5 @@
 import { Service } from 'typedi';
-import { BaseRepository } from '../../../../shared/repository/BaseRepository';
-import { IBaseRepository } from '../../../../shared/repository/IBaseRepository';
+import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
 import { UserAuthenticated } from '../../../auth/useCases/command/authenticate/AuthenticateResponse';
 import { Channel } from '../domain/aggregateRoot/Channel';
 import { ChannelMapper } from '../infra/ChannelMapper';
@@ -8,7 +7,8 @@ import { ChannelDb } from "../infra/databases/typeorm/entities/ChannelDb";
 export interface IChannelRepository extends IBaseRepository<ChannelDb, string> {
     isChannelExist(id: string): Promise<boolean>
     getChannelById(id: string, user?: UserAuthenticated): Promise<Channel>
-    getExistedSingleChannel(firstUserId: string, secondUserId: string): Promise<any>
+    getExistedSingleChannel(firstUserId: string, secondUserId: string): Promise<Channel>
+    getChannelsByUsers(userAuthenticated: UserAuthenticated): Promise<[Channel[], number]>
 }
 @Service('channel.repository')
 export class ChannelRepository extends BaseRepository<ChannelDb, string> implements IChannelRepository {
@@ -60,5 +60,15 @@ export class ChannelRepository extends BaseRepository<ChannelDb, string> impleme
             .having('COUNT(DISTINCT(channelUser.id)) = 2');
 
         return await query.getRawMany().then(results => results[0])
+    }
+
+    async getChannelsByUsers(userAuthenticated: UserAuthenticated): Promise<[Channel[], number]> {
+        const result = await this.repository
+        .createQueryBuilder('channel')
+        .leftJoinAndSelect('channel.channelUsers', 'channelUsers')
+        .where('channelUsers.userId = :userId', { userId: userAuthenticated.userId })
+        const [channelsDb, count] = await result.getManyAndCount()
+        const channels = channelsDb.map(channelDb => ChannelMapper.toDomain(channelDb))
+        return [channels, count]
     }
 }

@@ -7,9 +7,10 @@ import { GetChannelByIdErrors } from './GetChannelByIdErrors';
 import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
 import { left, Result, right } from '../../../../../../shared/core/Result';
 import { ApplicationError } from '../../../../../../shared/core/ApplicationError';
+import { IUseCaseQueryCQRS } from '../../../../../../shared/core/IUseCase';
 
 @Service()
-export class GetChannelByIdUseCase {
+export class GetChannelByIdUseCase implements IUseCaseQueryCQRS<GetChannelByIdDTO, Promise<GetChannelByIdResponse>>{
     @Inject('channel.repository')
     private readonly _channelRepository: ChannelRepository
 

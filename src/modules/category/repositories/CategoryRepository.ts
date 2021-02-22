@@ -1,7 +1,6 @@
 import { CategoryName } from './../domain/valueObjects/CategoryName';
 import { Service } from 'typedi';
-import { BaseRepository } from '../../../shared/repository/BaseRepository';
-import { IBaseRepository } from "../../../shared/repository/IBaseRepository";
+import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
 import { CategoryDb } from "../infra/databases/typeorm/entities/CategoryDb";
 export interface ICategoryRepository extends IBaseRepository<CategoryDb, string> {
     isExist(categoryName: CategoryName): Promise<boolean>
