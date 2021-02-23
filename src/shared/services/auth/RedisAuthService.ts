@@ -25,6 +25,7 @@ export interface IJwtAuthService {
     getTokens(email: string): Promise<string[]>
     addToken(user: User): Promise<any>
     deAuthenticateUser(email: string): Promise<boolean>
+    getEmailFromRefreshToken(refreshToken: RefreshToken): Promise<string>
 }
 
 @Service('redis.auth.service')
@@ -81,6 +82,14 @@ export class RedisAuthService implements IJwtAuthService {
         return this.clearAllSessions(email)
     }
 
+    public async getEmailFromRefreshToken(refreshToken: RefreshToken): Promise<string> {
+        const keys = await this._redisContext.getAllKeys(`*${refreshToken}*`);
+        const isExist = keys.length > 0
+        if(!isExist)
+            return "EmailNotFoundError"
+        return keys[0].substring(keys[0].indexOf(this.jwtHashName) + this.jwtHashName.length + 1)
+    }
+
     private constructKey(refreshToken: RefreshToken, email: string): string {
         return `refresh-${refreshToken}.${this.jwtHashName}.${email}`
     }
@@ -90,4 +99,5 @@ export class RedisAuthService implements IJwtAuthService {
         const keys = keyValues.map(kv => kv.key)
         return !!Promise.all(keys.map(key => this._redisContext.deleteOne(key)))
     }
+    
 }

@@ -3,7 +3,7 @@ import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { Either, Result } from './../../../../../shared/core/Result';
 import { LoginErrors } from './LoginErrors';
 
-type LoginDTOResponse = {
+export type LoginDTOResponse = {
     accessToken: JWTToken,
     refreshToken: RefreshToken
 }

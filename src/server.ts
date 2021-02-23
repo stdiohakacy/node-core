@@ -1,3 +1,4 @@
+import { RefreshTokenUserController } from './modules/user/controller/RefreshTokenUserController';
 import { LogoutUserController } from './modules/user/controller/LogoutUserController';
 import * as http from 'http';
 import * as express from 'express';
@@ -49,7 +50,7 @@ export class ExpressServer {
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User
-                    SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController, LogoutUserController,
+                    SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController, LogoutUserController, RefreshTokenUserController,
                     // Auth
                     LoginController, AuthController,
                     // Product
