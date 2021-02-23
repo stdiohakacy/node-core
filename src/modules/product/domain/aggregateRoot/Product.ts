@@ -1,10 +1,10 @@
-import { ProductPrice } from './ProductPrice';
-import { ProductName } from "./ProductName";
-import { AggregateRoot } from '../../shared/domain/AggregateRoot';
-import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
-import { ProductId } from './ProductId';
-import { Guard } from '../../shared/core/Guard';
-import { Result } from '../../shared/core/Result';
+import { Guard } from "../../../../shared/core/Guard";
+import { Result } from "../../../../shared/core/Result";
+import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
+import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
+import { ProductId } from "../entity/ProductId";
+import { ProductName } from "../valueObjects/ProductName";
+import { ProductPrice } from "../valueObjects/ProductPrice";
 
 interface IProductProps {
     name: ProductName

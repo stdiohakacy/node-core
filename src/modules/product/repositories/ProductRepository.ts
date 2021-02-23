@@ -1,7 +1,7 @@
-import { ProductName } from './ProductName';
 import { Service } from 'typedi';
-import { BaseRepository, IBaseRepository } from '../../shared/repository/BaseRepository';
-import { ProductDb } from './infra/databases/typeorm/entities/ProductDb';
+import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
+import { ProductName } from '../domain/valueObjects/ProductName';
+import { ProductDb } from '../infra/databases/typeorm/entities/ProductDb';
 
 export interface IProductRepository extends IBaseRepository<ProductDb, string> {
     isExist(productName: ProductName): Promise<boolean>

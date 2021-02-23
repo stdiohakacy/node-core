@@ -27,7 +27,7 @@ import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
 import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 import { appSocket } from './shared/socket/app.socket';
-import { CreateProductController } from './modules/product/CreateProductController';
+import { CreateProductController } from './modules/product/controller/CreateProductController';
 
 
 export class ExpressServer {

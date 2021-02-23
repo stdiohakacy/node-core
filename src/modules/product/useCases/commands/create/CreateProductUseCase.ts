@@ -1,15 +1,15 @@
-import { ProductName } from './ProductName';
-import { left, Result, right } from './../../shared/core/Result';
+import { left, Result, right } from '../../../../../shared/core/Result';
 import { CreateProductResponse } from './CreateProductResponse';
 import { CreateProductCommandDTO } from './CreateProductCommandDTO';
-import { ProductRepository } from './ProductRepository';
 import { Inject, Service } from "typedi";
-import { IUseCaseCommandCQRS } from '../../shared/core/IUseCase';
-import { ProductPrice } from './ProductPrice';
-import { ApplicationError } from '../../shared/core/ApplicationError';
+import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
+import { ProductPrice } from '../../../domain/valueObjects/ProductPrice';
+import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { CreateProductErrors } from './CreateProductErrors';
-import { Product } from './Product';
-import { ProductMapper } from './ProductMapper';
+import { ProductMapper } from '../../../infra/ProductMapper';
+import { ProductName } from '../../../domain/valueObjects/ProductName';
+import { Product } from '../../../domain/aggregateRoot/Product';
+import { ProductRepository } from '../../../repositories/ProductRepository';
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {
