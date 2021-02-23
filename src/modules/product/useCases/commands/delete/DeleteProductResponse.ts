@@ -1,9 +1,10 @@
 import { ApplicationError } from "../../../../../shared/core/ApplicationError";
 import { Either, Result } from "../../../../../shared/core/Result";
-import { DeleteCategoryErrors } from "./DeleteCategoryErrors";
+import { DeleteProductErrors } from "./DeleteProductErrors";
 
-export type DeleteCategoryResponse = Either<
-    DeleteCategoryErrors.NotFoundError |
+export type DeleteProductResponse = Either<
+    DeleteProductErrors.NameAlreadyExistsError |
+    DeleteProductErrors.DataCannotSave |
     ApplicationError.UnexpectedError |
     Result<any>,
     Result<boolean>

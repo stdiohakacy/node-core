@@ -1,10 +1,10 @@
 import { Service } from 'typedi';
 import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
-import { ProductName } from '../domain/valueObjects/ProductName';
 import { ProductDb } from '../infra/databases/typeorm/entities/ProductDb';
 
 export interface IProductRepository extends IBaseRepository<ProductDb, string> {
-    isExist(productName: ProductName): Promise<boolean>
+    isExist(id: string): Promise<boolean>
+    isNameExist(name: string): Promise<boolean>
 }
 
 @Service('product.repository')
@@ -15,10 +15,14 @@ export class ProductRepository extends BaseRepository<ProductDb, string> impleme
         })
     }
 
-    async isExist(productName: ProductName): Promise<boolean> {
+    async isExist(id: string): Promise<boolean> {
+        return await this.repository.count({ id }) > 0
+    }
+
+    async isNameExist(name: string): Promise<boolean> {
         let query = this.repository
             .createQueryBuilder('product')
-            .where(`LOWER(product.name) = LOWER(:name)`, { name: productName.value });
+            .where(`LOWER(product.name) = LOWER(:name)`, { name });
 
         return !!await query.getOne();
     }

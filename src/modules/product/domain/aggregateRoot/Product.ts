@@ -2,6 +2,7 @@ import { Guard } from "../../../../shared/core/Guard";
 import { Result } from "../../../../shared/core/Result";
 import { AggregateRoot } from "../../../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
+import { CategoryId } from "../../../category/domain/entity/CategoryId";
 import { ProductId } from "../entity/ProductId";
 import { ProductName } from "../valueObjects/ProductName";
 import { ProductPrice } from "../valueObjects/ProductPrice";
@@ -9,7 +10,7 @@ import { ProductPrice } from "../valueObjects/ProductPrice";
 interface IProductProps {
     name: ProductName
     price: ProductPrice
-    categoryId: string
+    categoryId: CategoryId
 }
 
 export class Product extends AggregateRoot<IProductProps> {
@@ -29,7 +30,7 @@ export class Product extends AggregateRoot<IProductProps> {
         return this.props.price;
     }
 
-    get categoryId (): string {
+    get categoryId (): CategoryId {
         return this.props.categoryId;
     }
 

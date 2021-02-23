@@ -25,7 +25,7 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<
         const name = categoryNameOrError.getValue();
 
         try {
-            const isExist = await this._categoryRepository.getById(param.id)
+            const isExist = await this._categoryRepository.isExist(param.id)
             if(!isExist)
                 return left(new UpdateCategoryErrors.NotFoundError(param.id))
                 
@@ -38,7 +38,7 @@ export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<
             const categoryDb = CategoryMapper.toPersistence(category)
 
             try {
-                const isExist = await this._categoryRepository.isExist(name)
+                const isExist = await this._categoryRepository.isNameExist(name.value)
                 if(isExist)
                     return left(new UpdateCategoryErrors.NameAlreadyExistsError(name.value))
                 try {

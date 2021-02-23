@@ -3,6 +3,13 @@ import { Result } from './../../../../../shared/core/Result';
 import { UseCaseError } from "../../../../../shared/core/UseCaseError"
 
 export namespace CreateProductErrors {
+    export class CategoryNotFoundError extends Result<UseCaseError> {
+        constructor() {
+            super(false, {
+                message: new SystemError(MessageError.PARAM_EXISTED, 'category').message
+            })
+        }
+    }
     export class NameAlreadyExistsError extends Result<UseCaseError> {
         constructor(name: string) {
             super(false, {

@@ -4,6 +4,7 @@ import { ProductDb } from "./databases/typeorm/entities/ProductDb"
 import { ProductPrice } from "../domain/valueObjects/ProductPrice"
 import { Product } from "../domain/aggregateRoot/Product"
 import { ProductName } from "../domain/valueObjects/ProductName"
+import { CategoryId } from "../../category/domain/entity/CategoryId"
 
 export class ProductMapper implements IMapper<Product> {
     public static toDomain (productDb: ProductDb): Product | null {
@@ -12,7 +13,7 @@ export class ProductMapper implements IMapper<Product> {
         const productOrError = Product.create({
             name: ProductName.create({value: productDb.name}).getValue(),
             price: ProductPrice.create({value: productDb.price}).getValue(),
-            categoryId: productDb.categoryId
+            categoryId: CategoryId.create(new UniqueEntityId(productDb.categoryId)).getValue() 
         }, new UniqueEntityId(productDb.id))
 
         if(productOrError.isFailure)
@@ -26,7 +27,7 @@ export class ProductMapper implements IMapper<Product> {
 
         productDb.name = product.name && product.name.value
         productDb.price = product.price && product.price.value
-        productDb.categoryId = product.categoryId
+        productDb.categoryId = product.categoryId && product.categoryId.id.toString()
 
         return productDb
     }

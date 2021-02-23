@@ -22,7 +22,7 @@ export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategory
         
         const name = categoryNameOrError.getValue();
         try {
-            const isExist = await this._categoryRepository.isExist(name)
+            const isExist = await this._categoryRepository.isNameExist(name.value)
             if(isExist)
                 return left(new CreateCategoryErrors.NameAlreadyExistsError(name.value))
             

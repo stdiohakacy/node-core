@@ -22,7 +22,7 @@ export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<DeleteCategory
         const categoryId = idOrError.getValue()
 
         try {
-            const isExist = await this._categoryRepository.getById(categoryId.id.toString())
+            const isExist = await this._categoryRepository.isExist(categoryId.id.toString())
             if(!isExist)
                 return left(new DeleteCategoryErrors.NotFoundError(param.id))
             const isDeleted = await this._categoryRepository.softDelete(param.id)

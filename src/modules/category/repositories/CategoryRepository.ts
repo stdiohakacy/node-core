@@ -3,7 +3,8 @@ import { Service } from 'typedi';
 import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
 import { CategoryDb } from "../infra/databases/typeorm/entities/CategoryDb";
 export interface ICategoryRepository extends IBaseRepository<CategoryDb, string> {
-    isExist(categoryName: CategoryName): Promise<boolean>
+    isExist(id: string): Promise<boolean>
+    isNameExist(name: string): Promise<boolean>
 }
 @Service('category.repository')
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {
@@ -13,10 +14,14 @@ export class CategoryRepository extends BaseRepository<CategoryDb, string> imple
         })
     }
 
-    async isExist(categoryName: CategoryName): Promise<boolean> {
+    async isExist(id: string): Promise<boolean> {
+        return await this.repository.count({ id }) > 0
+    }
+
+    async isNameExist(name: string): Promise<boolean> {
         let query = this.repository
             .createQueryBuilder('category')
-            .where(`LOWER(category.name) = LOWER(:name)`, { name: categoryName.value });
+            .where(`LOWER(category.name) = LOWER(:name)`, { name });
 
         return !!await query.getOne();
     }
