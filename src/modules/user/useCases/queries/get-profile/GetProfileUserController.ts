@@ -26,7 +26,7 @@ export class GetProfileUserController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case GetProfileUserErrors.NotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

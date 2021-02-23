@@ -21,9 +21,9 @@ export class DeleteCategoryController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case DeleteCategoryErrors.NotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     case DeleteCategoryErrors.DataCannotSave:
-                        return this.fail(res, resultValue.errorValue().message)
+                        return this.fail(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

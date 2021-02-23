@@ -21,9 +21,9 @@ export class UpdateCategoryController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case UpdateCategoryErrors.NotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     case UpdateCategoryErrors.NameAlreadyExistsError:
-                        return this.conflict(res, resultValue.errorValue().message)
+                        return this.conflict(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

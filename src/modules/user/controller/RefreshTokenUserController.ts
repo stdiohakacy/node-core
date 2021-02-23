@@ -23,9 +23,9 @@ export class RefreshTokenUserController extends BaseController {
             if (result.isLeft()) {
                 switch (resultValue.constructor) {
                     case RefreshTokenUserErrors.TokenNotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     case RefreshTokenUserErrors.UserNotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

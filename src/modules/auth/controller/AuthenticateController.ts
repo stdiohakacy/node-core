@@ -30,11 +30,11 @@ export class AuthController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case AuthenticateErrors.TokenInvalidError:
-                        return this.unAuthorized(res, resultValue.errorValue().message)
+                        return this.unAuthorized(res, resultValue.errorValue())
                     case AuthenticateErrors.TokenExpireTimeError:
-                        return this.unAuthorized(res, resultValue.errorValue().message)
+                        return this.unAuthorized(res, resultValue.errorValue())
                     case AuthenticateErrors.AccessDeniedError:
-                        return this.forbidden(res, resultValue.errorValue().message)
+                        return this.forbidden(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

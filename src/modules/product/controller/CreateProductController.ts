@@ -17,19 +17,21 @@ export class CreateProductController extends BaseController {
         try {
             const result = await this._createProductUseCase.execute(param)
             const resultValue = result.value
-
-            console.log(resultValue)
-            if(result.isLeft()) {
+            if (result.isLeft()) {
                 switch (resultValue.constructor) {
+                    case CreateProductErrors.CategoryNotFoundError:
+                        return this.notFound(res, resultValue.errorValue())
                     case CreateProductErrors.NameAlreadyExistsError:
-                        return this.conflict(res, resultValue.errorValue().message)
+                        return this.conflict(res, resultValue.errorValue())
+                    case CreateProductErrors.DataCannotSave:
+                        return this.fail(res, resultValue.errorValue())
                     default:
-                        return this.fail(res, resultValue.errorValue().message)
+                        return this.fail(res, resultValue.errorValue())
                 }
             }
-            else 
+            else
                 return this.created(res, resultValue.getValue())
-        } 
+        }
         catch (error) {
             console.error(error)
             return this.fail(res, error)

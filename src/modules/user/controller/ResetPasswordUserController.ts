@@ -20,13 +20,13 @@ export class ResetPasswordUserController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case ResetPasswordUserErrors.EmailNotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     case ResetPasswordUserErrors.ForgotKeyInvalidError:
-                        return this.clientError(res, resultValue.errorValue().message)
+                        return this.clientError(res, resultValue.errorValue())
                     case ResetPasswordUserErrors.ExpiredTimeError:
-                        return this.clientError(res, resultValue.errorValue().message)
+                        return this.clientError(res, resultValue.errorValue())
                     case ResetPasswordUserErrors.CannotSaveError:
-                        return this.fail(res, resultValue.errorValue().message)
+                        return this.fail(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

@@ -20,9 +20,9 @@ export class SignUpUserController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case SignUpUserErrors.EmailAlreadyExistsError:
-                        return this.conflict(res, resultValue.errorValue().message)
+                        return this.conflict(res, resultValue.errorValue())
                     case SignUpUserErrors.DataCannotSave:
-                        return this.fail(res, result.value.errorValue().message)
+                        return this.fail(res, result.value.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }

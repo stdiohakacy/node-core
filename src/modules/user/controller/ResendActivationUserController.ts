@@ -20,11 +20,11 @@ export class ResendActivationUserController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case ResendActivationUserErrors.EmailNotFoundError:
-                        return this.notFound(res, resultValue.errorValue().message)
+                        return this.notFound(res, resultValue.errorValue())
                     case ResendActivationUserErrors.UserStatusError:
-                        return this.clientError(res, resultValue.errorValue().message)
+                        return this.clientError(res, resultValue.errorValue())
                     case ResendActivationUserErrors.CannotSaveError:
-                        return this.fail(res, resultValue.errorValue().message)
+                        return this.fail(res, resultValue.errorValue())
                     default:
                         return this.fail(res, resultValue.errorValue())
                 }
