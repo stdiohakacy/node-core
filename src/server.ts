@@ -1,3 +1,4 @@
+import { LogoutUserController } from './modules/user/controller/LogoutUserController';
 import * as http from 'http';
 import * as express from 'express';
 import { createServer } from 'http';
@@ -48,7 +49,7 @@ export class ExpressServer {
                     // Category
                     CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
                     // User
-                    SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController,
+                    SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController, LogoutUserController,
                     // Auth
                     LoginController, AuthController,
                     // Product

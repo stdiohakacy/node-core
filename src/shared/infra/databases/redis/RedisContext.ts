@@ -91,6 +91,12 @@ export class RedisContext implements IRedisContext {
     }
     
     deleteOne(key: string): Promise<number> {
-        throw new Error('Method not implemented.');
+        return new Promise((resolve, reject) => {
+            this.redisClient.del(key, (error, reply) => {
+                if(error)
+                    return reject(error)
+                return resolve(reply)
+            })
+        })
     }
 }

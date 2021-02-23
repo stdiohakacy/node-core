@@ -24,6 +24,7 @@ export interface IJwtAuthService {
     getToken(user: User): Promise<string>
     getTokens(email: string): Promise<string[]>
     addToken(user: User): Promise<any>
+    deAuthenticateUser(email: string): Promise<boolean>
 }
 
 @Service('redis.auth.service')
@@ -71,12 +72,22 @@ export class RedisAuthService implements IJwtAuthService {
         return this._redisContext.getOne(this.constructKey(user.refreshToken, user.email.value))
     }
 
-    async getTokens(email: string): Promise<string[]> {
+    public async getTokens(email: string): Promise<string[]> {
         const keyValues = await this._redisContext.getAllKeyValue(`*${this.jwtHashName}.${email}`)
         return keyValues.map((kv) => kv.value)
+    }
+    
+    public async deAuthenticateUser(email: string): Promise<boolean> {
+        return this.clearAllSessions(email)
     }
 
     private constructKey(refreshToken: RefreshToken, email: string): string {
         return `refresh-${refreshToken}.${this.jwtHashName}.${email}`
+    }
+
+    private async clearAllSessions(email: string): Promise<boolean> {
+        const keyValues = await this._redisContext.getAllKeyValue(`*${this.jwtHashName}.${email}`)
+        const keys = keyValues.map(kv => kv.key)
+        return !!Promise.all(keys.map(key => this._redisContext.deleteOne(key)))
     }
 }
