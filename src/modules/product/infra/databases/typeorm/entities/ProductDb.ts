@@ -10,13 +10,13 @@ export class ProductDb extends BaseEntity {
     @Column({ name: 'category_id', type: 'uuid' })
     categoryId!: string;
 
+    @ManyToOne(() => CategoryDb, category => category.products)
+    @JoinColumn({ name: 'category_id' })
+    category: CategoryDb;
+
     @Column({ name: 'name', length: 150 })
     name: string;
 
     @Column({ name: 'price', type: 'integer' })
     price: number;
-
-    @ManyToOne(() => CategoryDb, category => category.products)
-    @JoinColumn({ name: 'category_id' })
-    category: CategoryDb;
 }
