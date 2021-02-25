@@ -1,34 +1,14 @@
-import { RefreshTokenUserController } from './modules/user/controller/RefreshTokenUserController';
-import { LogoutUserController } from './modules/user/controller/LogoutUserController';
 import * as http from 'http';
 import * as express from 'express';
 import { createServer } from 'http';
 import { ApiAuthenticator } from './shared/middleware/ApiAuthenticator';
-import { AuthController } from './modules/auth/controller/AuthenticateController';
-import { LoginController } from './modules/auth/controller/LoginController';
-import { ResetPasswordUserController } from './modules/user/controller/ResetPasswordUserController';
 import 'reflect-metadata';
 import { createConnection } from "typeorm";
 import { createExpressServer } from 'routing-controllers';
-import { ForgotPasswordUserController } from './modules/user/controller/ForgotPasswordUserController';
-import { ResendActivationUserController } from './modules/user/controller/ResendActivationUserController';
-import { ActiveUserController } from './modules/user/controller/ActiveUserController';
-import { SignUpUserController } from './modules/user/controller/SignUpUserController';
-
-import { 
-    CreateCategoryController, 
-    GetCategoryByIdController,
-    UpdateCategoryController,
-    DeleteCategoryController,
-    FindCategoryController 
-} from './modules/category/controller';
-
 import { RedisContext } from './shared/infra/databases/redis/RedisContext';
 import Container from 'typedi';
-import { GetProfileUserController } from './modules/user/useCases/queries/get-profile/GetProfileUserController';
 import { appSocket } from './shared/socket/app.socket';
-import { CreateProductController } from './modules/product/controller/CreateProductController';
-
+import * as path from 'path'
 
 export class ExpressServer {
     static app: express.Application;
@@ -40,14 +20,7 @@ export class ExpressServer {
                 authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
                 currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
                 controllers: [
-                    // Category
-                    CreateCategoryController, GetCategoryByIdController, UpdateCategoryController, DeleteCategoryController, FindCategoryController,
-                    // User
-                    SignUpUserController, ActiveUserController, ResendActivationUserController, ForgotPasswordUserController, ResetPasswordUserController, GetProfileUserController, LogoutUserController, RefreshTokenUserController,
-                    // Auth
-                    LoginController, AuthController,
-                    // Product
-                    CreateProductController,
+                    path.join(__dirname, '/modules/**/controller/*{.js,.ts}')
                 ]
             })
 

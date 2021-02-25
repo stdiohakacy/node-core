@@ -14,9 +14,13 @@ export class AuthController extends BaseController {
     ) { super() }
 
     @Post('/')
-    async executeImpl(@BodyParam('token') token: string, @Res() res: Response, @HeaderParam('authorization') authorization: string): Promise<Response> {
+    async executeImpl(
+        @BodyParam('token') token: string,
+        @Res() res: Response,
+        @HeaderParam('authorization') authorization: string
+    ): Promise<Response> {
         const param = new AuthenticateCommandDTO()
-        if(authorization) {
+        if (authorization) {
             const parts = (authorization || '').split(' ');
             param.token = parts.length === 2 && parts[0] === 'Bearer' ? parts[1] : '';
         }
@@ -27,8 +31,8 @@ export class AuthController extends BaseController {
             const result = await this._authenticateUseCase.execute(param);
             const resultValue = result.value
 
-            if(result.isLeft()) {
-                switch(resultValue.constructor) {
+            if (result.isLeft()) {
+                switch (resultValue.constructor) {
                     case AuthenticateErrors.TokenInvalidError:
                         return this.unAuthorized(res, resultValue.errorValue())
                     case AuthenticateErrors.TokenExpireTimeError:
@@ -41,7 +45,7 @@ export class AuthController extends BaseController {
             }
             else
                 return this.OK(res, resultValue.getValue())
-        } 
+        }
         catch (error) {
             console.error('ERR', error)
             return this.fail(res, error)

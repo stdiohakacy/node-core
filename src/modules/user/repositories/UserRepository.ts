@@ -7,6 +7,7 @@ import { BaseRepository, IBaseRepository } from '../../../shared/repository/Base
 export interface IUserRepository extends IBaseRepository<UserDb, string> {
     getByEmail(userEmail: UserEmail): Promise<User>
     isEmailExist(userEmail: UserEmail): Promise<boolean>
+    isExist(id: string): Promise<boolean>
 }
 
 @Service('user.repository')
@@ -16,6 +17,11 @@ export class UserRepository extends BaseRepository<UserDb, string> implements IU
             TABLE_NAME: 'user'
         })
     }
+
+    async isExist(id: string): Promise<boolean> {
+        return await this.repository.count({ id }) > 0
+    }
+
     async getByEmail(userEmail: UserEmail): Promise<User> {
         const result = await this.repository
             .createQueryBuilder('user')

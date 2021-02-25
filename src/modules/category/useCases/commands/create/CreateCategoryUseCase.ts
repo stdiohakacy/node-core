@@ -13,7 +13,7 @@ import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 @Service()
 export class CreateCategoryUseCase implements IUseCaseCommandCQRS<CreateCategoryCommandDTO, Promise<CreateCategoryResponse>> {
     @Inject('category.repository')
-    private _categoryRepository: CategoryRepository;
+    private readonly _categoryRepository: CategoryRepository;
 
     async execute(param: CreateCategoryCommandDTO): Promise<CreateCategoryResponse> {
         const categoryNameOrError = CategoryName.create({ value: param.name })

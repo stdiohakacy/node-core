@@ -24,6 +24,7 @@ export class ErrorCode {
     static DATA_ACTIVATED = 'DATA_ACTIVATED_ERR';
     static DATA_NOT_VERIFIED = 'DATA_NOT_VERIFIED_ERR';
     static ACCOUNT_WRONG = 'ACCOUNT_WRONG_ERR';
+    static TOO_MANY_REQUEST = 'TOO_MANY_REQUEST_ERR';
 }
 
 
@@ -58,6 +59,7 @@ export class MessageError {
     static PARAM_LEN_GREATER_OR_EQUAL = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be greater than or equal to {1}!');
     static PARAM_LEN_BETWEEN = new ErrorObject(ErrorCode.DATA_INVALID, 'The length of {0} must be between {1} and {2}!');
     static ACCOUNT_WRONG = new ErrorObject(ErrorCode.ACCOUNT_WRONG, 'Wrong email or password!');
+    static TOO_MANY_REQUEST = new ErrorObject(ErrorCode.TOO_MANY_REQUEST, 'Too many request!');
 }
 
 export class SystemError extends Error {
