@@ -18,8 +18,6 @@ export class UserRepository extends BaseRepository<UserDb, string> implements IU
         })
     }
     
-    
-
     async isExist(id: string): Promise<boolean> {
         return await this.repository.count({ id }) > 0
     }

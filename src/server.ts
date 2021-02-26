@@ -98,26 +98,3 @@
 //         return typeof addr === 'string' ? `pipe ${addr}` : `port http://localhost:${addr.port}`;
 //     }
 // }
-
-
-if (!this.app) {
-    this.app = createExpressServer({
-        authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
-        currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
-        controllers: [
-            path.join(__dirname, '/modules/**/controller/*{.js,.ts}')
-        ]
-    })
-
-    this.app.listen(3000, () => {
-        createConnection().then(async connection => {
-            const redisContext = Container.get<RedisContext>('redis.context');
-            redisContext.createConnection();
-            console.log('Express Server listening on port : 3000')
-        }).catch(error => console.log("Error: ", error));
-    })
-
-    if (cb) {
-        cb(this.app);
-    }
-}

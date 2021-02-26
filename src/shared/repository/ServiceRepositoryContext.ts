@@ -1,22 +1,23 @@
-import { UserRepository } from './../../modules/user/repositories/UserRepository';
+import { UserRepository } from "../../modules/user/repositories/UserRepository";
 
-export class ServiceRepositoryContext {
-    static instance: ServiceRepositoryContext
-    private _userRepository: UserRepository
+export class ServiceRepositoriesContext {
+    static instance: ServiceRepositoriesContext;
 
-    static getInstance(): ServiceRepositoryContext {
-        if(!this.instance)
-            this.instance = new ServiceRepositoryContext()
-        return this.instance
+    static getInstance(): ServiceRepositoriesContext {
+        if (!ServiceRepositoriesContext.instance) {
+            ServiceRepositoriesContext.instance = new ServiceRepositoriesContext();
+        }
+        return ServiceRepositoriesContext.instance;
     }
 
     // user
-    get userRepository(): UserRepository {
-        return this._userRepository
+    private _userRepository: UserRepository;
+    public get userRepository() {
+        return this._userRepository;
     }
 
-    public setUserRepository(userRepository: UserRepository): ServiceRepositoryContext {
-        this._userRepository = userRepository
+    public setUserRepository(userRepository: UserRepository): ServiceRepositoriesContext {
+        this._userRepository = userRepository;
         return this;
     }
 }
