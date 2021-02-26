@@ -1,3 +1,4 @@
+import { User } from './../../../../../user/domain/aggregateRoot/User';
 import { UserId } from './../../../../../user/domain/entity/UserId';
 import { PrivateMessageRepository } from './../../../repositories/PrivateMessageRepository';
 import { CreatePrivateMessageResponse } from './CreatePrivateMessageResponse';
@@ -52,22 +53,17 @@ Promise<CreatePrivateMessageResponse>
 
         const privateMessage = privateMessageOrError.getValue()
         try {
-            const isToUserExist = await this._userRepository.isExist(toUserId.id.toString())
-            if (!isToUserExist)
-                return left(new CreatePrivateMessageErrors.UserNotFoundError(toUserId.id.toString()))
-        } catch (error) {
-            console.error(error)
-            return left(new ApplicationError.UnexpectedError())
-        }
-        try {
             const isFromUserExist = await this._userRepository.isExist(fromUserId.id.toString())
             if (!isFromUserExist)
                 return left(new CreatePrivateMessageErrors.UserNotFoundError(fromUserId.id.toString()))
-        } catch (error) {
-            console.error(error)
-            return left(new ApplicationError.UnexpectedError())
-        }
-        try {
+
+            const toUser = await this._userRepository.getById(toUserId.id.toString())
+            if (!toUser)
+                return left(new CreatePrivateMessageErrors.UserNotFoundError(toUserId.id.toString()))
+
+            // socket id handler
+            // ====
+
             const privateMessageMapper = PrivateMessageMapper.toPersistence(privateMessage)
             const isCreated = await this._privateMessageRepository.create(privateMessageMapper)
             if (!isCreated)
