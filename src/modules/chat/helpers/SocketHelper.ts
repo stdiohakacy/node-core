@@ -1,16 +1,10 @@
+import { PrivateMessageDb } from './../infra/databases/typeorm/entities/PrivateMessageDb';
 import * as socketIO from 'socket.io'
-// export const emitAsync = (socket: SocketIO.Socket, emitName: string, data: string, cb) => {
-//     return new Promise((resolve, reject) => {
-//         if (!socket || !socket.emit)
-//             reject('Socket not implement!')
-//         socket.emit(emitName, data, (...args) => {
-//             let response
-//             if (typeof cb === 'function')
-//                 response = cb(...args)
-//             resolve(response)
-//         })
-//     })
-// }
+import { SocketError } from '../../../shared/exceptions/SocketError';
+import { MessageError } from '../../../shared/exceptions/SystemError';
+import { UnauthorizedError } from '../../../shared/exceptions/UnauthorizedError';
+import { ServiceRepositoriesContext } from '../../../shared/repository/ServiceRepositoryContext';
+import { UserDb } from '../../user/infra/databases/typeorm/entities/UserDb';
 
 export function emitAsync(socket, emitName, data, callback) {
     return new Promise((resolve, reject) => {
@@ -28,8 +22,76 @@ export function emitAsync(socket, emitName, data, callback) {
     });
 }
 
-export const socketIdHandler = (ids: any) => {
-    return ids[0] ? JSON.parse(JSON.stringify(ids[0])).socketid : '';
+export const verifySocketIO = (token: string, next) => {
+    const { redisAuthService } = ServiceRepositoriesContext.getInstance();
+
+    let tokenDecoded
+    try {
+        tokenDecoded = redisAuthService.decodeJWT(token)
+    }
+    catch (error) {
+        if (error.name === 'TokenExpiredError')
+            throw new UnauthorizedError(MessageError.PARAM_EXPIRED, 'token')
+        else
+            throw new UnauthorizedError(MessageError.PARAM_INVALID, 'token')
+    }
+
+    if (!tokenDecoded || !tokenDecoded.sub)
+        throw new UnauthorizedError(MessageError.PARAM_INVALID, 'token')
+
+    console.log('Verify socket token success')
+    return next()
+}
+
+export const checkSpamSocket = (socketId: string, next) => {
+    if (!socketRequestFrequency(socketId))
+        return next()
+    throw new SocketError(MessageError.TOO_MANY_REQUEST)
+}
+
+export const updateUserSocketId = async (userId: string, socketId: string): Promise<boolean> => {
+    const { userRepository } = ServiceRepositoriesContext.getInstance();
+
+    const user = await userRepository.getById(userId)
+    if (!user)
+        throw new Error('User not found')
+    const socketIds = user.socketIds
+    const newSocketIds = socketIds ? `${socketIds},${socketId}` : socketId
+
+    const userDb = new UserDb()
+    userDb.socketIds = newSocketIds
+
+    const isUpdatedSocketId = await userRepository.update(userId, userDb)
+    if (!isUpdatedSocketId)
+        throw new Error('Update socket id of user cant not saved')
+    console.log(`Init Socket For User ${userId} => Time: ${new Date().toLocaleString()}`)
+
+    return !!isUpdatedSocketId
+}
+
+export const savePrivateMessage = async (userId: string, data: any): Promise<boolean> => {
+    const { privateMessageRepository } = ServiceRepositoriesContext.getInstance();
+
+    const privateMsgDb = new PrivateMessageDb()
+    privateMsgDb.fromUserId = userId
+    privateMsgDb.toUserId = data.toUserId
+    privateMsgDb.message = data.message
+    try {
+        const isCreated = await privateMessageRepository.create(privateMsgDb)
+        console.log('Messaged sent!')
+        return !!isCreated
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const emitSocketToUser = async (io: socketIO.Server, data) => {
+    const { userRepository } = ServiceRepositoriesContext.getInstance();
+
+    const toUser = await userRepository.getById(data.toUserId)
+    const toUserSocketIds = (toUser.socketIds && toUser.socketIds.split(',') || [])
+
+    toUserSocketIds.forEach(toUserSocketId => io.to(toUserSocketId).emit('listen-private-message', data))
 }
 
 let timeStamp = Date.parse(new Date().toString())

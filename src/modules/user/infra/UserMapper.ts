@@ -22,9 +22,9 @@ export class UserMapper implements IMapper<User> {
             password: UserPassword.create({ value: userDb.password, hashed: true }).getValue(),
             status: UserStatus.create({ value: userDb.status }).getValue(),
             activeKey: userDb.activeKey ? UserActiveKey.create({ value: userDb.activeKey }).getValue() : null,
-            activeExpire: UserActiveExpire.create({ value: userDb.activeExpire }).getValue(),
+            activeExpire: userDb.activeExpire ?  UserActiveExpire.create({ value: userDb.activeExpire }).getValue() : null,
             forgotKey: userDb.forgotKey ? UserForgotKey.create({ value: userDb.forgotKey }).getValue() : null,
-            forgotExpire: UserForgotExpire.create({value: userDb.forgotExpire}).getValue()
+            forgotExpire: userDb.forgotExpire ? UserForgotExpire.create({value: userDb.forgotExpire}).getValue() : null
         }, new UniqueEntityId(userDb.id))
 
         if(userOrError.isFailure)

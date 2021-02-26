@@ -1,3 +1,5 @@
+import { PrivateMessageRepository } from './../../modules/chat/private/repositories/PrivateMessageRepository';
+import { RedisAuthService } from './../services/auth/RedisAuthService';
 import { UserRepository } from "../../modules/user/repositories/UserRepository";
 
 export class ServiceRepositoriesContext {
@@ -10,7 +12,7 @@ export class ServiceRepositoriesContext {
         return ServiceRepositoriesContext.instance;
     }
 
-    // user
+    // user repository
     private _userRepository: UserRepository;
     public get userRepository() {
         return this._userRepository;
@@ -18,6 +20,28 @@ export class ServiceRepositoriesContext {
 
     public setUserRepository(userRepository: UserRepository): ServiceRepositoriesContext {
         this._userRepository = userRepository;
+        return this;
+    }
+
+    // auth service
+    private _redisAuthSerice: RedisAuthService
+    public get redisAuthService() {
+        return this._redisAuthSerice;
+    }
+
+    public setRedisAuthService(redisAuthService: RedisAuthService): ServiceRepositoriesContext {
+        this._redisAuthSerice = redisAuthService;
+        return this;
+    }
+
+    // private message repository
+    private _privateMessageRepository: PrivateMessageRepository;
+    public get privateMessageRepository() {
+        return this._privateMessageRepository;
+    }
+
+    public setPrivateMessageRepository(privateMessageRepository: PrivateMessageRepository): ServiceRepositoriesContext {
+        this._privateMessageRepository = privateMessageRepository;
         return this;
     }
 }
