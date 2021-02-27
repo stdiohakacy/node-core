@@ -6,7 +6,7 @@ import { createConnection } from "typeorm";
 import { RedisContext } from "./shared/infra/databases/redis/RedisContext";
 import * as http from 'http'
 import * as socketIO from 'socket.io'
-import { checkSpamSocket, emitSocketToUser, joinGroup, saveAndJoinGroup, savePrivateMessage, sendGroupMessage, socketRequestFrequency, updateUserSocketId, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
+import { checkSpamSocket, emitSocketToUser, joinGroup, leaveGroup, saveAndJoinGroup, savePrivateMessage, sendGroupMessage, socketRequestFrequency, updateUserSocketId, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
 import { ServiceRepositoriesContext } from "./shared/repository/ServiceRepositoryContext";
 import { UserRepository } from "./modules/user/repositories/UserRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
@@ -129,6 +129,20 @@ app.listen(3000, () => {
                         await joinGroup(data, socket)
                         console.log(`Joined group - data : ${ JSON.parse(JSON.stringify(data))} - time ${new Date().toLocaleString()}`)
                         cbFn(data)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', {
+                            code: 500,
+                            message: error.message
+                        })
+                    }
+                })
+
+                // leave group
+                socket.on('leave-group', async(data) => {
+                    try {
+                        await leaveGroup(data, socket)
+                        console.log(`Leave group - data ${data} - time : ${new Date().toLocaleString()}`)
                     } catch (error) {
                         console.error(error)
                         io.to(socketId).emit('error', {

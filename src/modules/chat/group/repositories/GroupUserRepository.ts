@@ -4,6 +4,7 @@ import { BaseRepository, IBaseRepository } from '../../../../shared/repository/B
 
 export interface IGroupUserRepository extends IBaseRepository<GroupUserDb, string> {
     isIntoGroup(userId: string, toGroupId: string): Promise<boolean>
+    leaveGroup(userId: string, toGroupId: string): Promise<boolean>
 }
 
 @Service('group_user.repository')
@@ -13,13 +14,25 @@ export class GroupUserRepository extends BaseRepository<GroupUserDb, string> imp
             TABLE_NAME: 'group_user'
         })
     }
+
     async isIntoGroup(userId: string, toGroupId: string): Promise<boolean> {
-        const result = await this.repository
+        const count = await this.repository
             .createQueryBuilder('group_user')
             .where('group_user.userId = :userId', { userId })
             .andWhere('group_user.toGroupId = :toGroupId', { toGroupId })
             .getCount()
 
-        return result > 0
+        return count > 0
+    }
+
+    async leaveGroup(userId: string, toGroupId: string): Promise<boolean> {
+        const result = await this.repository
+            .createQueryBuilder('group_user')
+            .where('userId = :userId', { userId })
+            .andWhere('toGroupId = :toGroupId', { toGroupId })
+            .delete()
+            .execute()
+
+        return !!result
     }
 }

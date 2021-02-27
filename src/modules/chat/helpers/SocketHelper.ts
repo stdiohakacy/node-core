@@ -80,7 +80,7 @@ export const savePrivateMessage = async (userId: string, data: any): Promise<voi
     privateMsgDb.message = data.message
     try {
         const isCreated = await privateMessageRepository.create(privateMsgDb)
-        if(!isCreated)
+        if (!isCreated)
             throw new Error(`Data cannot save`)
     } catch (error) {
         console.error(error)
@@ -91,7 +91,7 @@ export const saveAndJoinGroup = async (userId: string, data: any, socket: socket
     const { groupRepository, groupUserRepository } = ServiceRepositoriesContext.getInstance()
 
     const toGroupId = uuid.v4()
-    
+
     const groupDb = new GroupDb()
     groupDb.creatorId = userId
     groupDb.name = data.name
@@ -131,7 +131,7 @@ export const sendGroupMessage = async (userId: string, data: any, socket: socket
 
     try {
         const isCreated = await groupMessageRepository.create(groupMessageDb)
-        if(!isCreated)
+        if (!isCreated)
             throw new Error(`Data cannot save`)
         socket.broadcast.to(data.toGroupId).emit('listen-group-message', data)
     } catch (error) {
@@ -143,16 +143,16 @@ export const joinGroup = async (data, socket: socketIO.Socket): Promise<void> =>
     const { groupUserRepository } = ServiceRepositoriesContext.getInstance();
 
     const isJoined = await groupUserRepository.isIntoGroup(data.userId, data.toGroupId)
-    if(!isJoined) {
+    if (!isJoined) {
         // join
         const groupUserDb = new GroupUserDb()
         groupUserDb.userId = data.userId
         groupUserDb.toGroupId = data.toGroupId
-        
+
         const joinedGroupCreated = await groupUserRepository.create(groupUserDb)
-        if(!joinedGroupCreated)
+        if (!joinedGroupCreated)
             throw new Error(`Data cannot save`)
-        
+
         socket.broadcast.to(data.toGroupId).emit('listen-group-message', {
             ...data,
             message: `${data.userId} just joined group`,
@@ -161,6 +161,22 @@ export const joinGroup = async (data, socket: socketIO.Socket): Promise<void> =>
         })
     }
     socket.join(data.toGroupId)
+}
+
+export const leaveGroup = async (data, socket: socketIO.Socket): Promise<void> => {
+    const { groupUserRepository } = ServiceRepositoriesContext.getInstance()
+
+    const isLeaved = await groupUserRepository.leaveGroup(data.userId, data.toGroupId)
+    if (!isLeaved)
+        throw new Error(`Error : Leave group is error`)
+        
+    socket
+        .leave(data.toGroupId)
+        .broadcast
+        .to(data.toGroupId)
+        .emit('listening-leave-group', {
+            message: 'Msg - leave group'
+        })
 }
 
 let timeStamp = Date.parse(new Date().toString())

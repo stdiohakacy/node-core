@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class ChatModule1614141683125 implements MigrationInterface {
-    name = 'ChatModule1614141683125'
+export class ChatModule1614423226099 implements MigrationInterface {
+    name = 'ChatModule1614423226099'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "group" ("created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP WITH TIME ZONE, "id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" uuid NOT NULL, "name" character varying(20) NOT NULL DEFAULT '', "notice" character varying(100) NOT NULL DEFAULT '', "to_group_id" character varying(100) NOT NULL, CONSTRAINT "PK_256aa0fda9b1de1a73ee0b7106b" PRIMARY KEY ("id"))`);
