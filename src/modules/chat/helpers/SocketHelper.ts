@@ -8,6 +8,7 @@ import { UserDb } from '../../user/infra/databases/typeorm/entities/UserDb';
 import { GroupDb } from '../infra/databases/typeorm/entities/GroupDb';
 import * as uuid from 'uuid';
 import { GroupUserDb } from '../infra/databases/typeorm/entities/GroupUserDb';
+import { GroupMessageDb } from '../infra/databases/typeorm/entities/GroupMessageDb';
 
 export function emitAsync(socket, emitName, data, callback) {
     return new Promise((resolve, reject) => {
@@ -25,7 +26,7 @@ export function emitAsync(socket, emitName, data, callback) {
     });
 }
 
-export const verifySocketIO = (token: string, next) => {
+export const verifySocketIO = (token: string, next): string => {
     const { redisAuthService } = ServiceRepositoriesContext.getInstance();
 
     let tokenDecoded
@@ -38,10 +39,8 @@ export const verifySocketIO = (token: string, next) => {
         else
             throw new UnauthorizedError(MessageError.PARAM_INVALID, 'token')
     }
-
     if (!tokenDecoded || !tokenDecoded.sub)
         throw new UnauthorizedError(MessageError.PARAM_INVALID, 'token')
-
     console.log('Verify socket token success')
     return next()
 }
@@ -72,7 +71,7 @@ export const updateUserSocketId = async (userId: string, socketId: string): Prom
     return !!isUpdatedSocketId
 }
 
-export const savePrivateMessage = async (userId: string, data: any): Promise<boolean> => {
+export const savePrivateMessage = async (userId: string, data: any): Promise<void> => {
     const { privateMessageRepository } = ServiceRepositoriesContext.getInstance();
 
     const privateMsgDb = new PrivateMessageDb()
@@ -81,7 +80,8 @@ export const savePrivateMessage = async (userId: string, data: any): Promise<boo
     privateMsgDb.message = data.message
     try {
         const isCreated = await privateMessageRepository.create(privateMsgDb)
-        return !!isCreated
+        if(!isCreated)
+            throw new Error(`Data cannot save`)
     } catch (error) {
         console.error(error)
     }
@@ -91,8 +91,8 @@ export const saveAndJoinGroup = async (userId: string, data: any, socket: socket
     const { groupRepository, groupUserRepository } = ServiceRepositoriesContext.getInstance()
 
     const toGroupId = uuid.v4()
+    
     const groupDb = new GroupDb()
-
     groupDb.creatorId = userId
     groupDb.name = data.name
     groupDb.notice = data.notice
@@ -110,13 +110,57 @@ export const saveAndJoinGroup = async (userId: string, data: any, socket: socket
     return toGroupId
 }
 
-export const emitSocketToUser = async (io: socketIO.Server, data) => {
+export const emitSocketToUser = async (io: socketIO.Server, data): Promise<void> => {
     const { userRepository } = ServiceRepositoriesContext.getInstance();
 
     const toUser = await userRepository.getById(data.toUserId)
     const toUserSocketIds = (toUser.socketIds && toUser.socketIds.split(',') || [])
 
     toUserSocketIds.forEach(toUserSocketId => io.to(toUserSocketId).emit('listen-private-message', data))
+}
+
+export const sendGroupMessage = async (userId: string, data: any, socket: socketIO.Socket): Promise<void> => {
+    const { groupMessageRepository } = ServiceRepositoriesContext.getInstance();
+
+    const groupMessageDb = new GroupMessageDb()
+
+    groupMessageDb.fromUserId = userId
+    groupMessageDb.toGroupId = data.toGroupId
+    groupMessageDb.message = data.message
+
+
+    try {
+        const isCreated = await groupMessageRepository.create(groupMessageDb)
+        if(!isCreated)
+            throw new Error(`Data cannot save`)
+        socket.broadcast.to(data.toGroupId).emit('listen-group-message', data)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const joinGroup = async (data, socket: socketIO.Socket): Promise<void> => {
+    const { groupUserRepository } = ServiceRepositoriesContext.getInstance();
+
+    const isJoined = await groupUserRepository.isIntoGroup(data.userId, data.toGroupId)
+    if(!isJoined) {
+        // join
+        const groupUserDb = new GroupUserDb()
+        groupUserDb.userId = data.userId
+        groupUserDb.toGroupId = data.toGroupId
+        
+        const joinedGroupCreated = await groupUserRepository.create(groupUserDb)
+        if(!joinedGroupCreated)
+            throw new Error(`Data cannot save`)
+        
+        socket.broadcast.to(data.toGroupId).emit('listen-group-message', {
+            ...data,
+            message: `${data.userId} just joined group`,
+            toGroupId: data.toGroupId,
+            tip: 'joinGroup'
+        })
+    }
+    socket.join(data.toGroupId)
 }
 
 let timeStamp = Date.parse(new Date().toString())

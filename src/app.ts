@@ -6,7 +6,7 @@ import { createConnection } from "typeorm";
 import { RedisContext } from "./shared/infra/databases/redis/RedisContext";
 import * as http from 'http'
 import * as socketIO from 'socket.io'
-import { checkSpamSocket, emitSocketToUser, saveAndJoinGroup, savePrivateMessage, socketRequestFrequency, updateUserSocketId, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
+import { checkSpamSocket, emitSocketToUser, joinGroup, saveAndJoinGroup, savePrivateMessage, sendGroupMessage, socketRequestFrequency, updateUserSocketId, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
 import { ServiceRepositoriesContext } from "./shared/repository/ServiceRepositoryContext";
 import { UserRepository } from "./modules/user/repositories/UserRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
@@ -49,6 +49,7 @@ app.listen(3000, () => {
                 .setGroupUserRepository(new GroupUserRepository())
         })
         .then(() => {
+            let userId
             io.use((socket, next) => {
                 let token = socket.handshake.query.token
                 verifySocketIO(token, next)
@@ -60,7 +61,7 @@ app.listen(3000, () => {
                 })
 
                 const socketId = socket.id
-                let userId
+                // let userId
                 let clientHomePageList
 
                 await emitAsync(socket, 'init-socket', socketId, (uid, homePageList) => {
@@ -102,6 +103,36 @@ app.listen(3000, () => {
                         console.error(error)
                         io.to(socketId).emit('error', {
                             code : 500,
+                            message: error.message
+                        })
+                    }
+                })
+                // send group message
+                socket.on('send-group-message', async (data, cbFn) => {
+                    if(!data)
+                        throw new Error(`Message data is require`)
+                    try {
+                        await sendGroupMessage(userId, data, socket)
+                        console.log(`Group message sent - data ${data} - time ${new Date().toLocaleString()}`)
+                        cbFn(data)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', {
+                            code: 500,
+                            message: error.message
+                        })
+                    }
+                })
+                // join group
+                socket.on('join-group', async(data, cbFn) => {
+                    try {
+                        await joinGroup(data, socket)
+                        console.log(`Joined group - data : ${ JSON.parse(JSON.stringify(data))} - time ${new Date().toLocaleString()}`)
+                        cbFn(data)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', {
+                            code: 500,
                             message: error.message
                         })
                     }

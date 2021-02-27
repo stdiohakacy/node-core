@@ -1,3 +1,4 @@
+import { GroupMessageRepository } from './../../modules/chat/group/repositories/GroupMessageRepository';
 import { GroupUserRepository } from './../../modules/chat/group/repositories/GroupUserRepository';
 import { GroupRepository } from './../../modules/chat/group/repositories/GroupRepository';
 import { PrivateMessageRepository } from './../../modules/chat/private/repositories/PrivateMessageRepository';
@@ -66,6 +67,17 @@ export class ServiceRepositoriesContext {
 
     public setGroupUserRepository(groupUserRepository: GroupUserRepository): ServiceRepositoriesContext {
         this._groupUserRepository = groupUserRepository;
+        return this;
+    }
+
+    // group_message repository
+    private _groupMessageRepository: GroupMessageRepository;
+    public get groupMessageRepository() {
+        return this._groupMessageRepository;
+    }
+
+    public setGroupMessageRepository(groupMessageRepository: GroupMessageRepository): ServiceRepositoriesContext {
+        this._groupMessageRepository = groupMessageRepository;
         return this;
     }
 }
