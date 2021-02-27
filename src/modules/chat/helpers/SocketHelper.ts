@@ -5,6 +5,9 @@ import { MessageError } from '../../../shared/exceptions/SystemError';
 import { UnauthorizedError } from '../../../shared/exceptions/UnauthorizedError';
 import { ServiceRepositoriesContext } from '../../../shared/repository/ServiceRepositoryContext';
 import { UserDb } from '../../user/infra/databases/typeorm/entities/UserDb';
+import { GroupDb } from '../infra/databases/typeorm/entities/GroupDb';
+import * as uuid from 'uuid';
+import { GroupUserDb } from '../infra/databases/typeorm/entities/GroupUserDb';
 
 export function emitAsync(socket, emitName, data, callback) {
     return new Promise((resolve, reject) => {
@@ -78,11 +81,33 @@ export const savePrivateMessage = async (userId: string, data: any): Promise<boo
     privateMsgDb.message = data.message
     try {
         const isCreated = await privateMessageRepository.create(privateMsgDb)
-        console.log('Messaged sent!')
         return !!isCreated
     } catch (error) {
         console.error(error)
     }
+}
+
+export const saveAndJoinGroup = async (userId: string, data: any, socket: socketIO.Socket): Promise<string> => {
+    const { groupRepository, groupUserRepository } = ServiceRepositoriesContext.getInstance()
+
+    const toGroupId = uuid.v4()
+    const groupDb = new GroupDb()
+
+    groupDb.creatorId = userId
+    groupDb.name = data.name
+    groupDb.notice = data.notice
+    groupDb.toGroupId = toGroupId
+
+    const groupUserDb = new GroupUserDb()
+    groupUserDb.toGroupId = toGroupId
+    groupUserDb.userId = userId
+
+    await Promise.all([
+        await groupRepository.create(groupDb),
+        await groupUserRepository.create(groupUserDb)
+    ])
+    socket.join(toGroupId)
+    return toGroupId
 }
 
 export const emitSocketToUser = async (io: socketIO.Server, data) => {

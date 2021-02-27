@@ -1,5 +1,3 @@
-import { PrivateMessageDb } from './modules/chat/infra/databases/typeorm/entities/PrivateMessageDb';
-import { SocketError } from './shared/exceptions/SocketError';
 import { createExpressServer } from "routing-controllers";
 import Container from "typedi";
 import { ApiAuthenticator } from "./shared/middleware/ApiAuthenticator";
@@ -8,14 +6,13 @@ import { createConnection } from "typeorm";
 import { RedisContext } from "./shared/infra/databases/redis/RedisContext";
 import * as http from 'http'
 import * as socketIO from 'socket.io'
-import { checkSpamSocket, emitSocketToUser, savePrivateMessage, socketRequestFrequency, updateUserSocketId, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
-import { UserDb } from "./modules/user/infra/databases/typeorm/entities/UserDb";
+import { checkSpamSocket, emitSocketToUser, saveAndJoinGroup, savePrivateMessage, socketRequestFrequency, updateUserSocketId, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
 import { ServiceRepositoriesContext } from "./shared/repository/ServiceRepositoryContext";
 import { UserRepository } from "./modules/user/repositories/UserRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
-import { UnauthorizedError } from "./shared/exceptions/UnauthorizedError";
-import { MessageError } from "./shared/exceptions/SystemError";
 import { PrivateMessageRepository } from './modules/chat/private/repositories/PrivateMessageRepository';
+import { GroupRepository } from './modules/chat/group/repositories/GroupRepository';
+import { GroupUserRepository } from './modules/chat/group/repositories/GroupUserRepository';
 // ExpressServer.init((app: express.Application) => { })
 //     .createServer()
 //     .createConnection()
@@ -48,6 +45,8 @@ app.listen(3000, () => {
                 .setUserRepository(new UserRepository())
                 .setRedisAuthService(new RedisAuthService())
                 .setPrivateMessageRepository(new PrivateMessageRepository())
+                .setGroupRepository(new GroupRepository())
+                .setGroupUserRepository(new GroupUserRepository())
         })
         .then(() => {
             io.use((socket, next) => {
@@ -74,12 +73,38 @@ app.listen(3000, () => {
 
                 // send private message
                 socket.on('send-private-message', async (data: any, cbFn) => {
-                    if(!data)
+                    if (!data)
                         throw new Error(`Message data is require`)
-                    await Promise.all([
-                        await savePrivateMessage(userId, data),
-                        await emitSocketToUser(io, data)
-                    ])
+                    try {
+                        await Promise.all([
+                            await savePrivateMessage(userId, data),
+                            await emitSocketToUser(io, data)
+                        ])
+                        console.log(`Private message sent - data ${data} - time - ${new Date().toLocaleString()}`);
+                        cbFn(data)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', {
+                            code: 500,
+                            message: error.message
+                        })
+                    }
+                })
+                // create group
+                socket.on('create-group', async(data, cbFn) => {
+                    if(!data)
+                        throw new Error(`Group data is require`)
+                    try {
+                        const toGroupId = await saveAndJoinGroup(userId, data, socket)
+                        console.log(`Create group ${data} - time ${new Date().toLocaleString()}`)
+                        cbFn({toGroupId, ...data})
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', {
+                            code : 500,
+                            message: error.message
+                        })
+                    }
                 })
             })
         })

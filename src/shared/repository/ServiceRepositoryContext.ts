@@ -1,3 +1,5 @@
+import { GroupUserRepository } from './../../modules/chat/group/repositories/GroupUserRepository';
+import { GroupRepository } from './../../modules/chat/group/repositories/GroupRepository';
 import { PrivateMessageRepository } from './../../modules/chat/private/repositories/PrivateMessageRepository';
 import { RedisAuthService } from './../services/auth/RedisAuthService';
 import { UserRepository } from "../../modules/user/repositories/UserRepository";
@@ -42,6 +44,28 @@ export class ServiceRepositoriesContext {
 
     public setPrivateMessageRepository(privateMessageRepository: PrivateMessageRepository): ServiceRepositoriesContext {
         this._privateMessageRepository = privateMessageRepository;
+        return this;
+    }
+
+    // group repository
+    private _groupRepository: GroupRepository;
+    public get groupRepository() {
+        return this._groupRepository;
+    }
+
+    public setGroupRepository(groupRepository: GroupRepository): ServiceRepositoriesContext {
+        this._groupRepository = groupRepository;
+        return this;
+    }
+
+    // group_user repository
+    private _groupUserRepository: GroupUserRepository;
+    public get groupUserRepository() {
+        return this._groupUserRepository;
+    }
+
+    public setGroupUserRepository(groupUserRepository: GroupUserRepository): ServiceRepositoriesContext {
+        this._groupUserRepository = groupUserRepository;
         return this;
     }
 }
