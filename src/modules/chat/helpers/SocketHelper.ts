@@ -1,33 +1,38 @@
-import { PrivateMessageDb } from './../infra/databases/typeorm/entities/PrivateMessageDb';
-import * as socketIO from 'socket.io'
-import { SocketError } from '../../../shared/exceptions/SocketError';
-import { MessageError } from '../../../shared/exceptions/SystemError';
-import { UnauthorizedError } from '../../../shared/exceptions/UnauthorizedError';
-import { ServiceRepositoriesContext } from '../../../shared/repository/ServiceRepositoryContext';
-import { UserDb } from '../../user/infra/databases/typeorm/entities/UserDb';
-import { GroupDb } from '../infra/databases/typeorm/entities/GroupDb';
-import * as uuid from 'uuid';
-import { GroupUserDb } from '../infra/databases/typeorm/entities/GroupUserDb';
-import { GroupMessageDb } from '../infra/databases/typeorm/entities/GroupMessageDb';
+// import { PrivateMessageDb } from './../infra/databases/typeorm/entities/PrivateMessageDb';
+// import * as socketIO from 'socket.io'
+// import { SocketError } from '../../../shared/exceptions/SocketError';
+// import { MessageError } from '../../../shared/exceptions/SystemError';
+// import { UnauthorizedError } from '../../../shared/exceptions/UnauthorizedError';
+// import { ServiceRepositoriesContext } from '../../../shared/repository/ServiceRepositoryContext';
+// import { UserDb } from '../../user/infra/databases/typeorm/entities/UserDb';
+// import { GroupDb } from '../infra/databases/typeorm/entities/GroupDb';
+// import * as uuid from 'uuid';
+// import { GroupUserDb } from '../infra/databases/typeorm/entities/GroupUserDb';
+// import { GroupMessageDb } from '../infra/databases/typeorm/entities/GroupMessageDb';
 
-export function emitAsync(socket, emitName, data, callback) {
-    return new Promise((resolve, reject) => {
-        if (!socket || !socket.emit) {
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject('pls input socket');
-        }
-        socket.emit(emitName, data, (...args) => {
-            let response;
-            if (typeof callback === 'function') {
-                response = callback(...args);
-            }
-            resolve(response);
-        });
-    });
-}
+import { SocketError } from "../../../shared/exceptions/SocketError";
+import { MessageError } from "../../../shared/exceptions/SystemError";
+import { UnauthorizedError } from "../../../shared/exceptions/UnauthorizedError";
+import { SocketServiceRepoContext } from "../useCases/SocketServiceRepoContext";
+
+// export function emitAsync(socket, emitName, data, callback) {
+//     return new Promise((resolve, reject) => {
+//         if (!socket || !socket.emit) {
+//             // eslint-disable-next-line prefer-promise-reject-errors
+//             reject('pls input socket');
+//         }
+//         socket.emit(emitName, data, (...args) => {
+//             let response;
+//             if (typeof callback === 'function') {
+//                 response = callback(...args);
+//             }
+//             resolve(response);
+//         });
+//     });
+// }
 
 export const verifySocketIO = (token: string, next): string => {
-    const { redisAuthService } = ServiceRepositoriesContext.getInstance();
+    const { redisAuthService } = SocketServiceRepoContext.getInstance();
 
     let tokenDecoded
     try {
@@ -51,133 +56,151 @@ export const checkSpamSocket = (socketId: string, next) => {
     throw new SocketError(MessageError.TOO_MANY_REQUEST)
 }
 
-export const updateUserSocketId = async (userId: string, socketId: string): Promise<boolean> => {
-    const { userRepository } = ServiceRepositoriesContext.getInstance();
-
-    const user = await userRepository.getById(userId)
-    if (!user)
-        throw new Error('User not found')
-    const socketIds = user.socketIds
-    const newSocketIds = socketIds ? `${socketIds},${socketId}` : socketId
-
-    const userDb = new UserDb()
-    userDb.socketIds = newSocketIds
-
-    const isUpdatedSocketId = await userRepository.update(userId, userDb)
-    if (!isUpdatedSocketId)
-        throw new Error('Update socket id of user cant not saved')
-    console.log(`Init Socket For User ${userId} => Time: ${new Date().toLocaleString()}`)
-
-    return !!isUpdatedSocketId
+export const emitAsync = (socket, emitName, data, callback) => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.emit) {
+            reject('pls input socket');
+        }
+        socket.emit(emitName, data, (...args) => {
+            let response;
+            if (typeof callback === 'function') {
+                response = callback(...args);
+            }
+            resolve(response);
+        });
+    });
 }
 
-export const savePrivateMessage = async (userId: string, data: any): Promise<void> => {
-    const { privateMessageRepository } = ServiceRepositoriesContext.getInstance();
 
-    const privateMsgDb = new PrivateMessageDb()
-    privateMsgDb.fromUserId = userId
-    privateMsgDb.toUserId = data.toUserId
-    privateMsgDb.message = data.message
-    try {
-        const isCreated = await privateMessageRepository.create(privateMsgDb)
-        if (!isCreated)
-            throw new Error(`Data cannot save`)
-    } catch (error) {
-        console.error(error)
-    }
-}
+// export const updateUserSocketId = async (userId: string, socketId: string): Promise<boolean> => {
+//     const { userRepository } = ServiceRepositoriesContext.getInstance();
 
-export const saveAndJoinGroup = async (userId: string, data: any, socket: socketIO.Socket): Promise<string> => {
-    const { groupRepository, groupUserRepository } = ServiceRepositoriesContext.getInstance()
+//     const user = await userRepository.getById(userId)
+//     if (!user)
+//         throw new Error('User not found')
+//     const socketIds = user.socketIds
+//     const newSocketIds = socketIds ? `${socketIds},${socketId}` : socketId
 
-    const toGroupId = uuid.v4()
+//     const userDb = new UserDb()
+//     userDb.socketIds = newSocketIds
 
-    const groupDb = new GroupDb()
-    groupDb.creatorId = userId
-    groupDb.name = data.name
-    groupDb.notice = data.notice
-    groupDb.toGroupId = toGroupId
+//     const isUpdatedSocketId = await userRepository.update(userId, userDb)
+//     if (!isUpdatedSocketId)
+//         throw new Error('Update socket id of user cant not saved')
+//     console.log(`Init Socket For User ${userId} => Time: ${new Date().toLocaleString()}`)
 
-    const groupUserDb = new GroupUserDb()
-    groupUserDb.toGroupId = toGroupId
-    groupUserDb.userId = userId
+//     return !!isUpdatedSocketId
+// }
 
-    await Promise.all([
-        await groupRepository.create(groupDb),
-        await groupUserRepository.create(groupUserDb)
-    ])
-    socket.join(toGroupId)
-    return toGroupId
-}
+// export const savePrivateMessage = async (userId: string, data: any): Promise<void> => {
+//     const { privateMessageRepository } = ServiceRepositoriesContext.getInstance();
 
-export const emitSocketToUser = async (io: socketIO.Server, data): Promise<void> => {
-    const { userRepository } = ServiceRepositoriesContext.getInstance();
+//     const privateMsgDb = new PrivateMessageDb()
+//     privateMsgDb.fromUserId = userId
+//     privateMsgDb.toUserId = data.toUserId
+//     privateMsgDb.message = data.message
+//     try {
+//         const isCreated = await privateMessageRepository.create(privateMsgDb)
+//         if (!isCreated)
+//             throw new Error(`Data cannot save`)
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
-    const toUser = await userRepository.getById(data.toUserId)
-    const toUserSocketIds = (toUser.socketIds && toUser.socketIds.split(',') || [])
+// export const saveAndJoinGroup = async (userId: string, data: any, socket: socketIO.Socket): Promise<string> => {
+//     const { groupRepository, groupUserRepository } = ServiceRepositoriesContext.getInstance()
 
-    toUserSocketIds.forEach(toUserSocketId => io.to(toUserSocketId).emit('listen-private-message', data))
-}
+//     const toGroupId = uuid.v4()
 
-export const sendGroupMessage = async (userId: string, data: any, socket: socketIO.Socket): Promise<void> => {
-    const { groupMessageRepository } = ServiceRepositoriesContext.getInstance();
+//     const groupDb = new GroupDb()
+//     groupDb.creatorId = userId
+//     groupDb.name = data.name
+//     groupDb.notice = data.notice
+//     groupDb.toGroupId = toGroupId
 
-    const groupMessageDb = new GroupMessageDb()
+//     const groupUserDb = new GroupUserDb()
+//     groupUserDb.toGroupId = toGroupId
+//     groupUserDb.userId = userId
 
-    groupMessageDb.fromUserId = userId
-    groupMessageDb.toGroupId = data.toGroupId
-    groupMessageDb.message = data.message
+//     await Promise.all([
+//         await groupRepository.create(groupDb),
+//         await groupUserRepository.create(groupUserDb)
+//     ])
+//     socket.join(toGroupId)
+//     return toGroupId
+// }
+
+// export const emitSocketToUser = async (io: socketIO.Server, data): Promise<void> => {
+//     const { userRepository } = ServiceRepositoriesContext.getInstance();
+
+//     const toUser = await userRepository.getById(data.toUserId)
+//     const toUserSocketIds = (toUser.socketIds && toUser.socketIds.split(',') || [])
+
+//     toUserSocketIds.forEach(toUserSocketId => io.to(toUserSocketId).emit('listen-private-message', data))
+// }
+
+// export const sendGroupMessage = async (userId: string, data: any, socket: socketIO.Socket): Promise<void> => {
+//     const { groupMessageRepository } = ServiceRepositoriesContext.getInstance();
+
+//     const groupMessageDb = new GroupMessageDb()
+
+//     groupMessageDb.fromUserId = userId
+//     groupMessageDb.toGroupId = data.toGroupId
+//     groupMessageDb.message = data.message
 
 
-    try {
-        const isCreated = await groupMessageRepository.create(groupMessageDb)
-        if (!isCreated)
-            throw new Error(`Data cannot save`)
-        socket.broadcast.to(data.toGroupId).emit('listen-group-message', data)
-    } catch (error) {
-        console.error(error)
-    }
-}
+//     try {
+//         const isCreated = await groupMessageRepository.create(groupMessageDb)
+//         if (!isCreated)
+//             throw new Error(`Data cannot save`)
+//         socket.broadcast.to(data.toGroupId).emit('listen-group-message', data)
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
-export const joinGroup = async (data, socket: socketIO.Socket): Promise<void> => {
-    const { groupUserRepository } = ServiceRepositoriesContext.getInstance();
+// export const joinGroup = async (data, socket: socketIO.Socket): Promise<void> => {
+//     const { groupUserRepository } = ServiceRepositoriesContext.getInstance();
 
-    const isJoined = await groupUserRepository.isIntoGroup(data.userId, data.toGroupId)
-    if (!isJoined) {
-        // join
-        const groupUserDb = new GroupUserDb()
-        groupUserDb.userId = data.userId
-        groupUserDb.toGroupId = data.toGroupId
+//     const isJoined = await groupUserRepository.isIntoGroup(data.userId, data.toGroupId)
+//     if (!isJoined) {
+//         // join
+//         const groupUserDb = new GroupUserDb()
+//         groupUserDb.userId = data.userId
+//         groupUserDb.toGroupId = data.toGroupId
 
-        const joinedGroupCreated = await groupUserRepository.create(groupUserDb)
-        if (!joinedGroupCreated)
-            throw new Error(`Data cannot save`)
+//         const joinedGroupCreated = await groupUserRepository.create(groupUserDb)
+//         if (!joinedGroupCreated)
+//             throw new Error(`Data cannot save`)
 
-        socket.broadcast.to(data.toGroupId).emit('listen-group-message', {
-            ...data,
-            message: `${data.userId} just joined group`,
-            toGroupId: data.toGroupId,
-            tip: 'joinGroup'
-        })
-    }
-    socket.join(data.toGroupId)
-}
+//         socket.broadcast.to(data.toGroupId).emit('listen-group-message', {
+//             ...data,
+//             message: `${data.userId} just joined group`,
+//             toGroupId: data.toGroupId,
+//             tip: 'joinGroup'
+//         })
+//     }
+//     socket.join(data.toGroupId)
+// }
 
-export const leaveGroup = async (data, socket: socketIO.Socket): Promise<void> => {
-    const { groupUserRepository } = ServiceRepositoriesContext.getInstance()
+// export const leaveGroup = async (data, socket: socketIO.Socket): Promise<void> => {
+//     const { groupUserRepository } = ServiceRepositoriesContext.getInstance()
 
-    const isLeaved = await groupUserRepository.leaveGroup(data.userId, data.toGroupId)
-    if (!isLeaved)
-        throw new Error(`Error : Leave group is error`)
+//     const isLeaved = await groupUserRepository.leaveGroup(data.userId, data.toGroupId)
+//     if (!isLeaved)
+//         throw new Error(`Error : Leave group is error`)
         
-    socket
-        .leave(data.toGroupId)
-        .broadcast
-        .to(data.toGroupId)
-        .emit('listening-leave-group', {
-            message: 'Msg - leave group'
-        })
-}
+//     socket
+//         .leave(data.toGroupId)
+//         .broadcast
+//         .to(data.toGroupId)
+//         .emit('listening-leave-group', {
+//             message: 'Msg - leave group'
+//         })
+// }
+
+// export const initialGroupChat = async (userId: string) => {}
 
 let timeStamp = Date.parse(new Date().toString())
 let limitCount = {}
