@@ -13,7 +13,8 @@ import { ChannelUserRepository } from "./modules/chat/repositories/ChannelUserRe
 import { MessageRepository } from "./modules/chat/repositories/MessageRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
 import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
-import { getSingleChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
+import { createMessage, getSingleChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
+import { CreateMessageCommandDTO } from "./modules/chat/dtos/CreateMessageCommandDTO";
 // ExpressServer.init((app: express.Application) => { })
 //     .createServer()
 //     .createConnection()
@@ -77,7 +78,7 @@ app.listen(3000, () => {
                 socket.on('get-single-channel', async (data: any, cbFn) => {
                     const { toUserId } = data
                     try {
-                        const channel = await getSingleChannel(toUserId, userId)
+                        const channel = await getSingleChannel(toUserId, userId, socket)
                         console.log(`channel ${channel}`)
                         socket.emit('get-single-channel', channel)
                         console.log(`Channel id is ${channel.id} - time ${new Date().toLocaleString()}`)
@@ -87,6 +88,20 @@ app.listen(3000, () => {
                         io.to(socketId).emit('error', { code: 500, message: error.message });
                     }
                 })
+
+                socket.on('send-message', async(input: any, cbFn) => {
+                    const { channelId, content, isPin, isStar } = input
+
+                    const messageDTO = new CreateMessageCommandDTO()
+                    messageDTO.channelId = channelId
+                    messageDTO.content = content
+                    messageDTO.isPin = isPin,
+                    messageDTO.isStar = isStar
+
+                    const message = await createMessage(messageDTO, userId, socket)
+                    cbFn(message)
+                })
+
             })
         })
         .catch(error => console.log("Error: ", error));

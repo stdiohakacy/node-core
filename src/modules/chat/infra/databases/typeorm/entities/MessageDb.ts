@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 import { BaseEntity } from '../../../../../../shared/infra/databases/typeorm/entity/BaseEntity';
 import { UserDb } from '../../../../../user/infra/databases/typeorm/entities/UserDb';
 import { MESSAGE_STATUS } from '../../../../definition/MessageStatus';
+import { MESSAGE_TYPE } from '../../../../definition/MessageType';
 
 @Entity({ name: 'message' })
 export class MessageDb extends BaseEntity {
@@ -20,6 +21,14 @@ export class MessageDb extends BaseEntity {
     @Column({ name: 'content', type: 'varchar', nullable: true })
     content: string;
 
+    @Column({
+        name: 'type',
+        type: 'enum',
+        enum: MESSAGE_TYPE,
+        default: MESSAGE_TYPE.CHAT,
+    })
+    type: MESSAGE_TYPE;
+    
     @Column({
         name: 'status',
         type: 'enum',

@@ -1,10 +1,14 @@
+import { MessageDb } from './../infra/databases/typeorm/entities/MessageDb';
 import { MessageError, SystemError } from "../../../shared/exceptions/SystemError";
-import { UserAuthenticated } from "../../auth/useCases/command/authenticate/AuthenticateResponse";
 import { UserDb } from "../../user/infra/databases/typeorm/entities/UserDb";
 import { CreateChannelCommandDTO } from "../dtos/CreateChannelCommandDTO";
 import { ChannelDb } from "../infra/databases/typeorm/entities/ChannelDb";
 import { ChannelUserDb } from "../infra/databases/typeorm/entities/ChannelUserDb";
 import { SocketServiceRepoContext } from "./SocketServiceRepoContext";
+import { AES, enc } from 'crypto-js';
+import { MESSAGE_TYPE } from '../definition/MessageType';
+import { CreateMessageCommandDTO } from '../dtos/CreateMessageCommandDTO';
+import { Socket } from 'socket.io';
 
 export const updateUserSocketId = async (userId: string, socketId: string): Promise<boolean> => {
     const { userRepository } = SocketServiceRepoContext.getInstance();
@@ -35,7 +39,7 @@ export const createChannel = async (
     let userIds = (fromUserId ? [fromUserId] : []).concat(input.userIds || [])
     userIds = Array.from(new Set(userIds))
 
-    if(!input)
+    if (!input)
         throw new SystemError(MessageError.PARAM_REQUIRED, 'channel')
 
     const channelDb = new ChannelDb()
@@ -46,7 +50,7 @@ export const createChannel = async (
 
     try {
         const channelCreated = await channelRepository.createGet(channelDb)
-        if(!channelCreated)
+        if (!channelCreated)
             throw new SystemError(MessageError.DATA_CANNOT_SAVE)
         const listChannelUsers: ChannelUserDb[] = []
 
@@ -58,7 +62,7 @@ export const createChannel = async (
         }
         try {
             const channelUsersCreated = await channelUserRepository.createMultiple(listChannelUsers)
-            if(!channelUsersCreated)
+            if (!channelUsersCreated)
                 throw new SystemError(MessageError.DATA_CANNOT_SAVE)
         } catch (error) {
             console.error(error)
@@ -72,10 +76,52 @@ export const createChannel = async (
     }
 }
 
-export const getSingleChannel = async (toUserId: string, fromUserId: string): Promise<any> => {
+export const getSingleChannel = async (toUserId: string, fromUserId: string, socket: Socket): Promise<ChannelDb> => {
     const { channelRepository } = SocketServiceRepoContext.getInstance();
     const channel = await channelRepository.getExistedSingleChannel(fromUserId, toUserId)
-    if (!channel)
-        return await createChannel({userIds: [toUserId]}, fromUserId)
+    if (!channel) {
+        const channelCreated = await createChannel({ userIds: [toUserId] }, fromUserId)
+        socket.join(channelCreated.id)
+    }
+    socket.join(channel.id)
     return channel
+}
+
+export const createMessage = async (
+    input: CreateMessageCommandDTO,
+    fromUserId: string,
+    socket: Socket
+): Promise<MessageDb> => {
+    const {
+        channelRepository,
+        messageRepository,
+    } = SocketServiceRepoContext.getInstance()
+    const { channelId, content } = input
+
+    const isChannelExist = await channelRepository.isChannelExist(channelId)
+    if (!isChannelExist)
+        throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'channel')
+
+    const messageDb = new MessageDb()
+    messageDb.channelId = channelId
+    messageDb.content = content
+    messageDb.type = MESSAGE_TYPE.CHAT
+    messageDb.userId = fromUserId
+
+    const messageCreated = await messageRepository.createGet(messageDb)
+    if (!messageCreated)
+        throw new SystemError(MessageError.DATA_CANNOT_SAVE)
+
+    const channelDb = new ChannelDb()
+    channelDb.lastMessageCreatedAt = new Date()
+    channelDb.lastMessageId = messageCreated.id
+    const isUpdated = await channelRepository.update(channelId, channelDb)
+
+    if (!isUpdated)
+        throw new SystemError(MessageError.DATA_CANNOT_SAVE)
+
+    socket.broadcast
+        .to(channelId)
+        .emit('receive-message', input)
+    return messageCreated
 }

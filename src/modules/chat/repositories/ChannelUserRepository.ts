@@ -6,6 +6,7 @@ import { ChannelDb } from '../infra/databases/typeorm/entities/ChannelDb';
 
 export interface IChannelUserRepository extends IBaseRepository<ChannelUserDb, string> {
     getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string>
+    // getUsersByChannel(channelId: string): Promise<ChannelUserDb[]>
 }
 
 @Service('channel_user.repository')
@@ -15,6 +16,7 @@ export class ChannelUserRepository extends BaseRepository<ChannelUserDb, string>
             TABLE_NAME: 'channel_user'
         })
     }
+    
     async getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string> {
         let channelName = channel.name
         if (!channelName) {
@@ -49,4 +51,11 @@ export class ChannelUserRepository extends BaseRepository<ChannelUserDb, string>
             return channelName
         }
     }
+
+    // async getUsersByChannel(channelId: string): Promise<ChannelUserDb[]> {
+    //     return await this.repository
+    //     .createQueryBuilder('channel_user')
+    //     .where('channelId = :channelId', { channelId })
+    //     .getMany()
+    // }
 }
