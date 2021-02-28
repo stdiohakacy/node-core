@@ -7,7 +7,7 @@ import { ChannelUserRepository } from './ChannelUserRepository';
 export interface IChannelRepository extends IBaseRepository<ChannelDb, string> {
     getChannelById(id: string, userAuthenticated: UserAuthenticated): Promise<ChannelDb>
     isChannelExist(id: string): Promise<boolean>
-    getChannelsByUser(input: any, userAuthenticated: UserAuthenticated): Promise<any>
+    getChannelsByUser(fromUserId: string, filter?: any): Promise<[ChannelDb[], number]>
 }
 
 @Service('channel.repository')
@@ -41,18 +41,13 @@ export class ChannelRepository extends BaseRepository<ChannelDb, string> impleme
         return count > 0
     }
 
-    async getChannelsByUser(filter: any, userAuthenticated: UserAuthenticated): Promise<[ChannelDb[], number]> {
+    async getChannelsByUser(fromUserId: string, filter?: any): Promise<[ChannelDb[], number]> {
         const result = await this.repository
-            .createQueryBuilder('channel')
-            .leftJoinAndSelect('channel.channelUsers', 'channelUsers')
-            .where('channelUsers.userId = :userId', { userId: userAuthenticated.userId })
-            .skip(filter.skip)
-            .take(filter.limit)
-
+        .createQueryBuilder('channel')
+        .leftJoinAndSelect('channel.channelUsers', 'channelUsers')
+        .where('channelUsers.userId = :userId', { userId: fromUserId });
         return await result.getManyAndCount()
     }
-
-    // const userIds = (userAuthenticated ? [userAuthenticated.userId] : []).concat(data.userIds || [])
 
     async getExistedSingleChannel(firstUserId: string, secondUserId: string) {
         const query = await this.repository

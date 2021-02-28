@@ -1,3 +1,4 @@
+import { AES, enc } from 'crypto-js';
 import { MessageDb } from './../infra/databases/typeorm/entities/MessageDb';
 import { MessageError, SystemError } from "../../../shared/exceptions/SystemError";
 import { UserDb } from "../../user/infra/databases/typeorm/entities/UserDb";
@@ -5,7 +6,6 @@ import { CreateChannelCommandDTO } from "../dtos/CreateChannelCommandDTO";
 import { ChannelDb } from "../infra/databases/typeorm/entities/ChannelDb";
 import { ChannelUserDb } from "../infra/databases/typeorm/entities/ChannelUserDb";
 import { SocketServiceRepoContext } from "./SocketServiceRepoContext";
-import { AES, enc } from 'crypto-js';
 import { MESSAGE_TYPE } from '../definition/MessageType';
 import { CreateMessageCommandDTO } from '../dtos/CreateMessageCommandDTO';
 import { Socket } from 'socket.io';
@@ -54,8 +54,8 @@ export const createChannel = async (
             throw new SystemError(MessageError.DATA_CANNOT_SAVE)
         const listChannelUsers: ChannelUserDb[] = []
 
-        let channelUserDb = new ChannelUserDb()
         for (let i = 0; i < userIds.length; i++) {
+            const channelUserDb = new ChannelUserDb()
             channelUserDb.channelId = channelCreated.id
             channelUserDb.userId = userIds[i]
             listChannelUsers.push(channelUserDb)
@@ -82,6 +82,7 @@ export const getSingleChannel = async (toUserId: string, fromUserId: string, soc
     if (!channel) {
         const channelCreated = await createChannel({ userIds: [toUserId] }, fromUserId)
         socket.join(channelCreated.id)
+        return channelCreated
     }
     socket.join(channel.id)
     return channel
@@ -124,4 +125,11 @@ export const createMessage = async (
         .to(channelId)
         .emit('receive-message', input)
     return messageCreated
+}
+
+export const getChannelsByUser = async (fromUserId: string, input: any, socket: Socket) => {
+    const { channelRepository } = SocketServiceRepoContext.getInstance()
+    const [channels, count] = await channelRepository.getChannelsByUser(fromUserId, input)
+    channels.forEach(channel => socket.join(channel.id))
+    return [channels, count]
 }
