@@ -29,7 +29,7 @@ export const updateUserSocketId = async (userId: string, socketId: string): Prom
 export const createChannel = async (
     input: CreateChannelCommandDTO,
     fromUserId: string
-): Promise<string> => {
+): Promise<ChannelDb> => {
     const { channelRepository, channelUserRepository } = SocketServiceRepoContext.getInstance();
 
     let userIds = (fromUserId ? [fromUserId] : []).concat(input.userIds || [])
@@ -45,14 +45,14 @@ export const createChannel = async (
     channelDb.isPrivate = true
 
     try {
-        const channelCreated = await channelRepository.create(channelDb)
+        const channelCreated = await channelRepository.createGet(channelDb)
         if(!channelCreated)
             throw new SystemError(MessageError.DATA_CANNOT_SAVE)
         const listChannelUsers: ChannelUserDb[] = []
 
         let channelUserDb = new ChannelUserDb()
         for (let i = 0; i < userIds.length; i++) {
-            channelUserDb.channelId = channelCreated
+            channelUserDb.channelId = channelCreated.id
             channelUserDb.userId = userIds[i]
             listChannelUsers.push(channelUserDb)
         }
@@ -74,10 +74,8 @@ export const createChannel = async (
 
 export const getSingleChannel = async (toUserId: string, fromUserId: string): Promise<any> => {
     const { channelRepository } = SocketServiceRepoContext.getInstance();
-
-    let channel = await channelRepository.getExistedSingleChannel(fromUserId, toUserId)
-    if (!channel) {
-        channel = await createChannel({userIds: [toUserId]}, fromUserId)
-    }
+    const channel = await channelRepository.getExistedSingleChannel(fromUserId, toUserId)
+    if (!channel)
+        return await createChannel({userIds: [toUserId]}, fromUserId)
     return channel
 }

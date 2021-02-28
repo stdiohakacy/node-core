@@ -73,12 +73,19 @@ app.listen(3000, () => {
                 // update socket id for user
                 await updateUserSocketId(userId, socketId)
 
-                // send private message
-                socket.on('connect-single-channel', async (data: any, cbFn) => {
-                    const channel = await getSingleChannel(data.toUserId, userId)
-                    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                    console.log(channel)
-                    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@')
+                // get single channel
+                socket.on('get-single-channel', async (data: any, cbFn) => {
+                    const { toUserId } = data
+                    try {
+                        const channel = await getSingleChannel(toUserId, userId)
+                        console.log(`channel ${channel}`)
+                        socket.emit('get-single-channel', channel)
+                        console.log(`Channel id is ${channel.id} - time ${new Date().toLocaleString()}`)
+                        cbFn(channel)
+                    } catch (error) {
+                        console.log('error', error.message);
+                        io.to(socketId).emit('error', { code: 500, message: error.message });
+                    }
                 })
             })
         })
