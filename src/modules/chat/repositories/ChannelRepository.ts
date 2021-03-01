@@ -64,8 +64,8 @@ export class ChannelRepository extends BaseRepository<ChannelDb, string> impleme
             .addSelect('channel.lastSeen', 'lastSeen')
             .addSelect('channel.lastMessageId', 'lastMessageId')
             .addSelect('channel.lastMessageCreatedAt', 'lastMessageCreatedAt')
-            .groupBy('channel.id')
-            .having('COUNT(DISTINCT(channelUser.id)) = 2');
+            // .groupBy('channel.id')
+            // .having('COUNT(DISTINCT(channelUser.id)) = 2');
 
         return await query.getRawMany().then(results => results[0])
     }

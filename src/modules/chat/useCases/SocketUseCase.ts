@@ -1,3 +1,4 @@
+import { UpdateChannelCommandDTO } from './../dtos/UpdateChannelCommandDTO';
 import { AES, enc } from 'crypto-js';
 import { MessageDb } from './../infra/databases/typeorm/entities/MessageDb';
 import { MessageError, SystemError } from "../../../shared/exceptions/SystemError";
@@ -148,7 +149,7 @@ export const readChannel = async (
         messageRepository.getMessageNotOwned(channelId, fromUserId)
     ])
 
-    if(!channel)
+    if (!channel)
         throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'channel')
 
     if (!message)
@@ -168,7 +169,43 @@ export const readChannel = async (
         socket.broadcast.to(channelId).emit('receive-read-channel', channel)
     } catch (error) {
         console.error(error)
+        throw new SystemError(MessageError.SOMETHING_WRONG)
     }
-
     return channel
+}
+
+export const updateChannel = async (channelId: string, input: UpdateChannelCommandDTO, socket: Socket): Promise<boolean> => {
+    const { name, lastMessageId, description, isPrivate } = input
+    const { channelRepository } = SocketServiceRepoContext.getInstance()
+
+    try {
+        const isExist = await channelRepository.isChannelExist(channelId)
+        if (!isExist)
+            throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'channel')
+
+        const channelDb = new ChannelDb()
+        if (name)
+            channelDb.name = name
+        if (lastMessageId)
+            channelDb.lastMessageId = lastMessageId
+        if (description)
+            channelDb.description = description
+        if (isPrivate)
+            channelDb.isPrivate = isPrivate
+
+        try {
+            const isUpdated = await channelRepository.update(channelId, channelDb)
+            if (!isUpdated)
+                throw new SystemError(MessageError.DATA_CANNOT_SAVE)
+            socket.broadcast.to(channelId).emit('receive-update-channel', isUpdated)
+            
+            return isUpdated
+        } catch (error) {
+            console.error(error)
+            throw new SystemError(MessageError.SOMETHING_WRONG)
+        }
+    } catch (error) {
+        console.error(error)
+        throw new SystemError(MessageError.SOMETHING_WRONG)
+    }
 }

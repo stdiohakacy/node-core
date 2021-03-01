@@ -1,3 +1,4 @@
+import { UpdateChannelCommandDTO } from './modules/chat/dtos/UpdateChannelCommandDTO';
 import { createExpressServer } from "routing-controllers";
 import Container from "typedi";
 import { ApiAuthenticator } from "./shared/middleware/ApiAuthenticator";
@@ -13,7 +14,7 @@ import { ChannelUserRepository } from "./modules/chat/repositories/ChannelUserRe
 import { MessageRepository } from "./modules/chat/repositories/MessageRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
 import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
-import { createMessage, getChannelsByUser, getSingleChannel, readChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
+import { createMessage, getChannelsByUser, getSingleChannel, readChannel, updateChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
 import { CreateMessageCommandDTO } from "./modules/chat/dtos/CreateMessageCommandDTO";
 // ExpressServer.init((app: express.Application) => { })
 //     .createServer()
@@ -79,7 +80,6 @@ app.listen(3000, () => {
                     const { toUserId } = data
                     try {
                         const channel = await getSingleChannel(toUserId, userId, socket)
-                        console.log(`channel ${channel}`)
                         socket.emit('get-single-channel', channel)
                         console.log(`Channel id is ${channel.id} - time ${new Date().toLocaleString()}`)
                         cbFn(channel)
@@ -89,28 +89,58 @@ app.listen(3000, () => {
                     }
                 })
 
-                socket.on('send-message', async(input: any, cbFn) => {
-                    const { channelId, content, isPin, isStar } = input
+                socket.on('send-message', async (input: any, cbFn) => {
+                    try {
+                        const { channelId, content, isPin, isStar } = input
 
-                    const messageDTO = new CreateMessageCommandDTO()
-                    messageDTO.channelId = channelId
-                    messageDTO.content = content
-                    messageDTO.isPin = isPin,
-                    messageDTO.isStar = isStar
+                        const messageDTO = new CreateMessageCommandDTO()
+                        messageDTO.channelId = channelId
+                        messageDTO.content = content
+                        messageDTO.isPin = isPin,
+                            messageDTO.isStar = isStar
 
-                    const message = await createMessage(messageDTO, userId, socket)
-                    cbFn(message)
+                        const message = await createMessage(messageDTO, userId, socket)
+                        cbFn(message)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', { code: 500, message: error.message });
+                    }
                 })
 
                 socket.on('get-channels', async (input: any, cbFn) => {
-                    const [channels, count] = await getChannelsByUser(userId, input, socket)
-                    cbFn([channels, count])
+                    try {
+                        const [channels, count] = await getChannelsByUser(userId, input, socket)
+                        cbFn([channels, count])
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', { code: 500, message: error.message });
+                    }
                 })
-                
-                socket.on('read-channel', async(input, cbFn) => {
-                    const { channelId } = input
-                    const channel = await readChannel(channelId, userId, socket)
-                    cbFn(channel)
+
+                socket.on('read-channel', async (input, cbFn) => {
+                    try {
+                        const { channelId } = input
+                        const channel = await readChannel(channelId, userId, socket)
+                        cbFn(channel)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', { code: 500, message: error.message });
+                    }
+                })
+
+                socket.on('update-channel', async (input: any, cbFn) => {
+                    try {
+                        const dto = new UpdateChannelCommandDTO()
+                        dto.name = input.name
+                        dto.description = input.description
+                        dto.isPrivate = input.isPrivate
+
+                        const isUpdated = await updateChannel(input.channelId, dto, socket)
+                        cbFn(isUpdated)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', { code: 500, message: error.message });
+                    }
                 })
             })
         })
