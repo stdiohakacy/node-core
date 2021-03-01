@@ -209,3 +209,31 @@ export const updateChannel = async (channelId: string, input: UpdateChannelComma
         throw new SystemError(MessageError.SOMETHING_WRONG)
     }
 }
+
+export const deleteChannel = async (channelId: string, socket: Socket) => {
+    const { 
+        channelRepository, 
+        channelUserRepository 
+    } = SocketServiceRepoContext.getInstance()
+    
+    try {
+        const isExist = await channelRepository.isChannelExist(channelId)
+        if(!isExist)
+            throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'channel')
+        try {
+            const isDeleted = await channelUserRepository.deleteByChannelId(channelId)
+
+            if(isDeleted) {
+                const isDeleted = await channelRepository.delete(channelId)
+                socket.leave(channelId)
+                return isDeleted
+            }
+        } catch (error) {
+            console.error(error)
+        throw new SystemError(MessageError.SOMETHING_WRONG)
+        }
+    } catch (error) {
+        console.error(error)
+        throw new SystemError(MessageError.SOMETHING_WRONG)
+    }
+}

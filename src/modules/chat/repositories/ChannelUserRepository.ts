@@ -6,6 +6,7 @@ import { ChannelDb } from '../infra/databases/typeorm/entities/ChannelDb';
 
 export interface IChannelUserRepository extends IBaseRepository<ChannelUserDb, string> {
     getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string>
+    deleteByChannelId(channelId: string): Promise<boolean>
     // getUsersByChannel(channelId: string): Promise<ChannelUserDb[]>
 }
 
@@ -16,6 +17,7 @@ export class ChannelUserRepository extends BaseRepository<ChannelUserDb, string>
             TABLE_NAME: 'channel_user'
         })
     }
+    
     
     async getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string> {
         let channelName = channel.name
@@ -50,5 +52,15 @@ export class ChannelUserRepository extends BaseRepository<ChannelUserDb, string>
             }
             return channelName
         }
+    }
+
+    async deleteByChannelId(channelId: string): Promise<boolean> {
+        const result = await this.repository
+        .createQueryBuilder('channel_user')
+        .where('channelId = :channelId', { channelId })
+        .delete()
+        .execute()
+
+        return !!result
     }
 }

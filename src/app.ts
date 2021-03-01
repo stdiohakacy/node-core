@@ -14,7 +14,7 @@ import { ChannelUserRepository } from "./modules/chat/repositories/ChannelUserRe
 import { MessageRepository } from "./modules/chat/repositories/MessageRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
 import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
-import { createMessage, getChannelsByUser, getSingleChannel, readChannel, updateChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
+import { createMessage, deleteChannel, getChannelsByUser, getSingleChannel, readChannel, updateChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
 import { CreateMessageCommandDTO } from "./modules/chat/dtos/CreateMessageCommandDTO";
 // ExpressServer.init((app: express.Application) => { })
 //     .createServer()
@@ -142,6 +142,18 @@ app.listen(3000, () => {
                         io.to(socketId).emit('error', { code: 500, message: error.message });
                     }
                 })
+
+                socket.on('delete-channel', async(input: any, cbFn) => {
+                    const { channelId } = input
+                    try {
+                        const isDeleted = await deleteChannel(channelId, socket)
+                        cbFn(isDeleted)
+                    } catch (error) {
+                        console.error(error)
+                        io.to(socketId).emit('error', { code: 500, message: error.message });
+                    }
+                })
+
             })
         })
         .catch(error => console.log("Error: ", error));
