@@ -1,35 +1,31 @@
 import { Inject, Service } from 'typedi';
 import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
-import { UserAuthenticated } from '../../auth/useCases/command/authenticate/AuthenticateResponse';
 import { ChannelDb } from '../infra/databases/typeorm/entities/ChannelDb';
 import { ChannelUserRepository } from './ChannelUserRepository';
 
 export interface IChannelRepository extends IBaseRepository<ChannelDb, string> {
-    getChannelById(id: string, userAuthenticated: UserAuthenticated): Promise<ChannelDb>
+    getChannelById(id: string, fromUserId: string): Promise<ChannelDb>
     isChannelExist(id: string): Promise<boolean>
     getChannelsByUser(fromUserId: string, filter?: any): Promise<[ChannelDb[], number]>
 }
 
 @Service('channel.repository')
 export class ChannelRepository extends BaseRepository<ChannelDb, string> implements IChannelRepository {
-    @Inject('channel_user.repository')
-    private readonly _channelUserRepository: ChannelUserRepository;
-    
     constructor() {
         super(ChannelDb, {
             TABLE_NAME: 'channel'
         })
     }
 
-    async getChannelById(id: string, userAuthenticated: UserAuthenticated): Promise<ChannelDb> {
+    async getChannelById(id: string, fromUserId: string): Promise<ChannelDb> {
         const result = await this.repository
             .createQueryBuilder('channel')
             .where('channel.id = :id', { id })
 
-        if (userAuthenticated)
+        if (fromUserId)
             result
                 .leftJoinAndSelect('channel.channelUsers', 'channelUsers')
-                .andWhere('channelUsers.userId = :userId', { userId: userAuthenticated.userId })
+                .andWhere('channelUsers.userId = :userId', { userId: fromUserId })
         return result.getOne()
     }
 

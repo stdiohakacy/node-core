@@ -13,7 +13,7 @@ import { ChannelUserRepository } from "./modules/chat/repositories/ChannelUserRe
 import { MessageRepository } from "./modules/chat/repositories/MessageRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
 import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
-import { createMessage, getChannelsByUser, getSingleChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
+import { createMessage, getChannelsByUser, getSingleChannel, readChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
 import { CreateMessageCommandDTO } from "./modules/chat/dtos/CreateMessageCommandDTO";
 // ExpressServer.init((app: express.Application) => { })
 //     .createServer()
@@ -105,6 +105,12 @@ app.listen(3000, () => {
                 socket.on('get-channels', async (input: any, cbFn) => {
                     const [channels, count] = await getChannelsByUser(userId, input, socket)
                     cbFn([channels, count])
+                })
+                
+                socket.on('read-channel', async(input, cbFn) => {
+                    const { channelId } = input
+                    const channel = await readChannel(channelId, userId, socket)
+                    cbFn(channel)
                 })
             })
         })

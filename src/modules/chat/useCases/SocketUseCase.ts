@@ -133,3 +133,42 @@ export const getChannelsByUser = async (fromUserId: string, input: any, socket: 
     channels.forEach(channel => socket.join(channel.id))
     return [channels, count]
 }
+
+export const readChannel = async (
+    channelId: string,
+    fromUserId: string,
+    socket: Socket
+): Promise<ChannelDb> => {
+    const {
+        messageRepository,
+        channelRepository,
+    } = SocketServiceRepoContext.getInstance()
+    const [channel, message] = await Promise.all([
+        channelRepository.getChannelById(channelId, fromUserId),
+        messageRepository.getMessageNotOwned(channelId, fromUserId)
+    ])
+
+    if(!channel)
+        throw new SystemError(MessageError.PARAM_NOT_EXISTS, 'channel')
+
+    if (!message)
+        return channel
+
+    const channelDb = new ChannelDb()
+    channelDb.lastSeen = {
+        ...channel.lastSeen || {},
+        [fromUserId]: message.id
+    }
+
+    try {
+        const channelUpdated = await channelRepository.update(channel.id, channelDb)
+        if (!channelUpdated)
+            throw new SystemError(MessageError.DATA_CANNOT_SAVE)
+
+        socket.broadcast.to(channelId).emit('read-channel', channel)
+    } catch (error) {
+        console.error(error)
+    }
+
+    return channel
+}

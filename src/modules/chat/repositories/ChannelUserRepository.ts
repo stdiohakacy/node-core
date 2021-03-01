@@ -51,11 +51,4 @@ export class ChannelUserRepository extends BaseRepository<ChannelUserDb, string>
             return channelName
         }
     }
-
-    // async getUsersByChannel(channelId: string): Promise<ChannelUserDb[]> {
-    //     return await this.repository
-    //     .createQueryBuilder('channel_user')
-    //     .where('channelId = :channelId', { channelId })
-    //     .getMany()
-    // }
 }

@@ -1,11 +1,9 @@
-import { ChannelDb } from './../infra/databases/typeorm/entities/ChannelDb';
 import { Service } from 'typedi';
 import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
 import { MessageDb } from '../infra/databases/typeorm/entities/MessageDb';
-import { UserAuthenticated } from '../../auth/useCases/command/authenticate/AuthenticateResponse';
 
 export interface IMessageRepository extends IBaseRepository<MessageDb, string> {
-    getLastMessage(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<MessageDb>
+    getMessageNotOwned(channelId: string, fromUserId: string): Promise<MessageDb>
 }
 
 @Service('message.repository')
@@ -16,7 +14,14 @@ export class MessageRepository extends BaseRepository<MessageDb, string> impleme
         })
     }
 
-    async getLastMessage(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<MessageDb> {
-        return new MessageDb()
+    async getMessageNotOwned(channelId: string, fromUserId: string): Promise<MessageDb> {
+        return await this.repository
+            .createQueryBuilder('message')
+            .where('message.channelId = :channelId', { channelId })
+            .andWhere('message.userId != :userId', { userId: fromUserId })
+            .orderBy('message.createdAt', 'DESC')
+            .select('id')
+            .addSelect('message.createdAt')
+            .getOne()
     }
 }
