@@ -3,8 +3,9 @@ import { GoogleSmtpFactory } from './providers/GoogleSmtpFactory';
 import { MailConsoleFactory } from './providers/MailConsoleFactory';
 import { MailGunFactory } from './providers/MailGunFactory';
 import { SendInBlueFactory } from './providers/SendInBlueFactory';
-import { GOOGLE_SMTP_PASSWORD, GOOGLE_SMTP_USERNAME, MAIL_PROVIDER, SENDINBLUE_API_KEY } from '../../../../configs/Configuration';
+import { GOOGLE_SMTP_PASSWORD, GOOGLE_SMTP_USERNAME, MAIL_PROVIDER, MAIL_TRAP_PASSWORD, MAIL_TRAP_USERNAME, SENDINBLUE_API_KEY } from '../../../../configs/Configuration';
 import { MailProvider } from '../../../../configs/ServiceProvider';
+import { MailTrapFactory } from './providers/MailTrapFactory';
 
 export class MailSender implements IMailProvider {
     private readonly _provider: IMailProvider;
@@ -21,6 +22,10 @@ export class MailSender implements IMailProvider {
 
         case MailProvider.SEND_IN_BLUE:
             this._provider = new SendInBlueFactory(SENDINBLUE_API_KEY);
+            break;
+
+        case MailProvider.MAIL_TRAP:
+            this._provider = new MailTrapFactory(MAIL_TRAP_USERNAME, MAIL_TRAP_PASSWORD)
             break;
 
         case MailProvider.CONSOLE:
