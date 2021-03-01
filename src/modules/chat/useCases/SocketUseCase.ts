@@ -165,7 +165,7 @@ export const readChannel = async (
         if (!channelUpdated)
             throw new SystemError(MessageError.DATA_CANNOT_SAVE)
 
-        socket.broadcast.to(channelId).emit('read-channel', channel)
+        socket.broadcast.to(channelId).emit('receive-read-channel', channel)
     } catch (error) {
         console.error(error)
     }
