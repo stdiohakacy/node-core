@@ -1,8 +1,8 @@
-import { CategoryDb } from './databases/typeorm/entities/CategoryDb';
-import { Category } from '../domain/aggregateRoot/Category';
-import { CategoryName } from '../domain/valueObjects/CategoryName';
-import { IMapper } from './../../../shared/IMapper';
 import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
+import { IMapper } from '../../../shared/IMapper';
+import { Category } from '../domain/blocks/aggregateRoot/Category';
+import { CategoryName } from '../domain/blocks/valueObjects/CategoryName';
+import { CategoryDb } from './databases/typeorm/entities/CategoryDb';
 
 export class CategoryMapper implements IMapper<Category> {
     public static toDomain (categoryDb: CategoryDb): Category | null {

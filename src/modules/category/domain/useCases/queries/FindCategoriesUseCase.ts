@@ -1,0 +1,28 @@
+import { Inject, Service } from "typedi";
+import { ApplicationError } from "../../../../../shared/core/ApplicationError";
+import { IUseCaseQueryCQRS } from "../../../../../shared/core/IUseCase";
+import { PaginationResult } from "../../../../../shared/core/PaginationResult";
+import { left, Result, right } from "../../../../../shared/core/Result";
+import { CategoryMapper } from "../../../infra/CategoryMapper";
+import { CategoryRepository } from "../../../infra/repositories/CategoryRepository";
+import { FindCategoriesQueryDTO } from "../handlers/dtos/FindCategoriesQueryDTO";
+import { FindCategoriesResponse } from "../handlers/response/FindCategoriesResponse";
+
+@Service()
+export class FindCategoriesUseCase implements IUseCaseQueryCQRS<FindCategoriesQueryDTO, Promise<FindCategoriesResponse>> {
+    @Inject('category.repository')
+    private readonly _categoryRepository: CategoryRepository;
+
+    async execute(param: FindCategoriesQueryDTO): Promise<FindCategoriesResponse> {
+        try {
+            const [categories, count] = await this._categoryRepository.findAndCount(param)
+            const list = categories.map(category => CategoryMapper.toDomain(category))
+            const pagination = new PaginationResult(list, count, param.skip, param.limit)
+
+            return right(Result.OK(pagination))
+        } 
+        catch (error) {
+            return left(new ApplicationError.UnexpectedError(error))
+        }
+    }
+}

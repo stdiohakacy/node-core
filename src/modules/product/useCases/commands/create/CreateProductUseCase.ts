@@ -1,4 +1,4 @@
-import { CategoryRepository } from './../../../../category/repositories/CategoryRepository';
+import { CategoryRepository } from '../../../../category/infra/repositories/CategoryRepository';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { CreateProductResponse } from './CreateProductResponse';
 import { CreateProductCommandDTO } from './CreateProductCommandDTO';
@@ -11,8 +11,8 @@ import { ProductMapper } from '../../../infra/ProductMapper';
 import { ProductName } from '../../../domain/valueObjects/ProductName';
 import { Product } from '../../../domain/aggregateRoot/Product';
 import { ProductRepository } from '../../../repositories/ProductRepository';
-import { CategoryId } from '../../../../category/domain/entity/CategoryId';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
+import { CategoryId } from '../../../../category/domain/blocks/entity/CategoryId';
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {

@@ -4,7 +4,7 @@ import { ProductDb } from "./databases/typeorm/entities/ProductDb"
 import { ProductPrice } from "../domain/valueObjects/ProductPrice"
 import { Product } from "../domain/aggregateRoot/Product"
 import { ProductName } from "../domain/valueObjects/ProductName"
-import { CategoryId } from "../../category/domain/entity/CategoryId"
+import { CategoryId } from "../../category/domain/blocks/entity/CategoryId"
 
 export class ProductMapper implements IMapper<Product> {
     public static toDomain (productDb: ProductDb): Product | null {
