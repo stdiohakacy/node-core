@@ -1,7 +1,7 @@
 import { JWTToken, RefreshToken } from '../../../../../shared/services/auth/TokenAlias';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
-import { Either, Result } from './../../../../../shared/core/Result';
-import { LoginErrors } from './LoginErrors';
+import { Either, Result } from '../../../../../shared/core/Result';
+import { LoginErrors } from '../errors/LoginErrors';
 
 export type LoginDTOResponse = {
     accessToken: JWTToken,

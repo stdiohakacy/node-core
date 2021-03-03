@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
 import { RefreshTokenUserCommandDTO } from '../../domain/useCases/request/RefreshTokenUserCommandDTO';
 import { RefreshTokenUserErrors } from '../../domain/useCases/errors/RefreshTokenUserErrors';
-import { LoginDTOResponse } from '../../../auth/useCases/command/login/LoginResponse';
+import { LoginDTOResponse } from '../../../auth/domain/useCases/response/LoginResponse';
 
 @JsonController('/v1/user')
 export class RefreshTokenUserController extends BaseController {

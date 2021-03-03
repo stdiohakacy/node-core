@@ -1,7 +1,7 @@
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { JWTToken } from '../../../../../shared/services/auth/TokenAlias';
-import { Either, Result } from './../../../../../shared/core/Result';
-import { AuthenticateErrors } from './AuthenticateErrors';
+import { Either, Result } from '../../../../../shared/core/Result';
+import { AuthenticateErrors } from '../errors/AuthenticateErrors';
 
 export class UserAuthenticated {
     token: JWTToken

@@ -1,10 +1,10 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
-import { LoginUseCase } from './../useCases/command/login/LoginUseCase';
-import { LoginCommandDTO } from '../useCases/command/login/LoginCommandDTO';
-import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { LoginErrors } from '../useCases/command/login/LoginErrors';
+import { LoginUseCase } from '../../domain/useCases/commands/LoginUseCase';
+import { BaseController } from '../../../../shared/infra/http/models/BaseController';
+import { LoginErrors } from '../../domain/useCases/errors/LoginErrors';
+import { LoginCommandDTO } from '../../domain/useCases/request/LoginCommandDTO';
 
 @JsonController('/v1/auth')
 export class LoginController extends BaseController {

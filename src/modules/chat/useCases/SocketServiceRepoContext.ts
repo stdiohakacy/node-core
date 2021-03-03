@@ -1,8 +1,8 @@
 import { RedisAuthService } from "../../../shared/services/auth/RedisAuthService";
 import { UserRepository } from "../../user/infra/repositories/UserRepository";
-import { ChannelRepository } from "../repositories/ChannelRepository";
-import { ChannelUserRepository } from "../repositories/ChannelUserRepository";
-import { MessageRepository } from "../repositories/MessageRepository";
+import { ChannelRepository } from "../infra/repositories/ChannelRepository";
+import { ChannelUserRepository } from "../infra/repositories/ChannelUserRepository";
+import { MessageRepository } from "../infra/repositories/MessageRepository";
 
 export class SocketServiceRepoContext {
     static instance: SocketServiceRepoContext;

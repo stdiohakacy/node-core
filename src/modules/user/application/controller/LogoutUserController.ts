@@ -3,7 +3,7 @@ import Container from 'typedi';
 import { CurrentUser, JsonController, Post, Res } from "routing-controllers";
 import { Response } from 'express';
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { UserAuthenticated } from '../../../auth/useCases/command/authenticate/AuthenticateResponse';
+import { UserAuthenticated } from '../../../auth/domain/useCases/response/AuthenticateResponse';
 import { LogoutUserCommandDTO } from '../../domain/useCases/request/LogoutUserCommandDTO';
 import { LogoutUserErrors } from '../../domain/useCases/errors/LogoutUserErrors';
 

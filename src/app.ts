@@ -9,9 +9,9 @@ import * as http from 'http'
 import * as socketIO from 'socket.io'
 import { SocketServiceRepoContext } from "./modules/chat/useCases/SocketServiceRepoContext";
 import { UserRepository } from "./modules/user/infra/repositories/UserRepository";
-import { ChannelRepository } from "./modules/chat/repositories/ChannelRepository";
-import { ChannelUserRepository } from "./modules/chat/repositories/ChannelUserRepository";
-import { MessageRepository } from "./modules/chat/repositories/MessageRepository";
+import { ChannelRepository } from "./modules/chat/infra/repositories/ChannelRepository";
+import { ChannelUserRepository } from "./modules/chat/infra/repositories/ChannelUserRepository";
+import { MessageRepository } from "./modules/chat/infra/repositories/MessageRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
 import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
 import { createMessage, deleteChannel, getChannelsByUser, getSingleChannel, readChannel, updateChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";

@@ -1,15 +1,15 @@
 import { Inject, Service } from 'typedi';
-import { RedisAuthService } from './../../../../../shared/services/auth/RedisAuthService';
-import { left, Result, right } from './../../../../../shared/core/Result';
-import { LoginCommandDTO } from './LoginCommandDTO';
+import { RedisAuthService } from '../../../../../shared/services/auth/RedisAuthService';
+import { left, Result, right } from '../../../../../shared/core/Result';
 import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
-import { LoginResponse } from './LoginResponse';
-import { LoginErrors } from './LoginErrors';
+import { LoginResponse } from '../response/LoginResponse';
 import { UserStatusType } from '../../../../user/domain/blocks/enums/UserStatusType';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { UserRepository } from '../../../../user/infra/repositories/UserRepository';
 import { UserEmail } from '../../../../user/domain/blocks/valueObject/UserEmail';
 import { UserPassword } from '../../../../user/domain/blocks/valueObject/UserPassword';
+import { LoginErrors } from '../errors/LoginErrors';
+import { LoginCommandDTO } from '../request/LoginCommandDTO';
 
 @Service()
 export class LoginUseCase implements IUseCaseCommandCQRS<LoginCommandDTO, Promise<LoginResponse>> {

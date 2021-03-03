@@ -1,13 +1,12 @@
-import { ChannelUserDb } from './../infra/databases/typeorm/entities/ChannelUserDb';
+import { ChannelUserDb } from '../databases/typeorm/entities/ChannelUserDb';
 import { Service } from 'typedi';
-import { BaseRepository, IBaseRepository } from '../../../shared/repository/BaseRepository';
-import { UserAuthenticated } from '../../auth/useCases/command/authenticate/AuthenticateResponse';
-import { ChannelDb } from '../infra/databases/typeorm/entities/ChannelDb';
+import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
+import { UserAuthenticated } from '../../../auth/domain/useCases/response/AuthenticateResponse';
+import { ChannelDb } from '../databases/typeorm/entities/ChannelDb';
 
 export interface IChannelUserRepository extends IBaseRepository<ChannelUserDb, string> {
     getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string>
     deleteByChannelId(channelId: string): Promise<boolean>
-    // getUsersByChannel(channelId: string): Promise<ChannelUserDb[]>
 }
 
 @Service('channel_user.repository')
@@ -17,7 +16,6 @@ export class ChannelUserRepository extends BaseRepository<ChannelUserDb, string>
             TABLE_NAME: 'channel_user'
         })
     }
-    
     
     async getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string> {
         let channelName = channel.name

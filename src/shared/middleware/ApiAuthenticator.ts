@@ -1,6 +1,6 @@
 import { MessageError } from './../exceptions/SystemError';
 import { UnauthorizedError } from './../exceptions/UnauthorizedError';
-import { UserAuthenticated } from './../../modules/auth/useCases/command/authenticate/AuthenticateResponse';
+import { UserAuthenticated } from '../../modules/auth/domain/useCases/response/AuthenticateResponse';
 import { Action } from "routing-controllers";
 import { Inject, Service } from "typedi";
 import { IJwtPayloadExtend, RedisAuthService } from "../services/auth/RedisAuthService";

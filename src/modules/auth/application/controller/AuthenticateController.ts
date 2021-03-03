@@ -1,10 +1,10 @@
-import { AuthenticateCommandDTO } from './../useCases/command/authenticate/AuthenticateCommandDTO';
-import { AuthenticateUseCase } from './../useCases/command/authenticate/AuthenticateUseCase';
+import { AuthenticateUseCase } from '../../domain/useCases/commands/AuthenticateUseCase';
 import { BodyParam, HeaderParam, JsonController, Post, Res } from "routing-controllers";
 import Container, { Service } from "typedi";
-import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { BaseController } from '../../../../shared/infra/http/models/BaseController';
 import { Response } from 'express';
-import { AuthenticateErrors } from '../useCases/command/authenticate/AuthenticateErrors';
+import { AuthenticateErrors } from '../../domain/useCases/errors/AuthenticateErrors';
+import { AuthenticateCommandDTO } from '../../domain/useCases/request/AuthenticateCommandDTO';
 
 @Service()
 @JsonController('/v1/auth')

@@ -1,12 +1,12 @@
-import { Result, right } from './../../../../../shared/core/Result';
-import { RedisAuthService } from './../../../../../shared/services/auth/RedisAuthService';
-import { AuthenticateResponse, UserAuthenticated } from './AuthenticateResponse';
-import { AuthenticateCommandDTO } from './AuthenticateCommandDTO';
-import { IUseCaseCommandCQRS } from './../../../../../shared/core/IUseCase';
+import { Result, right } from '../../../../../shared/core/Result';
+import { RedisAuthService } from '../../../../../shared/services/auth/RedisAuthService';
+import { AuthenticateResponse, UserAuthenticated } from '../response/AuthenticateResponse';
+import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
 import { Inject, Service } from "typedi";
 import { left } from '../../../../../shared/core/Result';
 import * as validator from 'class-validator'
-import { AuthenticateErrors } from './AuthenticateErrors';
+import { AuthenticateErrors } from '../errors/AuthenticateErrors';
+import { AuthenticateCommandDTO } from '../request/AuthenticateCommandDTO';
 
 @Service()
 export class AuthenticateUseCase implements IUseCaseCommandCQRS<AuthenticateCommandDTO, Promise<AuthenticateResponse>> {

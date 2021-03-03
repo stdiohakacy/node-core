@@ -1,6 +1,6 @@
-import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
-import { Result } from "../../../../../shared/core/Result";
-import { UseCaseError } from "../../../../../shared/core/UseCaseError";
+import { Result } from "../../../../../shared/core/Result"
+import { UseCaseError } from "../../../../../shared/core/UseCaseError"
+import { SystemError, MessageError } from "../../../../../shared/exceptions/SystemError"
 
 export namespace AuthenticateErrors {
     export class TokenInvalidError extends Result<UseCaseError> {    
