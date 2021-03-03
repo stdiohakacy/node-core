@@ -1,6 +1,6 @@
 import { RedisContext } from '../../infra/databases/redis/RedisContext';
 import { JWTToken, RefreshToken } from './TokenAlias';
-import { User } from '../../../modules/user/domain/aggregateRoot/User';
+import { User } from '../../../modules/user/domain/blocks/aggregateRoot/User';
 import { Inject, Service } from 'typedi';
 import * as jwt from 'jsonwebtoken';
 import { uid } from 'rand-token';

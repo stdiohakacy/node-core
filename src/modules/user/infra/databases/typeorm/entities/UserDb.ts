@@ -1,6 +1,6 @@
 import { DateTransformer } from './../transformers/DateTransformer';
-import { GenderType } from './../../../../enums/GenderType';
-import { UserStatusType } from '../../../../enums/UserStatusType';
+import { GenderType } from '../../../../domain/blocks/enums/GenderType';
+import { UserStatusType } from '../../../../domain/blocks/enums/UserStatusType';
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
 

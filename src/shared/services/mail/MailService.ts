@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { User } from '../../../modules/user/domain/aggregateRoot/User';
+import { User } from '../../../modules/user/domain/blocks/aggregateRoot/User';
 import { MailGenerator } from './MailGenerator';
 import { MailSender } from './sender/MailSender';
 import { ForgotPasswordTemplate } from './templates/ForgotPasswordTemplate';

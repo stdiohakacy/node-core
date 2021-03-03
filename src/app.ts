@@ -8,7 +8,7 @@ import { RedisContext } from "./shared/infra/databases/redis/RedisContext";
 import * as http from 'http'
 import * as socketIO from 'socket.io'
 import { SocketServiceRepoContext } from "./modules/chat/useCases/SocketServiceRepoContext";
-import { UserRepository } from "./modules/user/repositories/UserRepository";
+import { UserRepository } from "./modules/user/infra/repositories/UserRepository";
 import { ChannelRepository } from "./modules/chat/repositories/ChannelRepository";
 import { ChannelUserRepository } from "./modules/chat/repositories/ChannelUserRepository";
 import { MessageRepository } from "./modules/chat/repositories/MessageRepository";

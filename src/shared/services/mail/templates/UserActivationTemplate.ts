@@ -1,5 +1,5 @@
 import * as Mailgen from 'mailgen';
-import { User } from '../../../../modules/user/domain/aggregateRoot/User';
+import { User } from '../../../../modules/user/domain/blocks/aggregateRoot/User';
 
 export class UserActivationTemplate {
     static getTemplate(user: User): Mailgen.Content {

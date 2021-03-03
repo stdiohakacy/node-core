@@ -1,5 +1,5 @@
 import { RedisAuthService } from "../../../shared/services/auth/RedisAuthService";
-import { UserRepository } from "../../user/repositories/UserRepository";
+import { UserRepository } from "../../user/infra/repositories/UserRepository";
 import { ChannelRepository } from "../repositories/ChannelRepository";
 import { ChannelUserRepository } from "../repositories/ChannelUserRepository";
 import { MessageRepository } from "../repositories/MessageRepository";

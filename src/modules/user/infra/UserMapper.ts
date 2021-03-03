@@ -1,16 +1,16 @@
-import { UserEmail } from './../domain/valueObject/UserEmail';
 import { UserDb } from './databases/typeorm/entities/UserDb';
-import { User } from './../domain/aggregateRoot/User';
+import { User } from '../domain/blocks/aggregateRoot/User';
 import { IMapper } from './../../../shared/IMapper';
 import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
-import { UserStatus } from '../domain/valueObject/UserStatus';
-import { UserFirstName } from '../domain/valueObject/UserFirstName';
-import { UserStatusType } from '../enums/UserStatusType';
-import { UserActiveKey } from '../domain/valueObject/UserActiveKey';
-import { UserActiveExpire } from '../domain/valueObject/UserActiveExpire';
-import { UserForgotKey } from '../domain/valueObject/UserForgotKey';
-import { UserForgotExpire } from '../domain/valueObject/UserForgotExpire';
-import { UserPassword } from '../domain/valueObject/UserPassword';
+import { UserFirstName } from '../domain/blocks/valueObject/UserFirstName';
+import { UserEmail } from '../domain/blocks/valueObject/UserEmail';
+import { UserPassword } from '../domain/blocks/valueObject/UserPassword';
+import { UserStatus } from '../domain/blocks/valueObject/UserStatus';
+import { UserActiveKey } from '../domain/blocks/valueObject/UserActiveKey';
+import { UserActiveExpire } from '../domain/blocks/valueObject/UserActiveExpire';
+import { UserForgotKey } from '../domain/blocks/valueObject/UserForgotKey';
+import { UserForgotExpire } from '../domain/blocks/valueObject/UserForgotExpire';
+import { UserStatusType } from '../domain/blocks/enums/UserStatusType';
 
 export class UserMapper implements IMapper<User> {
     public static toDomain (userDb: UserDb): User | null {
