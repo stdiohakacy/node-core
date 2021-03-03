@@ -1,6 +1,6 @@
-import { MESSAGE_STATUS } from './../definition/MessageStatus';
+import { MESSAGE_STATUS } from '../definition/MessageStatus';
 import { MESSAGE_TYPE } from '../definition/MessageType';
-import { ICommand } from './../../../shared/core/ICQRS';
+import { ICommand } from '../../../../shared/core/ICQRS';
 
 export class CreateMessageCommandDTO implements ICommand {
     channelId: string;

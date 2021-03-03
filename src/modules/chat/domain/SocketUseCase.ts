@@ -1,14 +1,14 @@
-import { UpdateChannelCommandDTO } from './../dtos/UpdateChannelCommandDTO';
+import { UpdateChannelCommandDTO } from './dtos/UpdateChannelCommandDTO';
 import { AES, enc } from 'crypto-js';
-import { MessageDb } from './../infra/databases/typeorm/entities/MessageDb';
+import { MessageDb } from '../infra/databases/typeorm/entities/MessageDb';
 import { MessageError, SystemError } from "../../../shared/exceptions/SystemError";
 import { UserDb } from "../../user/infra/databases/typeorm/entities/UserDb";
-import { CreateChannelCommandDTO } from "../dtos/CreateChannelCommandDTO";
+import { CreateChannelCommandDTO } from "./dtos/CreateChannelCommandDTO";
 import { ChannelDb } from "../infra/databases/typeorm/entities/ChannelDb";
 import { ChannelUserDb } from "../infra/databases/typeorm/entities/ChannelUserDb";
 import { SocketServiceRepoContext } from "./SocketServiceRepoContext";
-import { MESSAGE_TYPE } from '../definition/MessageType';
-import { CreateMessageCommandDTO } from '../dtos/CreateMessageCommandDTO';
+import { MESSAGE_TYPE } from './definition/MessageType';
+import { CreateMessageCommandDTO } from './dtos/CreateMessageCommandDTO';
 import { Socket } from 'socket.io';
 
 export const updateUserSocketId = async (userId: string, socketId: string): Promise<boolean> => {

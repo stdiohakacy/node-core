@@ -1,4 +1,4 @@
-import { UpdateChannelCommandDTO } from './modules/chat/dtos/UpdateChannelCommandDTO';
+import { UpdateChannelCommandDTO } from './modules/chat/domain/dtos/UpdateChannelCommandDTO';
 import { createExpressServer } from "routing-controllers";
 import Container from "typedi";
 import { ApiAuthenticator } from "./shared/middleware/ApiAuthenticator";
@@ -7,15 +7,15 @@ import { createConnection } from "typeorm";
 import { RedisContext } from "./shared/infra/databases/redis/RedisContext";
 import * as http from 'http'
 import * as socketIO from 'socket.io'
-import { SocketServiceRepoContext } from "./modules/chat/useCases/SocketServiceRepoContext";
 import { UserRepository } from "./modules/user/infra/repositories/UserRepository";
 import { ChannelRepository } from "./modules/chat/infra/repositories/ChannelRepository";
 import { ChannelUserRepository } from "./modules/chat/infra/repositories/ChannelUserRepository";
 import { MessageRepository } from "./modules/chat/infra/repositories/MessageRepository";
 import { RedisAuthService } from "./shared/services/auth/RedisAuthService";
-import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/helpers/SocketHelper";
-import { createMessage, deleteChannel, getChannelsByUser, getSingleChannel, readChannel, updateChannel, updateUserSocketId } from "./modules/chat/useCases/SocketUseCase";
-import { CreateMessageCommandDTO } from "./modules/chat/dtos/CreateMessageCommandDTO";
+import { checkSpamSocket, emitAsync, verifySocketIO } from "./modules/chat/domain/helpers/SocketHelper";
+import { createMessage, deleteChannel, getChannelsByUser, getSingleChannel, readChannel, updateChannel, updateUserSocketId } from "./modules/chat/domain/SocketUseCase";
+import { CreateMessageCommandDTO } from "./modules/chat/domain/dtos/CreateMessageCommandDTO";
+import { SocketServiceRepoContext } from './modules/chat/domain/SocketServiceRepoContext';
 // ExpressServer.init((app: express.Application) => { })
 //     .createServer()
 //     .createConnection()

@@ -10,10 +10,10 @@
 // import { GroupUserDb } from '../infra/databases/typeorm/entities/GroupUserDb';
 // import { GroupMessageDb } from '../infra/databases/typeorm/entities/GroupMessageDb';
 
-import { SocketError } from "../../../shared/exceptions/SocketError";
-import { MessageError } from "../../../shared/exceptions/SystemError";
-import { UnauthorizedError } from "../../../shared/exceptions/UnauthorizedError";
-import { SocketServiceRepoContext } from "../useCases/SocketServiceRepoContext";
+import { SocketError } from "../../../../shared/exceptions/SocketError";
+import { MessageError } from "../../../../shared/exceptions/SystemError";
+import { UnauthorizedError } from "../../../../shared/exceptions/UnauthorizedError";
+import { SocketServiceRepoContext } from "../SocketServiceRepoContext";
 
 // export function emitAsync(socket, emitName, data, callback) {
 //     return new Promise((resolve, reject) => {
