@@ -3,8 +3,8 @@ import { Response } from 'express';
 import { Body, JsonController, Param, Put, Res } from "routing-controllers";
 import { UpdateCategoryCommandDTO } from '../../domain/useCases/handlers/dtos/UpdateCategoryCommandDTO';
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { UpdateCategoryErrors } from '../../domain/useCases/handlers/errors/UpdateCategoryErrors';
 import { UpdateCategoryUseCase } from '../../domain/useCases/commands/UpdateCategoryUseCase';
+import { UpdateCategoryErrors } from '../../domain/useCases/errors/UpdateCategoryErrors';
 @JsonController('/v1/categories')
 export class UpdateCategoryController extends BaseController {
     constructor(

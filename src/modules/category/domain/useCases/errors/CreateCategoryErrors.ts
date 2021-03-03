@@ -1,6 +1,6 @@
-import { SystemError, MessageError } from '../../../../../../shared/exceptions/SystemError';
-import { UseCaseError } from "../../../../../../shared/core/UseCaseError"
-import { Result } from "../../../../../../shared/core/Result"
+import { SystemError, MessageError } from '../../../../../shared/exceptions/SystemError';
+import { UseCaseError } from "../../../../../shared/core/UseCaseError"
+import { Result } from "../../../../../shared/core/Result"
 
 export namespace CreateCategoryErrors {
     export class NameAlreadyExistsError extends Result<UseCaseError> {

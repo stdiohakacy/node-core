@@ -6,8 +6,8 @@ import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { CategoryId } from '../../blocks/entity/CategoryId';
+import { GetCategoryByIdErrors } from '../errors/GetCategoryByIdErrors';
 import { GetCategoryByIdQueryDTO } from '../handlers/dtos/GetCategoryByIdQueryDTO';
-import { GetCategoryByIdErrors } from '../handlers/errors/GetCategoryByIdErrors';
 import { GetCategoryByIdResponse } from '../handlers/response/GetCategoryByIdResponse';
 
 @Service()

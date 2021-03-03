@@ -3,8 +3,8 @@ import { Response } from 'express';
 import { Delete, JsonController, Params, Res } from "routing-controllers";
 import { DeleteCategoryCommandDTO } from '../../domain/useCases/handlers/dtos/DeleteCategoryCommandDTO';
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { DeleteCategoryErrors } from '../../domain/useCases/handlers/errors/DeleteCategoryErrors';
 import { DeleteCategoryUseCase } from '../../domain/useCases/commands/DeleteCategoryUseCase';
+import { DeleteCategoryErrors } from '../../domain/useCases/errors/DeleteCategoryErrors';
 
 @JsonController('/v1/categories')
 export class DeleteCategoryController extends BaseController {

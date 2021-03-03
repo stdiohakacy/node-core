@@ -1,7 +1,7 @@
 import { CreateCategoryCommandDTO } from '../handlers/dtos/CreateCategoryCommandDTO';
 import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
 import { left, Result, right } from '../../../../../shared/core/Result';
-import { CreateCategoryErrors } from '../handlers/errors/CreateCategoryErrors';
+import { CreateCategoryErrors } from '../errors/CreateCategoryErrors';
 import { Category } from '../../blocks/aggregateRoot/Category';
 import { Inject, Service } from 'typedi';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';

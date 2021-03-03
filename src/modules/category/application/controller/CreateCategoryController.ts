@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
 import { CreateCategoryUseCase } from "../../domain/useCases/commands/CreateCategoryUseCase";
 import { CreateCategoryCommandDTO } from '../../domain/useCases/handlers/dtos/CreateCategoryCommandDTO';
-import { CreateCategoryErrors } from "../../domain/useCases/handlers/errors/CreateCategoryErrors";
+import { CreateCategoryErrors } from "../../domain/useCases/errors/CreateCategoryErrors";
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
 
 @JsonController('/v1/categories')

@@ -5,8 +5,8 @@ import { left, Result, right } from '../../../../../shared/core/Result';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { CategoryId } from '../../blocks/entity/CategoryId';
+import { DeleteCategoryErrors } from '../errors/DeleteCategoryErrors';
 import { DeleteCategoryCommandDTO } from '../handlers/dtos/DeleteCategoryCommandDTO';
-import { DeleteCategoryErrors } from '../handlers/errors/DeleteCategoryErrors';
 import { DeleteCategoryResponse } from '../handlers/response/DeleteCategoryResponse';
 
 @Service()

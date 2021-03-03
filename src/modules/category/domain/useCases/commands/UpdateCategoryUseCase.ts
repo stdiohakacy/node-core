@@ -6,8 +6,8 @@ import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { Category } from '../../blocks/aggregateRoot/Category';
 import { CategoryName } from '../../blocks/valueObjects/CategoryName';
+import { UpdateCategoryErrors } from '../errors/UpdateCategoryErrors';
 import { UpdateCategoryCommandDTO } from '../handlers/dtos/UpdateCategoryCommandDTO';
-import { UpdateCategoryErrors } from '../handlers/errors/UpdateCategoryErrors';
 import { UpdateCategoryResponse } from '../handlers/response/UpdateCategoryResponse';
 
 @Service()
