@@ -1,6 +1,6 @@
 import { ApplicationError } from "../../../../../shared/core/ApplicationError";
 import { Either, Result } from "../../../../../shared/core/Result";
-import { CreateProductErrors } from "./CreateProductErrors";
+import { CreateProductErrors } from "../errors/CreateProductErrors";
 
 export type CreateProductResponse = Either<
     CreateProductErrors.NameAlreadyExistsError |
