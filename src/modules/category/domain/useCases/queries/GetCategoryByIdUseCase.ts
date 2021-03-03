@@ -7,8 +7,8 @@ import { CategoryMapper } from '../../../infra/CategoryMapper';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { CategoryId } from '../../blocks/entity/CategoryId';
 import { GetCategoryByIdErrors } from '../errors/GetCategoryByIdErrors';
-import { GetCategoryByIdQueryDTO } from '../handlers/dtos/GetCategoryByIdQueryDTO';
-import { GetCategoryByIdResponse } from '../handlers/response/GetCategoryByIdResponse';
+import { GetCategoryByIdQueryDTO } from '../request/GetCategoryByIdQueryDTO';
+import { GetCategoryByIdResponse } from '../response/GetCategoryByIdResponse';
 
 @Service()
 export class GetCategoryByIdUseCase implements IUseCaseQueryCQRS<GetCategoryByIdQueryDTO, Promise<GetCategoryByIdResponse>> {

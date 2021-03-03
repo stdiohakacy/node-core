@@ -2,9 +2,9 @@ import Container from 'typedi';
 import { Response } from 'express';
 import { Body, Get, JsonController, Params, Res } from "routing-controllers";
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { GetCategoryByIdQueryDTO } from '../../domain/useCases/handlers/dtos/GetCategoryByIdQueryDTO';
 import { GetCategoryByIdUseCase } from '../../domain/useCases/queries/GetCategoryByIdUseCase';
 import { GetCategoryByIdErrors } from '../../domain/useCases/errors/GetCategoryByIdErrors';
+import { GetCategoryByIdQueryDTO } from '../../domain/useCases/request/GetCategoryByIdQueryDTO';
 
 @JsonController('/v1/categories')
 export class GetCategoryByIdController extends BaseController {

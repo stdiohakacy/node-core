@@ -1,9 +1,9 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Authorized, Get, JsonController, QueryParams, Res } from "routing-controllers";
-import { FindCategoriesQueryDTO } from '../../domain/useCases/handlers/dtos/FindCategoriesQueryDTO';
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
 import { FindCategoriesUseCase } from '../../domain/useCases/queries/FindCategoriesUseCase';
+import { FindCategoriesQueryDTO } from '../../domain/useCases/request/FindCategoriesQueryDTO';
 
 @JsonController('/v1/categories')
 export class FindCategoryController extends BaseController {

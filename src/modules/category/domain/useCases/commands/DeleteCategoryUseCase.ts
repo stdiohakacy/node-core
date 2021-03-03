@@ -6,8 +6,8 @@ import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { CategoryId } from '../../blocks/entity/CategoryId';
 import { DeleteCategoryErrors } from '../errors/DeleteCategoryErrors';
-import { DeleteCategoryCommandDTO } from '../handlers/dtos/DeleteCategoryCommandDTO';
-import { DeleteCategoryResponse } from '../handlers/response/DeleteCategoryResponse';
+import { DeleteCategoryCommandDTO } from '../request/DeleteCategoryCommandDTO';
+import { DeleteCategoryResponse } from '../response/DeleteCategoryResponse';
 
 @Service()
 export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<DeleteCategoryCommandDTO, Promise<DeleteCategoryResponse>> {

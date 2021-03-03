@@ -5,8 +5,8 @@ import { PaginationResult } from "../../../../../shared/core/PaginationResult";
 import { left, Result, right } from "../../../../../shared/core/Result";
 import { CategoryMapper } from "../../../infra/CategoryMapper";
 import { CategoryRepository } from "../../../infra/repositories/CategoryRepository";
-import { FindCategoriesQueryDTO } from "../handlers/dtos/FindCategoriesQueryDTO";
-import { FindCategoriesResponse } from "../handlers/response/FindCategoriesResponse";
+import { FindCategoriesQueryDTO } from "../request/FindCategoriesQueryDTO";
+import { FindCategoriesResponse } from "../response/FindCategoriesResponse";
 
 @Service()
 export class FindCategoriesUseCase implements IUseCaseQueryCQRS<FindCategoriesQueryDTO, Promise<FindCategoriesResponse>> {

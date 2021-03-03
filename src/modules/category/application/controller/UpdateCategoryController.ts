@@ -1,10 +1,10 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Param, Put, Res } from "routing-controllers";
-import { UpdateCategoryCommandDTO } from '../../domain/useCases/handlers/dtos/UpdateCategoryCommandDTO';
 import { BaseController } from '../../../../shared/infra/http/models/BaseController';
 import { UpdateCategoryUseCase } from '../../domain/useCases/commands/UpdateCategoryUseCase';
 import { UpdateCategoryErrors } from '../../domain/useCases/errors/UpdateCategoryErrors';
+import { UpdateCategoryCommandDTO } from '../../domain/useCases/request/UpdateCategoryCommandDTO';
 @JsonController('/v1/categories')
 export class UpdateCategoryController extends BaseController {
     constructor(

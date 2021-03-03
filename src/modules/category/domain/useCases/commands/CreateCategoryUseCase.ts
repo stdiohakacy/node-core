@@ -1,4 +1,4 @@
-import { CreateCategoryCommandDTO } from '../handlers/dtos/CreateCategoryCommandDTO';
+import { CreateCategoryCommandDTO } from '../request/CreateCategoryCommandDTO';
 import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
 import { left, Result, right } from '../../../../../shared/core/Result';
 import { CreateCategoryErrors } from '../errors/CreateCategoryErrors';
@@ -7,7 +7,7 @@ import { Inject, Service } from 'typedi';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { CategoryName } from '../../blocks/valueObjects/CategoryName';
-import { CreateCategoryResponse } from '../handlers/response/CreateCategoryResponse';
+import { CreateCategoryResponse } from '../response/CreateCategoryResponse';
 import { CategoryMapper } from '../../../infra/CategoryMapper';
 
 @Service()

@@ -7,8 +7,8 @@ import { CategoryRepository } from '../../../infra/repositories/CategoryReposito
 import { Category } from '../../blocks/aggregateRoot/Category';
 import { CategoryName } from '../../blocks/valueObjects/CategoryName';
 import { UpdateCategoryErrors } from '../errors/UpdateCategoryErrors';
-import { UpdateCategoryCommandDTO } from '../handlers/dtos/UpdateCategoryCommandDTO';
-import { UpdateCategoryResponse } from '../handlers/response/UpdateCategoryResponse';
+import { UpdateCategoryCommandDTO } from '../request/UpdateCategoryCommandDTO';
+import { UpdateCategoryResponse } from '../response/UpdateCategoryResponse';
 
 @Service()
 export class UpdateCategoryUseCase implements IUseCaseCommandCQRS<
