@@ -1,7 +1,7 @@
-import { Result } from "../../../../shared/core/Result";
-import { Entity } from "../../../../shared/domain/Entity";
-import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
-import { MessageError, SystemError } from "../../../../shared/exceptions/SystemError";
+import { Result } from "../../../../../shared/core/Result";
+import { Entity } from "../../../../../shared/domain/Entity";
+import { UniqueEntityId } from "../../../../../shared/domain/UniqueEntityId";
+import { MessageError, SystemError } from "../../../../../shared/exceptions/SystemError";
 
 export class ProductId extends Entity<any> {
     private constructor (id?: UniqueEntityId) {

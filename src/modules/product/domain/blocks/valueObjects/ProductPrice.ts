@@ -1,6 +1,6 @@
-import { SystemError, MessageError } from '../../../../shared/exceptions/SystemError';
-import { Result } from '../../../../shared/core/Result';
-import { ValueObject } from '../../../../shared/domain/ValueObject';
+import { Result } from "../../../../../shared/core/Result";
+import { ValueObject } from "../../../../../shared/domain/ValueObject";
+import { MessageError, SystemError } from "../../../../../shared/exceptions/SystemError";
 
 interface IProductPriceProps {
     value: number;

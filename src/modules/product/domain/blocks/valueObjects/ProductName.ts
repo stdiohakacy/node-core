@@ -1,7 +1,7 @@
 import * as validator from 'class-validator'
-import { Result } from '../../../../shared/core/Result';
-import { ValueObject } from '../../../../shared/domain/ValueObject';
-import { MessageError, SystemError } from '../../../../shared/exceptions/SystemError';
+import { Result } from '../../../../../shared/core/Result';
+import { ValueObject } from '../../../../../shared/domain/ValueObject';
+import { MessageError, SystemError } from '../../../../../shared/exceptions/SystemError';
 
 interface IProductNameProps {
     value: string;

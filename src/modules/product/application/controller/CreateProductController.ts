@@ -1,10 +1,10 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
-import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { CreateProductUseCase } from '../useCases/commands/create/CreateProductUseCase';
-import { CreateProductCommandDTO } from '../useCases/commands/create/CreateProductCommandDTO';
-import { CreateProductErrors } from '../useCases/commands/create/CreateProductErrors';
+import { BaseController } from '../../../../shared/infra/http/models/BaseController';
+import { CreateProductUseCase } from '../../useCases/commands/create/CreateProductUseCase';
+import { CreateProductCommandDTO } from '../../useCases/commands/create/CreateProductCommandDTO';
+import { CreateProductErrors } from '../../useCases/commands/create/CreateProductErrors';
 
 @JsonController('/v1/products')
 export class CreateProductController extends BaseController {

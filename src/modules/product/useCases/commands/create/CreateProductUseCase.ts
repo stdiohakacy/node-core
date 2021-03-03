@@ -4,15 +4,15 @@ import { CreateProductResponse } from './CreateProductResponse';
 import { CreateProductCommandDTO } from './CreateProductCommandDTO';
 import { Inject, Service } from "typedi";
 import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
-import { ProductPrice } from '../../../domain/valueObjects/ProductPrice';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { CreateProductErrors } from './CreateProductErrors';
 import { ProductMapper } from '../../../infra/ProductMapper';
-import { ProductName } from '../../../domain/valueObjects/ProductName';
-import { Product } from '../../../domain/aggregateRoot/Product';
+import { Product } from '../../../domain/blocks/aggregateRoot/Product';
 import { ProductRepository } from '../../../repositories/ProductRepository';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { CategoryId } from '../../../../category/domain/blocks/entity/CategoryId';
+import { ProductName } from '../../../domain/blocks/valueObjects/ProductName';
+import { ProductPrice } from '../../../domain/blocks/valueObjects/ProductPrice';
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {
