@@ -9,10 +9,10 @@ import { ProductMapper } from '../../../infra/ProductMapper';
 import { Product } from '../../blocks/aggregateRoot/Product';
 import { ProductRepository } from '../../../infra/repositories/ProductRepository';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
-import { CategoryId } from '../../../../category/domain/blocks/entity/CategoryId';
 import { ProductName } from '../../blocks/valueObjects/ProductName';
 import { ProductPrice } from '../../blocks/valueObjects/ProductPrice';
 import { CreateProductErrors } from '../errors/CreateProductErrors';
+import { CategoryId } from "../../../../category/domain/entities/CategoryId";
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {

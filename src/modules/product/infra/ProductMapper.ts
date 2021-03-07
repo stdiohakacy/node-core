@@ -2,9 +2,9 @@ import { UniqueEntityId } from "../../../shared/domain/UniqueEntityId"
 import { IMapper } from "../../../shared/IMapper"
 import { ProductDb } from "./databases/typeorm/entities/ProductDb"
 import { Product } from "../domain/blocks/aggregateRoot/Product"
-import { CategoryId } from "../../category/domain/blocks/entity/CategoryId"
 import { ProductName } from "../domain/blocks/valueObjects/ProductName"
 import { ProductPrice } from "../domain/blocks/valueObjects/ProductPrice"
+import { CategoryId } from "../../category/domain/entities/CategoryId"
 
 export class ProductMapper implements IMapper<Product> {
     public static toDomain (productDb: ProductDb): Product | null {

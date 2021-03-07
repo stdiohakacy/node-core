@@ -2,7 +2,7 @@ import { Guard } from "../../../../../shared/core/Guard";
 import { Result } from "../../../../../shared/core/Result";
 import { AggregateRoot } from "../../../../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../../../../shared/domain/UniqueEntityId";
-import { CategoryId } from "../../../../category/domain/blocks/entity/CategoryId";
+import { CategoryId } from "../../../../category/domain/entities/CategoryId";
 import { ProductId } from "../entity/ProductId";
 import { ProductName } from "../valueObjects/ProductName";
 import { ProductPrice } from "../valueObjects/ProductPrice";

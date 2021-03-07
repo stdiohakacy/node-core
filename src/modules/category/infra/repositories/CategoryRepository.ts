@@ -1,10 +1,8 @@
-import { Service } from 'typedi';
-import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
+import { Service } from "typedi";
+import { BaseRepository } from "../../../../shared/repository/BaseRepository";
+import { ICategoryRepository } from "../../adapter/ICategoryRepository";
 import { CategoryDb } from "../databases/typeorm/entities/CategoryDb";
-export interface ICategoryRepository extends IBaseRepository<CategoryDb, string> {
-    isExist(id: string): Promise<boolean>
-    isNameExist(name: string): Promise<boolean>
-}
+
 @Service('category.repository')
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {
     constructor() {
