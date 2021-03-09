@@ -1,6 +1,6 @@
-import { SystemError, MessageError } from './../../../../../shared/exceptions/SystemError';
-import { Result } from './../../../../../shared/core/Result';
-import { UseCaseError } from "../../../../../shared/core/UseCaseError";
+import { SystemError, MessageError } from '../../../../shared/exceptions/SystemError';
+import { Result } from '../../../../shared/core/Result';
+import { UseCaseError } from "../../../../shared/core/UseCaseError";
 
 export namespace CreateProductErrors {
     export class CategoryNotFoundError extends Result<UseCaseError> {

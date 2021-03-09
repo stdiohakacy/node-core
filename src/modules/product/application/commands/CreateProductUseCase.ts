@@ -1,18 +1,18 @@
 import { Inject, Service } from "typedi";
-import { CategoryRepository } from '../../../../category/infra/repositories/CategoryRepository';
-import { left, Result, right } from '../../../../../shared/core/Result';
-import { CreateProductResponse } from '../response/CreateProductResponse';
-import { CreateProductCommandDTO } from '../request/CreateProductCommandDTO';
-import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
-import { ApplicationError } from '../../../../../shared/core/ApplicationError';
-import { ProductMapper } from '../../../infra/ProductMapper';
-import { Product } from '../../blocks/aggregateRoot/Product';
-import { ProductRepository } from '../../../infra/repositories/ProductRepository';
-import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
-import { ProductName } from '../../blocks/valueObjects/ProductName';
-import { ProductPrice } from '../../blocks/valueObjects/ProductPrice';
-import { CreateProductErrors } from '../errors/CreateProductErrors';
-import { CategoryId } from "../../../../category/domain/entities/CategoryId";
+import { CategoryRepository } from '../../../category/infra/repositories/CategoryRepository';
+import { left, Result, right } from '../../../../shared/core/Result';
+import { CreateProductResponse } from './CreateProductResponse';
+import { CreateProductCommandDTO } from '../../dtos/CreateProductCommandDTO';
+import { IUseCaseCommandCQRS } from '../../../../shared/core/IUseCase';
+import { ApplicationError } from '../../../../shared/core/ApplicationError';
+import { Product } from '../../domain/aggregateRoots/Product';
+import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
+import { ProductName } from '../../domain/valueObjects/ProductName';
+import { CreateProductErrors } from './CreateProductErrors';
+import { CategoryId } from "../../../category/domain/entities/CategoryId";
+import { ProductRepository } from "../../infra/repositories/ProductRepository";
+import { ProductPrice } from "../../domain/valueObjects/ProductPrice";
+import { ProductMapper } from "../../infra/databases/ProductMapper";
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {
