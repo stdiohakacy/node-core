@@ -1,6 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
 import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
-import { ProductDb } from "../../../../../product/infra/databases/typeorm/entities/ProductDb";
+import { ProductDb } from "../../../../../product_bk/infra/databases/typeorm/entities/ProductDb";
 
 @Entity('category')
 export class CategoryDb extends BaseEntity {
