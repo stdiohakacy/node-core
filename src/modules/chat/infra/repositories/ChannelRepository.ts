@@ -1,7 +1,6 @@
 import { Inject, Service } from 'typedi';
+import { ChannelDb } from '../../../../infra/ChannelDb';
 import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
-import { ChannelDb } from '../databases/typeorm/entities/ChannelDb';
-import { ChannelUserRepository } from './ChannelUserRepository';
 
 export interface IChannelRepository extends IBaseRepository<ChannelDb, string> {
     getChannelById(id: string, fromUserId: string): Promise<ChannelDb>

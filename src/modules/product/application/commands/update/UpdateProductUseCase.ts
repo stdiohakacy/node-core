@@ -13,7 +13,6 @@ import { IProductProps, Product } from '../../../domain/aggregateRoots/Product';
 import { CategoryId } from '../../../../category/domain/entities/CategoryId';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { ProductMapper } from '../../../infra/databases/ProductMapper';
-import { ProductDb } from '../../../infra/databases/typeorm/entities/ProductDb';
 
 @Service()
 export class UpdateProductUseCase implements IUseCaseCommandCQRS<

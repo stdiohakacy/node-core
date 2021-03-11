@@ -1,6 +1,6 @@
-import { ChannelUserDb } from './ChannelUserDb';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
+import { BaseEntity } from "../shared/infra/databases/typeorm/entity/BaseEntity";
+import { ChannelUserDb } from "./ChannelUserDb";
 
 @Entity({ name: 'channel' })
 export class ChannelDb extends BaseEntity {

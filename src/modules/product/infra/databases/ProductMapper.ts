@@ -3,8 +3,8 @@ import { IMapper } from "../../../../shared/IMapper"
 import { Product } from "../../domain/aggregateRoots/Product"
 import { ProductName } from "../../domain/valueObjects/ProductName"
 import { CategoryId } from "../../../category/domain/entities/CategoryId"
-import { ProductDb } from "./typeorm/entities/ProductDb"
 import { ProductPrice } from "../../domain/valueObjects/ProductPrice"
+import { ProductDb } from "../../../../infra/ProductDb"
 
 export class ProductMapper implements IMapper<Product> {
     public static toDomain (productDb: ProductDb): Product | null {

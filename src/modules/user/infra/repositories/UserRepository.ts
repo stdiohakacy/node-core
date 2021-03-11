@@ -1,9 +1,9 @@
 import { UserMapper } from '../UserMapper';
 import { User } from '../../domain/blocks/aggregateRoot/User';
-import { UserDb } from '../databases/typeorm/entities/UserDb';
 import { Service } from 'typedi';
 import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
 import { UserEmail } from '../../domain/blocks/valueObject/UserEmail';
+import { UserDb } from '../../../../infra/UserDb';
 
 export interface IUserRepository extends IBaseRepository<UserDb, string> {
     getByEmail(userEmail: UserEmail): Promise<User>

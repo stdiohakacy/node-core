@@ -1,7 +1,7 @@
 import { Service } from "typedi";
+import { CategoryDb } from "../../../../infra/CategoryDb";
 import { BaseRepository } from "../../../../shared/repository/BaseRepository";
 import { ICategoryRepository } from "../adapter/ICategoryRepository";
-import { CategoryDb } from "../databases/typeorm/entities/CategoryDb";
 
 @Service('category.repository')
 export class CategoryRepository extends BaseRepository<CategoryDb, string> implements ICategoryRepository {

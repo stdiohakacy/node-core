@@ -1,8 +1,8 @@
-import { DateTransformer } from './../transformers/DateTransformer';
-import { GenderType } from '../../../../domain/blocks/enums/GenderType';
-import { UserStatusType } from '../../../../domain/blocks/enums/UserStatusType';
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { BaseEntity } from "../../../../../../shared/infra/databases/typeorm/entity/BaseEntity";
+import { GenderType } from "../modules/user/domain/blocks/enums/GenderType";
+import { UserStatusType } from "../modules/user/domain/blocks/enums/UserStatusType";
+import { DateTransformer } from "../modules/user/infra/databases/typeorm/transformers/DateTransformer";
+import { BaseEntity } from "../shared/infra/databases/typeorm/entity/BaseEntity";
 
 @Entity('user')
 export class UserDb extends BaseEntity {

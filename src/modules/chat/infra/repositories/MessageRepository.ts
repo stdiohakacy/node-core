@@ -1,6 +1,6 @@
+import { MessageDb } from './../../../../infra/MessageDb';
 import { Service } from 'typedi';
 import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
-import { MessageDb } from '../databases/typeorm/entities/MessageDb';
 
 export interface IMessageRepository extends IBaseRepository<MessageDb, string> {
     getMessageNotOwned(channelId: string, fromUserId: string): Promise<MessageDb>

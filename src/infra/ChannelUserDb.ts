@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../../../../../../shared/infra/databases/typeorm/entity/BaseEntity';
-import { ChannelDb } from './ChannelDb';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity } from "../shared/infra/databases/typeorm/entity/BaseEntity";
+import { ChannelDb } from "./ChannelDb";
 
 @Entity({ name: 'channel_user' })
 

@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
+import { ProductDb } from '../../../../infra/ProductDb';
 import { BaseRepository } from '../../../../shared/repository/BaseRepository';
 import { IProductRepository } from '../adapter/IProductRepository';
-import { ProductDb } from '../databases/typeorm/entities/ProductDb';
 
 @Service('product.repository')
 export class ProductRepository extends BaseRepository<ProductDb, string> implements IProductRepository {

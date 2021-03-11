@@ -1,4 +1,3 @@
-import { UserDb } from './databases/typeorm/entities/UserDb';
 import { User } from '../domain/blocks/aggregateRoot/User';
 import { IMapper } from './../../../shared/IMapper';
 import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
@@ -11,6 +10,7 @@ import { UserActiveExpire } from '../domain/blocks/valueObject/UserActiveExpire'
 import { UserForgotKey } from '../domain/blocks/valueObject/UserForgotKey';
 import { UserForgotExpire } from '../domain/blocks/valueObject/UserForgotExpire';
 import { UserStatusType } from '../domain/blocks/enums/UserStatusType';
+import { UserDb } from '../../../infra/UserDb';
 
 export class UserMapper implements IMapper<User> {
     public static toDomain (userDb: UserDb): User | null {

@@ -1,8 +1,8 @@
-import { ChannelUserDb } from '../databases/typeorm/entities/ChannelUserDb';
 import { Service } from 'typedi';
+import { ChannelDb } from '../../../../infra/ChannelDb';
+import { ChannelUserDb } from '../../../../infra/ChannelUserDb';
 import { BaseRepository, IBaseRepository } from '../../../../shared/repository/BaseRepository';
 import { UserAuthenticated } from '../../../auth/domain/useCases/response/AuthenticateResponse';
-import { ChannelDb } from '../databases/typeorm/entities/ChannelDb';
 
 export interface IChannelUserRepository extends IBaseRepository<ChannelUserDb, string> {
     getDisplayNameChannel(channel: ChannelDb, userAuthenticated: UserAuthenticated): Promise<string>
