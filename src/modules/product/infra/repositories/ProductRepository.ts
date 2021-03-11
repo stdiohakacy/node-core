@@ -11,7 +11,6 @@ export class ProductRepository extends BaseRepository<ProductDb, string> impleme
         })
     }
 
-
     async isExist(id: string): Promise<boolean> {
         return await this.repository.count({ id }) > 0
     }
@@ -31,5 +30,15 @@ export class ProductRepository extends BaseRepository<ProductDb, string> impleme
             .where(`categoryId = :categoryId`, { categoryId })
             .execute();
         return !!isDeleted.affected
+    }
+
+    async findByCategory(filter: any, categoryId: string): Promise<[ProductDb[], number]> {
+        const query = this.repository
+            .createQueryBuilder('product')
+            .where('product.categoryId = :categoryId', { categoryId })
+            .skip(filter.skip)
+            .take(filter.limit)
+
+        return await query.getManyAndCount()
     }
 }
