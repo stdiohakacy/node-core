@@ -6,11 +6,13 @@ import { CategoryId } from "../../../category/domain/entities/CategoryId";
 import { ProductId } from "../entities/ProductId";
 import { ProductName } from "../valueObjects/ProductName";
 import { ProductPrice } from "../valueObjects/ProductPrice";
+import { ProductTags } from "../watchedList/ProductTags";
 
 export interface IProductProps {
     name: ProductName
     price: ProductPrice
     categoryId: CategoryId
+    tags?: ProductTags
 }
 
 export class Product extends AggregateRoot<IProductProps> {
@@ -32,6 +34,10 @@ export class Product extends AggregateRoot<IProductProps> {
 
     get categoryId (): CategoryId {
         return this.props.categoryId;
+    }
+
+    get tags(): ProductTags {
+        return this.props.tags
     }
 
     public static create (props: IProductProps, id?: UniqueEntityId): Result<Product> {
