@@ -2,12 +2,12 @@ import { Inject, Service } from 'typedi';
 import { ApplicationError } from '../../../../../shared/core/ApplicationError';
 import { IUseCaseCommandCQRS } from '../../../../../shared/core/IUseCase';
 import { left, Result, right } from '../../../../../shared/core/Result';
-import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
-import { CategoryId } from '../../../domain/entities/CategoryId';
+import { MessageError, SystemError } from '../../../../../shared/exceptions/SystemError';
 import { DeleteCategoryCommandDTO } from '../../../dtos/DeleteCategoryCommandDTO';
 import { CategoryRepository } from '../../../infra/repositories/CategoryRepository';
 import { DeleteCategoryErrors } from './DeleteCategoryErrors';
 import { DeleteCategoryResponse } from './DeleteCategoryResponse';
+import * as validator from 'class-validator'
 
 @Service()
 export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<DeleteCategoryCommandDTO, Promise<DeleteCategoryResponse>> {
@@ -15,14 +15,13 @@ export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<DeleteCategory
     private readonly _categoryRepository: CategoryRepository;
     
     async execute(param: DeleteCategoryCommandDTO): Promise<DeleteCategoryResponse> {
-        const idOrError = CategoryId.create(new UniqueEntityId(param.id))
-        if(idOrError.isFailure)
-            return left(Result.fail<CategoryId>(idOrError.error));
-        
-        const categoryId = idOrError.getValue()
+        if(!param.id)
+            return left(Result.fail(new SystemError(MessageError.PARAM_REQUIRED, 'category id').message))
+        if(!validator.isUUID(param.id))
+            return left(Result.fail(new SystemError(MessageError.PARAM_INVALID, 'category id').message))
 
         try {
-            const isExist = await this._categoryRepository.isExist(categoryId.id.toString())
+            const isExist = await this._categoryRepository.isExist(param.id)
             if(!isExist)
                 return left(new DeleteCategoryErrors.NotFoundError(param.id))
             const isDeleted = await this._categoryRepository.softDelete(param.id)
