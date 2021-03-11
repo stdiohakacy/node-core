@@ -11,6 +11,7 @@ export class ProductRepository extends BaseRepository<ProductDb, string> impleme
         })
     }
 
+
     async isExist(id: string): Promise<boolean> {
         return await this.repository.count({ id }) > 0
     }
@@ -21,5 +22,14 @@ export class ProductRepository extends BaseRepository<ProductDb, string> impleme
             .where(`LOWER(product.name) = LOWER(:name)`, { name });
 
         return !!await query.getOne();
+    }
+
+    async deleteByCategory(categoryId: string): Promise<boolean> {
+        const isDeleted = await this.repository
+            .createQueryBuilder('product')
+            .softDelete()
+            .where(`categoryId = :categoryId`, { categoryId })
+            .execute();
+        return !!isDeleted.affected
     }
 }

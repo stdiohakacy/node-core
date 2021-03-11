@@ -8,12 +8,16 @@ import { CategoryRepository } from '../../../infra/repositories/CategoryReposito
 import { DeleteCategoryErrors } from './DeleteCategoryErrors';
 import { DeleteCategoryResponse } from './DeleteCategoryResponse';
 import * as validator from 'class-validator'
+import { ProductRepository } from '../../../../product/infra/repositories/ProductRepository';
 
 @Service()
 export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<DeleteCategoryCommandDTO, Promise<DeleteCategoryResponse>> {
     @Inject('category.repository')
     private readonly _categoryRepository: CategoryRepository;
     
+    @Inject('product.repository')
+    private readonly _productRepository: ProductRepository;
+
     async execute(param: DeleteCategoryCommandDTO): Promise<DeleteCategoryResponse> {
         if(!param.id)
             return left(Result.fail(new SystemError(MessageError.PARAM_REQUIRED, 'category id').message))
@@ -27,7 +31,10 @@ export class DeleteCategoryUseCase implements IUseCaseCommandCQRS<DeleteCategory
             const isDeleted = await this._categoryRepository.softDelete(param.id)
             if(!isDeleted)
                 return left(new DeleteCategoryErrors.DataCannotSave())
-            return right(Result.OK(isDeleted))
+            else {
+                await this._productRepository.deleteByCategory(param.id)
+                return right(Result.OK(isDeleted))
+            }
         } 
         catch (error) {
             console.log(error)    
