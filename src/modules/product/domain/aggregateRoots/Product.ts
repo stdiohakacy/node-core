@@ -7,7 +7,7 @@ import { ProductId } from "../entities/ProductId";
 import { ProductName } from "../valueObjects/ProductName";
 import { ProductPrice } from "../valueObjects/ProductPrice";
 
-interface IProductProps {
+export interface IProductProps {
     name: ProductName
     price: ProductPrice
     categoryId: CategoryId

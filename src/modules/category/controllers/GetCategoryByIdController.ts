@@ -21,9 +21,9 @@ export class GetCategoryByIdController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case GetCategoryByIdErrors.NotFoundError:
-                        return this.notFound(res, resultValue.errorValue())
+                        return this.notFound(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             } else {
                 return this.OK(res, resultValue.getValue())

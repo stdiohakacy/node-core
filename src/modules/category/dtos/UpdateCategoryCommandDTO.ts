@@ -4,4 +4,3 @@ export class UpdateCategoryCommandDTO implements ICommand {
     id: string
     name: string
 }
-

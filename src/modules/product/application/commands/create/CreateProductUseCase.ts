@@ -1,18 +1,18 @@
 import { Inject, Service } from "typedi";
-import { CategoryRepository } from '../../../category/infra/repositories/CategoryRepository';
-import { left, Result, right } from '../../../../shared/core/Result';
 import { CreateProductResponse } from './CreateProductResponse';
-import { CreateProductCommandDTO } from '../../dtos/CreateProductCommandDTO';
-import { IUseCaseCommandCQRS } from '../../../../shared/core/IUseCase';
-import { ApplicationError } from '../../../../shared/core/ApplicationError';
-import { Product } from '../../domain/aggregateRoots/Product';
-import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
-import { ProductName } from '../../domain/valueObjects/ProductName';
 import { CreateProductErrors } from './CreateProductErrors';
-import { CategoryId } from "../../../category/domain/entities/CategoryId";
-import { ProductRepository } from "../../infra/repositories/ProductRepository";
-import { ProductPrice } from "../../domain/valueObjects/ProductPrice";
-import { ProductMapper } from "../../infra/databases/ProductMapper";
+import { IUseCaseCommandCQRS } from "../../../../../shared/core/IUseCase";
+import { CreateProductCommandDTO } from "../../../dtos/CreateProductCommandDTO";
+import { ProductRepository } from "../../../infra/repositories/ProductRepository";
+import { CategoryRepository } from "../../../../category/infra/repositories/CategoryRepository";
+import { ProductName } from "../../../domain/valueObjects/ProductName";
+import { ProductPrice } from "../../../domain/valueObjects/ProductPrice";
+import { CategoryId } from "../../../../category/domain/entities/CategoryId";
+import { UniqueEntityId } from "../../../../../shared/domain/UniqueEntityId";
+import { left, Result, right } from "../../../../../shared/core/Result";
+import { IProductProps, Product } from "../../../domain/aggregateRoots/Product";
+import { ApplicationError } from "../../../../../shared/core/ApplicationError";
+import { ProductMapper } from "../../../infra/databases/ProductMapper";
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {
@@ -35,28 +35,30 @@ export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCo
         if (dtoResults.isFailure)
             return left(Result.fail(dtoResults.error))
 
-        const name = productNameOrError.getValue()
-        const price = productPriceOrError.getValue()
-        const categoryId = categoryIdOrError.getValue()
+        const productProps: IProductProps = {
+            name: productNameOrError.getValue(),
+            price: productPriceOrError.getValue(),
+            categoryId: categoryIdOrError.getValue()
+        }
 
         try {
-            const isExist = await this._productRepository.isNameExist(name.value)
+            const isExist = await this._productRepository.isNameExist(productProps.name.value)
             if (isExist)
-                return left(new CreateProductErrors.NameAlreadyExistsError(name.value))
+                return left(new CreateProductErrors.NameAlreadyExistsError(productProps.name.value))
         } catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
 
         try {
-            const isExist = await this._categoryRepository.isExist(categoryId.id.toString())
+            const isExist = await this._categoryRepository.isExist(productProps.categoryId.id.toString())
             if(!isExist)
                 return left(new CreateProductErrors.CategoryNotFoundError())
         } catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
         }
-        const productOrError = Product.create({ name, price, categoryId });
+        const productOrError = Product.create(productProps);
 
         if (productOrError.isFailure)
             return left(Result.fail(productOrError.error!.toString()))

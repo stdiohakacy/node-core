@@ -20,17 +20,17 @@ export class ActiveUserController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case ActiveUserErrors.EmailNotFoundError:
-                        return this.notFound(res, resultValue.errorValue())
+                        return this.notFound(res, resultValue.errorValue().message)
                     case ActiveUserErrors.UserStatusError:
-                        return this.clientError(res, resultValue.errorValue())
+                        return this.clientError(res, resultValue.errorValue().message)
                     case ActiveUserErrors.ActiveKeyInvalidError:
-                        return this.clientError(res, resultValue.errorValue())
+                        return this.clientError(res, resultValue.errorValue().message)
                     case ActiveUserErrors.ExpiredTimeError:
-                        return this.clientError(res, resultValue.errorValue())
+                        return this.clientError(res, resultValue.errorValue().message)
                     case ActiveUserErrors.CannotSaveError:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             }
             else 

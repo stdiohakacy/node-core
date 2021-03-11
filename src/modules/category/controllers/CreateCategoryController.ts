@@ -20,12 +20,12 @@ export class CreateCategoryController extends BaseController {
             if(result.isLeft()) {
                 switch (resultValue.constructor) {
                     case CreateCategoryErrors.NameAlreadyExistsError:
-                        return this.conflict(res, resultValue.errorValue())
+                        return this.conflict(res, resultValue.errorValue().message.message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message.message)
                 }
             }
-            else 
+            else
                 return this.created(res, resultValue.getValue())
         } 
         catch (error) {

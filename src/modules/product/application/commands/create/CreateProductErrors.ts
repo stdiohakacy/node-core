@@ -1,12 +1,12 @@
-import { SystemError, MessageError } from '../../../../shared/exceptions/SystemError';
-import { Result } from '../../../../shared/core/Result';
-import { UseCaseError } from "../../../../shared/core/UseCaseError";
+import { SystemError, MessageError } from '../../../../../shared/exceptions/SystemError';
+import { Result } from '../../../../../shared/core/Result';
+import { UseCaseError } from "../../../../../shared/core/UseCaseError";
 
 export namespace CreateProductErrors {
     export class CategoryNotFoundError extends Result<UseCaseError> {
         constructor() {
             super(false, {
-                message: new SystemError(MessageError.PARAM_EXISTED, 'category').message
+                message: new SystemError(MessageError.PARAM_NOT_EXISTS, 'category').message
             })
         }
     }

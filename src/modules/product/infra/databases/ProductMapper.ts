@@ -25,10 +25,14 @@ export class ProductMapper implements IMapper<Product> {
     public static toPersistence (product: Product): ProductDb {
         const productDb = new ProductDb()
 
-        productDb.name = product.name && product.name.value
-        productDb.price = product.price && product.price.value
-        productDb.categoryId = product.categoryId && product.categoryId.id.toString()
+        if(product.name.value) 
+            productDb.name = product.name.value
+        if(product.price.value)
+            productDb.price = product.price.value
+        if(product.categoryId.id.toString())
+            productDb.categoryId = product.categoryId.id.toString()
 
+        console.log(productDb)
         return productDb
     }
 }

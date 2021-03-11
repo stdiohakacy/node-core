@@ -21,11 +21,11 @@ export class LoginController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case LoginErrors.AccountInvalidError:
-                        return this.unAuthorized(res, resultValue.errorValue())
+                        return this.unAuthorized(res, resultValue.errorValue().message)
                     case LoginErrors.AccountStatusError:
-                        return this.unAuthorized(res, resultValue.errorValue())
+                        return this.unAuthorized(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             }
             else

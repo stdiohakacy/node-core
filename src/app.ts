@@ -29,7 +29,7 @@ const app = createExpressServer({
     authorizationChecker: Container.get(ApiAuthenticator).authorizationHttpChecker,
     currentUserChecker: Container.get(ApiAuthenticator).userAuthChecker,
     controllers: [
-        path.join(__dirname, '/modules/**/controller/*{.js,.ts}')
+        path.join(__dirname, '/modules/**/controllers/*{.js,.ts}')
     ]
 })
 

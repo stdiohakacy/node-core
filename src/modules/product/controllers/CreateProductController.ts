@@ -2,9 +2,9 @@ import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
-import { CreateProductUseCase } from '../application/commands/CreateProductUseCase';
 import { CreateProductCommandDTO } from '../dtos/CreateProductCommandDTO';
-import { CreateProductErrors } from '../application/commands/CreateProductErrors';
+import { CreateProductErrors } from '../application/commands/create/CreateProductErrors';
+import { CreateProductUseCase } from '../application/commands/create/CreateProductUseCase';
 
 @JsonController('/v1/products')
 export class CreateProductController extends BaseController {
@@ -20,13 +20,13 @@ export class CreateProductController extends BaseController {
             if (result.isLeft()) {
                 switch (resultValue.constructor) {
                     case CreateProductErrors.CategoryNotFoundError:
-                        return this.notFound(res, resultValue.errorValue())
+                        return this.notFound(res, resultValue.errorValue().message)
                     case CreateProductErrors.NameAlreadyExistsError:
-                        return this.conflict(res, resultValue.errorValue())
+                        return this.conflict(res, resultValue.errorValue().message)
                     case CreateProductErrors.DataCannotSave:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             }
             else

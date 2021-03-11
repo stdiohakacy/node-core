@@ -20,13 +20,13 @@ export class ForgotPasswordUserController extends BaseController {
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
                     case ForgotPasswordUserErrors.EmailNotFoundError:
-                        return this.conflict(res, resultValue.errorValue())
+                        return this.conflict(res, resultValue.errorValue().message)
                     case ForgotPasswordUserErrors.DataInvalidError:
-                        return this.clientError(res, resultValue.errorValue())
+                        return this.clientError(res, resultValue.errorValue().message)
                     case ForgotPasswordUserErrors.CannotSaveError:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             }
             else 

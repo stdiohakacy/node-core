@@ -30,9 +30,9 @@ export class LogoutUserController extends BaseController {
             if (result.isLeft()) {
                 switch (resultValue.constructor) {
                     case LogoutUserErrors.NotFoundError:
-                        return this.notFound(res, resultValue.errorValue())
+                        return this.notFound(res, resultValue.errorValue().message)
                     default:
-                        return this.fail(res, resultValue.errorValue())
+                        return this.fail(res, resultValue.errorValue().message)
                 }
             }
             else
