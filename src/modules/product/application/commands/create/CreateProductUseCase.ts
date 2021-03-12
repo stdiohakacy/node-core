@@ -104,9 +104,8 @@ export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCo
                 })
 
                 await this._productTagRepository.createMultiple(productTagsDb)
-                return right(Result.OK(id))
             }
-
+            return right(Result.OK(id))
         } catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))
