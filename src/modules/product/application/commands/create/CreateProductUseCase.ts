@@ -1,3 +1,4 @@
+import { TagMapper } from './../../../tag/TagMapper';
 import { Inject, Service } from "typedi";
 import { CreateProductResponse } from './CreateProductResponse';
 import { CreateProductErrors } from './CreateProductErrors';
@@ -49,14 +50,14 @@ export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCo
             categoryId: categoryIdOrError.getValue(),
         }
 
-        // try {
-        //     const isExist = await this._productRepository.isNameExist(productProps.name.value)
-        //     if (isExist)
-        //         return left(new CreateProductErrors.NameAlreadyExistsError(productProps.name.value))
-        // } catch (error) {
-        //     console.error(error)
-        //     return left(new ApplicationError.UnexpectedError(error))
-        // }
+        try {
+            const isExist = await this._productRepository.isNameExist(productProps.name.value)
+            if (isExist)
+                return left(new CreateProductErrors.NameAlreadyExistsError(productProps.name.value))
+        } catch (error) {
+            console.error(error)
+            return left(new ApplicationError.UnexpectedError(error))
+        }
 
         try {
             const isExist = await this._categoryRepository.isExist(productProps.categoryId.id.toString())
@@ -77,27 +78,35 @@ export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCo
             if (!id)
                 return left(new CreateProductErrors.DataCannotSave())
 
-            const filteredTags = param.tags.filter(async tag => !await this._tagRepository.isNameExist(tag))
+            const tagsDb = await this._tagRepository.getTagsName()
+            const tags = tagsDb.map(tagDb => TagMapper.toDomain(tagDb))
 
-            const tagsDb = filteredTags.map(name => {
-                let tagDb = new TagDb()
-                tagDb.name = name
-                tagDb.productId = id
-                return tagDb
-            })
+            if (param.tags) {
+                const filteredTags = param.tags.filter(tag => tags.map(t => t.name).indexOf(tag) === -1)
+                let existTags = tagsDb.filter(tag => param.tags.includes(tag.name)).map(tag => tag.id)
 
-            const tags = await this._tagRepository.createMultiple(tagsDb)
+                if (filteredTags.length > 0) {
+                    const tagsDb = filteredTags.map(tag => {
+                        let tagDb = new TagDb()
+                        tagDb.name = tag
+                        return tagDb
+                    })
 
-            const productTags = tags.map(tagId => {
-                const productTagDb = new ProductTagDb()
-                productTagDb.productId = id
-                productTagDb.tagId = tagId
-                return productTagDb
-            })
+                    const tagsId = await this._tagRepository.createMultiple(tagsDb)
+                    existTags = existTags.concat(tagsId)
+                }
 
-            await this._productTagRepository.createMultiple(productTags)
+                const productTagsDb = existTags.map(tagId => {
+                    const productTagDb = new ProductTagDb()
+                    productTagDb.productId = id
+                    productTagDb.tagId = tagId
+                    return productTagDb
+                })
 
-            return right(Result.OK(id))
+                await this._productTagRepository.createMultiple(productTagsDb)
+                return right(Result.OK(id))
+            }
+
         } catch (error) {
             console.error(error)
             return left(new ApplicationError.UnexpectedError(error))

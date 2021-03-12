@@ -10,10 +10,6 @@ export class TagDb extends BaseEntity {
     @OneToMany(() => ProductTagDb, productTags => productTags.tag)
     productTags: ProductTagDb[];
 
-    @Column({ name: 'product_id', type: 'uuid' })
-    productId: string;
-    
     @Column({ name: 'name', length: 150 })
     name: string;
-
 }

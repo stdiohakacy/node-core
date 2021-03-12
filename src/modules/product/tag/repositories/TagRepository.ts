@@ -15,7 +15,14 @@ export class TagRepository extends BaseRepository<TagDb, string> implements ITag
         let query = this.repository
             .createQueryBuilder('tag')
             .where(`LOWER(tag.name) = LOWER(:name)`, { name });
-
         return !!await query.getOne();
+    }
+
+    async getTagsName(): Promise<TagDb[]> {
+        return await this.repository
+        .createQueryBuilder('tag')
+        .select("tag.name")
+        .addSelect("tag.id")
+        .getMany()
     }
 }
