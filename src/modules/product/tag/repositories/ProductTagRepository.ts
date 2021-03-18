@@ -10,4 +10,14 @@ export class ProductTagRepository extends BaseRepository<ProductTagDb, string> i
             TABLE_NAME: 'product_tag'
         })
     }
+    
+    async deleteByProductId(productId: string): Promise<boolean> {
+        const isDeleted = this.repository
+            .createQueryBuilder('product_tag')
+            .delete()
+            .where('product_tag.productId = :productId', { productId })
+            .execute()
+
+        return !!isDeleted
+    }
 }
