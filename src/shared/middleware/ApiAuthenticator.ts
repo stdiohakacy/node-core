@@ -29,7 +29,6 @@ export class ApiAuthenticator {
         if(!tokenDecoded || !tokenDecoded.sub)
             throw new UnauthorizedError(MessageError.PARAM_INVALID, 'token')
         
-
         const { email } = tokenDecoded
         const tokens = await this._redisAuthService.getTokens(email)
         if(tokens.length > 0) {

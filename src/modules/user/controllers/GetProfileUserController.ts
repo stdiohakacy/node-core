@@ -1,11 +1,11 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Authorized, CurrentUser, Get, JsonController, Params, Res } from "routing-controllers";
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { GetProfileUserUseCase } from '../../domain/useCases/queries/GetProfileUserUseCase';
-import { UserAuthenticated } from '../../../auth/domain/useCases/response/AuthenticateResponse';
-import { GetProfileUserErrors } from '../../domain/useCases/errors/GetProfileUserErrors';
-import { GetProfileUserQueryDTO } from '../../domain/useCases/request/GetProfileUserQueryDTO';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { GetProfileUserUseCase } from '../domain/useCases/queries/GetProfileUserUseCase';
+import { UserAuthenticated } from '../../auth/domain/useCases/response/AuthenticateResponse';
+import { GetProfileUserErrors } from '../domain/useCases/errors/GetProfileUserErrors';
+import { GetProfileUserQueryDTO } from '../domain/useCases/request/GetProfileUserQueryDTO';
 
 @JsonController('/v1/users')
 export class GetProfileUserController extends BaseController {

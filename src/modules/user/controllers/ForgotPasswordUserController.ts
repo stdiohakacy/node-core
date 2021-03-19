@@ -1,10 +1,10 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
-import { ForgotPasswordUserUseCase } from '../../domain/useCases/commands/ForgotPasswordUserUseCase';
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { ForgotPasswordUserCommandDTO } from '../../domain/useCases/request/ForgotPasswordUserCommandDTO';
-import { ForgotPasswordUserErrors } from '../../domain/useCases/errors/ForgotPasswordUserErrors';
+import { ForgotPasswordUserUseCase } from '../domain/useCases/commands/ForgotPasswordUserUseCase';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { ForgotPasswordUserCommandDTO } from '../domain/useCases/request/ForgotPasswordUserCommandDTO';
+import { ForgotPasswordUserErrors } from '../domain/useCases/errors/ForgotPasswordUserErrors';
 
 @JsonController('/v1/user')
 export class ForgotPasswordUserController extends BaseController {

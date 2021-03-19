@@ -1,11 +1,11 @@
-import { LogoutUserUseCase } from '../../domain/useCases/commands/LogoutUserUseCase';
+import { LogoutUserUseCase } from '../domain/useCases/commands/LogoutUserUseCase';
 import Container from 'typedi';
 import { CurrentUser, JsonController, Post, Res } from "routing-controllers";
 import { Response } from 'express';
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { UserAuthenticated } from '../../../auth/domain/useCases/response/AuthenticateResponse';
-import { LogoutUserCommandDTO } from '../../domain/useCases/request/LogoutUserCommandDTO';
-import { LogoutUserErrors } from '../../domain/useCases/errors/LogoutUserErrors';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { UserAuthenticated } from '../../auth/domain/useCases/response/AuthenticateResponse';
+import { LogoutUserCommandDTO } from '../domain/useCases/request/LogoutUserCommandDTO';
+import { LogoutUserErrors } from '../domain/useCases/errors/LogoutUserErrors';
 
 @JsonController('/v1/user')
 export class LogoutUserController extends BaseController {

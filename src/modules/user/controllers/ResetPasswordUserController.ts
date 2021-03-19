@@ -1,10 +1,10 @@
-import { ResetPasswordUserCommandDTO } from '../../domain/useCases/request/ResetPasswordUserCommandDTO';
-import { ResetPasswordUserUseCase } from '../../domain/useCases/commands/ResetPasswordUserUseCase';
+import { ResetPasswordUserCommandDTO } from '../domain/useCases/request/ResetPasswordUserCommandDTO';
+import { ResetPasswordUserUseCase } from '../domain/useCases/commands/ResetPasswordUserUseCase';
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { ResetPasswordUserErrors } from '../../domain/useCases/errors/ResetPasswordUserErrors';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { ResetPasswordUserErrors } from '../domain/useCases/errors/ResetPasswordUserErrors';
 
 @JsonController('/v1/user')
 export class ResetPasswordUserController extends BaseController {

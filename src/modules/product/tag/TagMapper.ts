@@ -15,33 +15,4 @@ export class TagMapper implements IMapper<Tag> {
             console.error(tagOrError.error)
         return tagOrError.isSuccess ? tagOrError.getValue() : null
     }
-
-    // public static toDomain (productDb: ProductDb): Product | null {
-    //     if(!productDb)
-    //         return null
-    //     const productOrError = Product.create({
-    //         name: ProductName.create({value: productDb.name}).getValue(),
-    //         price: ProductPrice.create({value: productDb.price}).getValue(),
-    //         categoryId: CategoryId.create(new UniqueEntityId(productDb.categoryId)).getValue() 
-    //     }, new UniqueEntityId(productDb.id))
-
-    //     if(productOrError.isFailure)
-    //         console.error(productOrError.error)
-
-    //     return productOrError.isSuccess ? productOrError.getValue() : null
-    // }
-
-    // public static toPersistence (product: Product): ProductDb {
-    //     const productDb = new ProductDb()
-
-    //     if(product.name.value) 
-    //         productDb.name = product.name.value
-    //     if(product.price.value)
-    //         productDb.price = product.price.value
-    //     if(product.categoryId.id.toString())
-    //         productDb.categoryId = product.categoryId.id.toString()
-
-    //     console.log(productDb)
-    //     return productDb
-    // }
 }

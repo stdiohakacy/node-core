@@ -1,29 +1,33 @@
 import Container from 'typedi';
 import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { ResendActivationUserUseCase } from '../../domain/useCases/commands/ResendActivationUserUseCase';
-import { ActiveUserCommandDTO } from '../../domain/useCases/request/ActiveUserCommandDTO';
-import { ResendActivationUserErrors } from '../../domain/useCases/errors/ResendActivationUserErrors';
+import { ActiveUserCommandDTO } from '../domain/useCases/request/ActiveUserCommandDTO';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { ActiveUserUseCase } from '../domain/useCases/commands/ActiveUserUseCase';
+import { ActiveUserErrors } from '../domain/useCases/errors/ActiveUserErrors';
 
 @JsonController('/v1/user')
-export class ResendActivationUserController extends BaseController {
+export class ActiveUserController extends BaseController {
     constructor(
-        private readonly _resendActivationUserUseCase = Container.get(ResendActivationUserUseCase),
+        private readonly _activeUserUseCase = Container.get(ActiveUserUseCase),
     ) {super()}
 
-    @Post('/resend-activation')
+    @Post('/active')
     async executeImpl(@Body() param: ActiveUserCommandDTO, @Res() res: Response): Promise<Response> {
         try {
-            const result = await this._resendActivationUserUseCase.execute(param);
+            const result = await this._activeUserUseCase.execute(param);
             const resultValue = result.value
             if(result.isLeft()) {
                 switch(resultValue.constructor) {
-                    case ResendActivationUserErrors.EmailNotFoundError:
+                    case ActiveUserErrors.EmailNotFoundError:
                         return this.notFound(res, resultValue.errorValue().message)
-                    case ResendActivationUserErrors.UserStatusError:
+                    case ActiveUserErrors.UserStatusError:
                         return this.clientError(res, resultValue.errorValue().message)
-                    case ResendActivationUserErrors.CannotSaveError:
+                    case ActiveUserErrors.ActiveKeyInvalidError:
+                        return this.clientError(res, resultValue.errorValue().message)
+                    case ActiveUserErrors.ExpiredTimeError:
+                        return this.clientError(res, resultValue.errorValue().message)
+                    case ActiveUserErrors.CannotSaveError:
                         return this.fail(res, resultValue.errorValue().message)
                     default:
                         return this.fail(res, resultValue.errorValue().message)

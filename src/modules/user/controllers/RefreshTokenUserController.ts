@@ -1,11 +1,11 @@
-import { RefreshTokenUserUseCase } from '../../domain/useCases/commands/RefreshTokenUserUseCase';
+import { RefreshTokenUserUseCase } from '../domain/useCases/commands/RefreshTokenUserUseCase';
 import Container from 'typedi';
 import { Body, JsonController, Params, Post, Res } from "routing-controllers";
 import { Response } from 'express';
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { RefreshTokenUserCommandDTO } from '../../domain/useCases/request/RefreshTokenUserCommandDTO';
-import { RefreshTokenUserErrors } from '../../domain/useCases/errors/RefreshTokenUserErrors';
-import { LoginDTOResponse } from '../../../auth/domain/useCases/response/LoginResponse';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { RefreshTokenUserCommandDTO } from '../domain/useCases/request/RefreshTokenUserCommandDTO';
+import { RefreshTokenUserErrors } from '../domain/useCases/errors/RefreshTokenUserErrors';
+import { LoginDTOResponse } from '../../auth/domain/useCases/response/LoginResponse';
 
 @JsonController('/v1/user')
 export class RefreshTokenUserController extends BaseController {

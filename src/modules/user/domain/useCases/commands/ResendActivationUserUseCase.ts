@@ -1,6 +1,5 @@
 import { ResendActivationUserCommandDTO } from '../request/ResendActivationUserCommandDTO';
 import { right } from '../../../../../shared/core/Result';
-import { UserDb } from '../../../infra/databases/typeorm/entities/UserDb';
 import { UserRepository } from '../../../infra/repositories/UserRepository';
 import { IUseCaseCommandCQRS } from "../../../../../shared/core/IUseCase";
 import { left, Result } from '../../../../../shared/core/Result';
@@ -15,6 +14,7 @@ import { UserActiveKey } from '../../blocks/valueObject/UserActiveKey';
 import { UserEmail } from '../../blocks/valueObject/UserEmail';
 import { ResendActivationUserErrors } from '../errors/ResendActivationUserErrors';
 import { ResendActivationUserResponse } from '../response/ResendActivationUserResponse';
+import { UserDb } from '../../../../../infra/UserDb';
 
 @Service()
 export class ResendActivationUserUseCase implements IUseCaseCommandCQRS<ResendActivationUserCommandDTO, Promise<ResendActivationUserResponse>> {

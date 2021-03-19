@@ -1,10 +1,10 @@
 import Container from 'typedi';
 import { Body, JsonController, Post, Res } from "routing-controllers";
 import { Response } from 'express';
-import { BaseController } from '../../../../shared/infra/http/models/BaseController';
-import { SignUpUserUseCase } from '../../domain/useCases/commands/SignUpUserUseCase';
-import { SignUpUserCommandDTO } from '../../domain/useCases/request/SignUpUserCommandDTO';
-import { SignUpUserErrors } from '../../domain/useCases/errors/SignUpUserErrors';
+import { BaseController } from '../../../shared/infra/http/models/BaseController';
+import { SignUpUserUseCase } from '../domain/useCases/commands/SignUpUserUseCase';
+import { SignUpUserCommandDTO } from '../domain/useCases/request/SignUpUserCommandDTO';
+import { SignUpUserErrors } from '../domain/useCases/errors/SignUpUserErrors';
 
 @JsonController('/v1/user')
 export class SignUpUserController extends BaseController {

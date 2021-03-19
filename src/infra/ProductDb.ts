@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "../shared/infra/databases/typeorm/entity/BaseEntity";
 import { CategoryDb } from "./CategoryDb";
+import { ProductFavoriteDb } from "./ProductFavoriteDb";
 import { ProductTagDb } from "./ProductTagDb";
 
 @Entity('product')
@@ -14,6 +15,9 @@ export class ProductDb extends BaseEntity {
     
     @OneToMany(() => ProductTagDb, productTags => productTags.product)
     productTags: ProductTagDb[];
+
+    @OneToMany(() => ProductFavoriteDb, productFavorites => productFavorites.product)
+    productFavorites: ProductFavoriteDb[];
     
     @Column({ name: 'category_id', type: 'uuid' })
     categoryId!: string;

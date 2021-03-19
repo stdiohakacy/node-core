@@ -1,7 +1,6 @@
 import * as crypto from 'crypto';
 import { Inject, Service } from 'typedi';
 import { right } from '../../../../../shared/core/Result';
-import { UserDb } from '../../../infra/databases/typeorm/entities/UserDb';
 import { UserRepository } from '../../../infra/repositories/UserRepository';
 import { ForgotPasswordUserResponse } from '../response/ForgotPasswordUserResponse';
 import { ForgotPasswordUserCommandDTO } from '../request/ForgotPasswordUserCommandDTO';
@@ -13,6 +12,7 @@ import { addSeconds } from '../../../../../shared/libs/date';
 import { MailService } from '../../../../../shared/services/mail/MailService';
 import { UserEmail } from '../../blocks/valueObject/UserEmail';
 import { ForgotPasswordUserErrors } from '../errors/ForgotPasswordUserErrors';
+import { UserDb } from '../../../../../infra/UserDb';
 
 @Service()
 export class ForgotPasswordUserUseCase implements IUseCaseCommandCQRS<ForgotPasswordUserCommandDTO, Promise<ForgotPasswordUserResponse>> {

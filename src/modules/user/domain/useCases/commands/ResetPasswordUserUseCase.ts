@@ -1,5 +1,4 @@
 import { Inject, Service } from 'typedi';
-import { UserDb } from '../../../infra/databases/typeorm/entities/UserDb';
 import { right } from '../../../../../shared/core/Result';
 import { UserRepository } from '../../../infra/repositories/UserRepository';
 import { ResetPasswordUserResponse } from '../response/ResetPasswordUserResponse';
@@ -11,6 +10,7 @@ import { UserEmail } from '../../blocks/valueObject/UserEmail';
 import { UserForgotKey } from '../../blocks/valueObject/UserForgotKey';
 import { UserPassword } from '../../blocks/valueObject/UserPassword';
 import { ResetPasswordUserErrors } from '../errors/ResetPasswordUserErrors';
+import { UserDb } from '../../../../../infra/UserDb';
 
 @Service()
 export class ResetPasswordUserUseCase implements IUseCaseCommandCQRS<ResetPasswordUserCommandDTO, Promise<ResetPasswordUserResponse>> {

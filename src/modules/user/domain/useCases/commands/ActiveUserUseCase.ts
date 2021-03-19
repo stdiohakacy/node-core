@@ -1,6 +1,5 @@
 import { Inject, Service } from 'typedi';
 import { right } from '../../../../../shared/core/Result';
-import { UserDb } from '../../../infra/databases/typeorm/entities/UserDb';
 import { UserRepository } from '../../../infra/repositories/UserRepository';
 import { ActiveUserResponse } from '../response/ActiveUserResponse';
 import { ActiveUserCommandDTO } from '../request/ActiveUserCommandDTO';
@@ -11,6 +10,7 @@ import { UserStatusType } from '../../blocks/enums/UserStatusType';
 import { UserActiveKey } from '../../blocks/valueObject/UserActiveKey';
 import { UserEmail } from '../../blocks/valueObject/UserEmail';
 import { ActiveUserErrors } from '../errors/ActiveUserErrors';
+import { UserDb } from '../../../../../infra/UserDb';
 
 @Service()
 export class ActiveUserUseCase implements IUseCaseCommandCQRS<ActiveUserCommandDTO, Promise<ActiveUserResponse>> {

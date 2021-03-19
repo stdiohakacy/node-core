@@ -32,7 +32,7 @@ export class LogoutUserUseCase implements IUseCaseCommandCQRS<
             if(!user)
                 return left(new LogoutUserErrors.NotFoundError())
             const isLogout = await this._redisAuthService.deAuthenticateUser(user.email)
-            return right(Result.OK(isLogout ? true : false))
+            return right(Result.OK(isLogout))
             
         } catch (error) {
             console.error(error)
