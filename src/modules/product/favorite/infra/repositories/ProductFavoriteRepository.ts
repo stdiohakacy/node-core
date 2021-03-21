@@ -11,6 +11,10 @@ export class ProductFavoriteRepository extends BaseRepository<ProductFavoriteDb,
         })
     }
 
+    async isIdExist(id: string): Promise<boolean> {
+        return await this.repository.count({ id }) > 0
+    }
+
     async isExist(userId: string, productId: string): Promise<boolean> {
         let query = this.repository
             .createQueryBuilder('product_favorite')
