@@ -1,4 +1,3 @@
-import { TagMapper } from './../../../tag/TagMapper';
 import { Inject, Service } from "typedi";
 import { CreateProductResponse } from './CreateProductResponse';
 import { CreateProductErrors } from './CreateProductErrors';
@@ -14,10 +13,11 @@ import { left, Result, right } from "../../../../../shared/core/Result";
 import { IProductProps, Product } from "../../../domain/aggregateRoots/Product";
 import { ApplicationError } from "../../../../../shared/core/ApplicationError";
 import { ProductMapper } from "../../../infra/databases/ProductMapper";
-import { TagRepository } from "../../../tag/repositories/TagRepository";
-import { ProductTagRepository } from "../../../tag/repositories/ProductTagRepository";
 import { TagDb } from "../../../../../infra/TagDb";
 import { ProductTagDb } from "../../../../../infra/ProductTagDb";
+import { TagRepository } from "../../../components/tag/repositories/TagRepository";
+import { ProductTagRepository } from "../../../components/tag/repositories/ProductTagRepository";
+import { TagMapper } from "../../../components/tag/TagMapper";
 
 @Service()
 export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCommandDTO, Promise<CreateProductResponse>> {

@@ -3,9 +3,9 @@ import { Response } from 'express';
 import { Delete, JsonController, Params, Res } from "routing-controllers";
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
 import { DeleteProdutErrors } from '../application/commands/delete/DeleteProdutErrors';
-import { DeleteProductFavoriteUseCase } from '../favorite/application/commands/delete/DeleteProductFavoriteUseCase';
-import { DeleteProductFavoriteCommandDTO } from '../favorite/dtos/DeleteProductFavoriteCommandDTO';
-import { DeleteProductFavoriteErrors } from '../favorite/application/commands/delete/DeleteProductFavoriteErrors';
+import { DeleteProductFavoriteUseCase } from '../components/favorite/application/commands/delete/DeleteProductFavoriteUseCase';
+import { DeleteProductFavoriteCommandDTO } from '../components/favorite/dtos/DeleteProductFavoriteCommandDTO';
+import { DeleteProductFavoriteErrors } from '../components/favorite/application/commands/delete/DeleteProductFavoriteErrors';
 
 @JsonController('/v1/products')
 export class DeleteProductFavoriteController extends BaseController {

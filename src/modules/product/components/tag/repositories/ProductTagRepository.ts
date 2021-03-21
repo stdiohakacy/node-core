@@ -1,6 +1,6 @@
 import { Service } from "typedi";
-import { ProductTagDb } from "../../../../infra/ProductTagDb";
-import { BaseRepository } from "../../../../shared/repository/BaseRepository";
+import { ProductTagDb } from "../../../../../infra/ProductTagDb";
+import { BaseRepository } from "../../../../../shared/repository/BaseRepository";
 import { IProductTagRepository } from "../adapter/IProductTagRepository";
 
 @Service('product_tag.repository')

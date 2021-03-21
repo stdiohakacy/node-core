@@ -1,5 +1,5 @@
-import { ProductFavoriteDb } from "../../../../../infra/ProductFavoriteDb"
-import { IMapper } from "../../../../../shared/IMapper"
+import { ProductFavoriteDb } from "../../../../../../infra/ProductFavoriteDb"
+import { IMapper } from "../../../../../../shared/IMapper"
 import { ProductFavorite } from "../../domain/valueObjects/ProductFavorite"
 
 export class ProductFavoriteMapper implements IMapper<ProductFavorite> {

@@ -3,9 +3,9 @@ import { Response } from 'express';
 import { Body, JsonController, Post, Res } from "routing-controllers";
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
 import { CreateProductErrors } from '../application/commands/create/CreateProductErrors';
-import { CreateProductFavoriteUseCase } from '../favorite/application/commands/create/CreateProductFavoriteUseCase';
-import { CreateProductFavoriteCommandDTO } from '../favorite/dtos/CreateProductFavoriteCommandDTO';
-import { CreateProductFavoriteErrors } from '../favorite/application/commands/create/CreateProductFavoriteErrors';
+import { CreateProductFavoriteUseCase } from '../components/favorite/application/commands/create/CreateProductFavoriteUseCase';
+import { CreateProductFavoriteCommandDTO } from '../components/favorite/dtos/CreateProductFavoriteCommandDTO';
+import { CreateProductFavoriteErrors } from '../components/favorite/application/commands/create/CreateProductFavoriteErrors';
 
 @JsonController('/v1/products')
 export class CreateProductFavoriteController extends BaseController {

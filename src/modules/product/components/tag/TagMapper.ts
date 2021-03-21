@@ -1,7 +1,8 @@
-import { TagDb } from './../../../infra/TagDb';
-import { IMapper } from "../../../shared/IMapper"
+
+import { TagDb } from "../../../../infra/TagDb";
+import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
+import { IMapper } from "../../../../shared/IMapper";
 import { Tag } from "./entities/Tag";
-import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
 
 export class TagMapper implements IMapper<Tag> {
     public static toDomain(tagDb: TagDb): Tag | null {

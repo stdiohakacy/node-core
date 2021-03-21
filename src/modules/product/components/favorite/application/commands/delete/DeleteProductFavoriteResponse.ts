@@ -1,5 +1,5 @@
-import { ApplicationError } from "../../../../../../shared/core/ApplicationError";
-import { Either, Result } from "../../../../../../shared/core/Result";
+import { ApplicationError } from "../../../../../../../shared/core/ApplicationError";
+import { Either, Result } from "../../../../../../../shared/core/Result";
 import { DeleteProductFavoriteErrors } from "./DeleteProductFavoriteErrors";
 
 export type DeleteProductFavoriteResponse = Either<

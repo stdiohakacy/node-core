@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
-import { ProductFavoriteDb } from '../../../../../infra/ProductFavoriteDb';
-import { BaseRepository } from '../../../../../shared/repository/BaseRepository';
+import { ProductFavoriteDb } from '../../../../../../infra/ProductFavoriteDb';
+import { BaseRepository } from '../../../../../../shared/repository/BaseRepository';
 import { IProductFavoriteRepository } from '../adapter/IProductFavoriteRepository';
 
 @Service('product_favorite.repository')

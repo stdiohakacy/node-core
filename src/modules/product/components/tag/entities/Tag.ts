@@ -1,7 +1,7 @@
-import { Guard } from "../../../../shared/core/Guard";
-import { Result } from "../../../../shared/core/Result";
-import { Entity } from "../../../../shared/domain/Entity";
-import { UniqueEntityId } from "../../../../shared/domain/UniqueEntityId";
+import { Guard } from "../../../../../shared/core/Guard";
+import { Result } from "../../../../../shared/core/Result";
+import { Entity } from "../../../../../shared/domain/Entity";
+import { UniqueEntityId } from "../../../../../shared/domain/UniqueEntityId";
 
 export interface ITagProps {
     name: string

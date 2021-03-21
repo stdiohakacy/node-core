@@ -1,9 +1,9 @@
-import { Result } from './../../../../../shared/core/Result';
-import { Entity } from "../../../../../shared/domain/Entity";
-import { UniqueEntityId } from "../../../../../shared/domain/UniqueEntityId";
-import { UserId } from "../../../../user/domain/blocks/entity/UserId";
-import { ProductId } from "../../../domain/entities/ProductId";
-import { Guard } from '../../../../../shared/core/Guard';
+import { Result } from '../../../../../../shared/core/Result';
+import { Entity } from "../../../../../../shared/domain/Entity";
+import { UniqueEntityId } from "../../../../../../shared/domain/UniqueEntityId";
+import { UserId } from "../../../../../user/domain/blocks/entity/UserId";
+import { ProductId } from "../../../../domain/entities/ProductId";
+import { Guard } from '../../../../../../shared/core/Guard';
 
 interface IProductFavoriteProps {
     userId: UserId

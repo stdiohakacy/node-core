@@ -1,16 +1,16 @@
-import { ProductFavoriteMapper } from './../../../infra/databases/ProductFavoriteMapper';
+import { ProductFavoriteMapper } from '../../../infra/databases/ProductFavoriteMapper';
 import { ProductFavoriteRepository } from '../../../infra/repositories/ProductFavoriteRepository';
 import { Inject, Service } from "typedi";
-import { IUseCaseCommandCQRS } from "../../../../../../shared/core/IUseCase";
+import { IUseCaseCommandCQRS } from "../../../../../../../shared/core/IUseCase";
 import { CreateProductFavoriteCommandDTO } from '../../../dtos/CreateProductFavoriteCommandDTO';
 import { CreateProductFavoriteResponse } from './CreateProductFavoriteResponse';
 import { ProductFavorite } from '../../../domain/valueObjects/ProductFavorite';
-import { UserId } from '../../../../../user/domain/blocks/entity/UserId';
-import { UniqueEntityId } from '../../../../../../shared/domain/UniqueEntityId';
-import { ProductId } from '../../../../domain/entities/ProductId';
-import { left, Result, right } from '../../../../../../shared/core/Result';
+import { UserId } from '../../../../../../user/domain/blocks/entity/UserId';
+import { UniqueEntityId } from '../../../../../../../shared/domain/UniqueEntityId';
+import { ProductId } from '../../../../../domain/entities/ProductId';
+import { left, Result, right } from '../../../../../../../shared/core/Result';
 import { CreateProductFavoriteErrors } from './CreateProductFavoriteErrors';
-import { ApplicationError } from '../../../../../../shared/core/ApplicationError';
+import { ApplicationError } from '../../../../../../../shared/core/ApplicationError';
 
 @Service()
 export class CreateProductFavoriteUseCase implements IUseCaseCommandCQRS<CreateProductFavoriteCommandDTO, Promise<CreateProductFavoriteResponse>> {

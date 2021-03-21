@@ -1,4 +1,4 @@
-import { ICommand } from "../../../../shared/core/ICQRS"
+import { ICommand } from "../../../../../shared/core/ICQRS"
 
 export class CreateProductFavoriteCommandDTO implements ICommand {
     userId: string

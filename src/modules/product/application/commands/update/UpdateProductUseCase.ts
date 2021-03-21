@@ -13,11 +13,11 @@ import { IProductProps, Product } from '../../../domain/aggregateRoots/Product';
 import { CategoryId } from '../../../../category/domain/entities/CategoryId';
 import { UniqueEntityId } from '../../../../../shared/domain/UniqueEntityId';
 import { ProductMapper } from '../../../infra/databases/ProductMapper';
-import { TagRepository } from '../../../tag/repositories/TagRepository';
-import { ProductTagRepository } from '../../../tag/repositories/ProductTagRepository';
-import { TagMapper } from '../../../tag/TagMapper';
 import { TagDb } from '../../../../../infra/TagDb';
 import { ProductTagDb } from '../../../../../infra/ProductTagDb';
+import { TagRepository } from '../../../components/tag/repositories/TagRepository';
+import { ProductTagRepository } from '../../../components/tag/repositories/ProductTagRepository';
+import { TagMapper } from '../../../components/tag/TagMapper';
 
 @Service()
 export class UpdateProductUseCase implements IUseCaseCommandCQRS<
