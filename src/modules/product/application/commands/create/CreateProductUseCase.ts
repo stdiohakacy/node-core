@@ -1,3 +1,5 @@
+import { ProductDetailDb } from './../../../../../infra/ProductDetailDb';
+import { ProductDetailRepository } from './../../../components/detail/infra/repositories/ProductDetailRepository';
 import { Inject, Service } from "typedi";
 import { CreateProductResponse } from './CreateProductResponse';
 import { CreateProductErrors } from './CreateProductErrors';
@@ -29,6 +31,8 @@ export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCo
     private readonly _tagRepository: TagRepository
     @Inject('product_tag.repository')
     private readonly _productTagRepository: ProductTagRepository
+    @Inject('product_detail.repository')
+    private readonly _productDetailRepository: ProductDetailRepository
 
     async execute(param: CreateProductCommandDTO): Promise<CreateProductResponse> {
         const productNameOrError = ProductName.create({ value: param.name })
@@ -75,8 +79,20 @@ export class CreateProductUseCase implements IUseCaseCommandCQRS<CreateProductCo
         const productDb = ProductMapper.toPersistence(product)
         try {
             const id = await this._productRepository.create(productDb)
+
             if (!id)
                 return left(new CreateProductErrors.DataCannotSave())
+
+            if(param.detail) {
+                const productDetailDb = new ProductDetailDb()
+                productDetailDb.color = param.detail.color
+                productDetailDb.size = param.detail.size
+                productDetailDb.productId = id
+
+                const productDetailId = await this._productDetailRepository.create(productDetailDb)
+                if(!productDetailId) 
+                    return left(new CreateProductErrors.DataCannotSave())
+            }
 
             const tagsDb = await this._tagRepository.getTagsName()
             const tags = tagsDb.map(tagDb => TagMapper.toDomain(tagDb))

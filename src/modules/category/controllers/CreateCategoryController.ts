@@ -1,10 +1,11 @@
 import Container from 'typedi';
 import { Response } from 'express';
-import { Body, JsonController, Post, Res } from "routing-controllers";
+import { Body, getMetadataArgsStorage, JsonController, Post, Res } from "routing-controllers";
 import { BaseController } from '../../../shared/infra/http/models/BaseController';
 import { CreateCategoryUseCase } from '../application/commands/create/CreateCategoryUseCase';
 import { CreateCategoryCommandDTO } from '../dtos/CreateCategoryCommandDTO';
 import { CreateCategoryErrors } from '../application/commands/create/CreateCategoryErrors';
+import { routingControllersToSpec } from 'routing-controllers-openapi';
 
 @JsonController('/v1/categories')
 export class CreateCategoryController extends BaseController {
@@ -34,3 +35,6 @@ export class CreateCategoryController extends BaseController {
         }
     }
 }
+const storage = getMetadataArgsStorage()
+const spec = routingControllersToSpec(storage)
+console.log(spec)
